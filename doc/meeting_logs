@@ -16,4 +16,10 @@ Week 4 - 19-25 February Participants: Çağatay, Yağız, Yasin
 Decided instances and functions of some classes.
 Talked about database management.
 
+Week 5 - 26 February - 2 March Participants : Çağatay, Yağız, Yasin, Ahmet
+
+We continued the design stage of our project. We determined the system design and subsystem design. 
+We determined the ingredients of each subsystem. 
+We divided the needed classes into 3 categories. Model, view and control classes.
+We skecthed class diagrams of all the packages and we began the code stage.
 
