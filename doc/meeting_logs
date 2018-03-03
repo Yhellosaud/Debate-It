@@ -19,7 +19,8 @@ Talked about database management.
 Week 5 - 26 February - 2 March Participants : Çağatay, Yağız, Yasin, Ahmet
 
 We continued the design stage of our project. We determined the system design and subsystem design. 
-We determined the ingredients of each subsystem. 
-We divided the needed classes into 3 categories. Model, view and control classes.
+The ingredients of each subsystem is determined. 
+The needed classes are divided into 3 main categories. Model, view and control classes.
 We skecthed class diagrams of all the packages and we began the code stage.
+Design report is written.
 
