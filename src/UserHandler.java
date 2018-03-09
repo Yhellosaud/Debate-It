@@ -8,7 +8,7 @@ import java.io.IOException;
 
 
 
-public class UserHandler extends Thread {
+public class UserHandler implements Runnable {
 
     public final int INVALID_ID = -1;
     public final int FAILED_REQUEST = -2;
@@ -45,12 +45,24 @@ public class UserHandler extends Thread {
     private Socket socket;
     private String clientAddress;
     private boolean running;
+    private PrintWriter out;
+    private BufferedReader in;
 
-    public UserHandler(Socket socket) {
+    public UserHandler(Socket socket)  {
 
         this.socket = socket;
         this.clientAddress = socket.getRemoteSocketAddress().toString();
         running = true;
+        
+        try {
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        } 
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            System.out.println("Failed to initiate input output streams");
+            
+        }
 
     }
 
@@ -58,17 +70,26 @@ public class UserHandler extends Thread {
 
         //Try block with resources
         //This block closes the resources when it is done.
-        try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true); BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));) {
+        try  {
             String inputLine;
             while (running) {
-                //System.out.println("read öncesi");
+                
                 inputLine = in.readLine();
-                //System.out.println("read sonrası");
-
+                
                 if (inputLine == null) {
                     System.out.println("Client disconnected");
                     return;
                 }
+                
+                /*boolean requestHandledSuccessfully =handleIncomingRequests(requestId,Object[] requestParameters);
+                if(requestHandledSuccessfully){
+                    System.out.println("Request handled successfully.");
+                }else{
+                    System.out.println("Request handle failed.");
+                }*/
+                
+            
+                
                 if (inputLine.equals("HELLO SERVER")) {
                     out.println("HELLO CLIENT");
                 } else {
@@ -82,12 +103,22 @@ public class UserHandler extends Thread {
         }
 
     }
+    
+    public synchronized void sendMessage(String message){
+        
+        if(out == null){
+                    System.out.println("out is null");
+                }
+        out.println(message);
+                
+        
+    }
 
     public void terminate() {
         running = false;
     }
 
-    private void handleIncomingRequests(int requestId, Object[] requestData) {
+    /*private boolean handleIncomingRequests(int requestId, Object[] requestParameters) {
 
         switch (requestId) {
 
@@ -102,6 +133,7 @@ public class UserHandler extends Thread {
             case (REQUEST_ADD_NEW_PAST_DEBATE):
                 break;
             case (REQUEST_ENTER_LOBBY):
+                
                 break;
             case (REQUEST_CHANGE_SELECTED_AVATAR):
                 break;
@@ -185,7 +217,7 @@ public class UserHandler extends Thread {
         
         return false;
     }
-    
+    */
     
     
      
