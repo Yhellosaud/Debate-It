@@ -15,7 +15,7 @@ public class Client extends AsyncTask<Void, Void, Void> {
     private BufferedReader in;
 
     public static final String serverIpAccessPoint = "192.168.43.193";
-    public static final String serverIpBilkent = "139.179.200.208";
+    public static final String serverIpBilkent = "139.179.225.19";
     public static final int serverPort =54134;
 
     @Override
@@ -30,9 +30,12 @@ public class Client extends AsyncTask<Void, Void, Void> {
                     new InputStreamReader(socket.getInputStream()));
 
             while (true) {
-                out.println("HELLO SERVER");
+                //out.println("HELLO SERVER");
                 String line = in.readLine();
-                System.out.println(line);
+                if(line !=null){
+                    System.out.println(line);
+                }
+
             }
 
         } catch (Exception e) {
