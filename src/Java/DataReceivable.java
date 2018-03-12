@@ -1,4 +1,4 @@
-package cstudio.client;
+package dicomp.debateit;
 
 /**
  * Created by Cagatay on 11.03.2018.

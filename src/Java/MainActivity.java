@@ -1,4 +1,4 @@
-package cstudio.client;
+package dicomp.debateit;
 
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
