@@ -17,7 +17,7 @@ import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity implements DataReceivable {
 
-    Client client;
+    
     TextView serversMessage;
     private ServerBridge sb;
 
