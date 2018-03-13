@@ -44,7 +44,11 @@ public class MainActivity extends AppCompatActivity implements DataReceivable {
             case (R.id.button):
                 sb = new ServerBridge(this);
                 String[] requestParams = {"param1", "param2"};
+
+                //Requesting data from server
                 sb.request(ServerBridge.REQUEST_REGISTER, requestParams);
+
+                //Trying to read the data received from server. Below method must be called from another thread, otherwise it blocks the ui thread.
                 ArrayList<Object> receivedData = sb.getLeastRecentlyReceivedData();
 
                 if (receivedData != null) {

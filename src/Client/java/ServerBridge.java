@@ -60,12 +60,21 @@ public class ServerBridge {
     private DataReceivable content;
 
 
+    /**
+     * Constructor
+     * @param content a reference to ui class that is calling this method
+     */
     public ServerBridge(DataReceivable content) {
         leastRecentlyReceivedData = new ArrayList<Object>();
         isDataReady = false;
         this.content = content;
     }
 
+    /**
+     * This method starts a new asyn task that communitices with server.
+     * @param requestId
+     * @param requestParams
+     */
     public void request(int requestId, Object[] requestParams) {
         isDataReady = false;
         leastRecentlyReceivedData.clear();
@@ -74,6 +83,11 @@ public class ServerBridge {
 
     }
 
+    /**
+     * This method tries to return the data received from server. It tries 10 times before timeout with 1sec sleep between tries.
+     * This method should'nt be called from ui threads so that ui thread does not get blocked.
+     * @return
+     */
     public ArrayList<Object> getLeastRecentlyReceivedData() {
 
         int attemptsToRetrieveData = 0;
@@ -106,6 +120,11 @@ public class ServerBridge {
         return null;
     }
 
+    /**
+     * This async task is responsible for communicating with server.
+     * It writes the received data to leastRecentlyReceivedData of the caller ServerBridge object.
+     * Received data could be retrieved with getLeastRecentlyReceivedData() method.
+     */
     private class Client extends AsyncTask<Void, Void, Object[]> {
 
         private Socket socket;
@@ -115,6 +134,12 @@ public class ServerBridge {
         private int requestId;
         private Object[] requestParams;
 
+        /**
+         * Constructor
+         * @param content reference to ui classes that is communicating with server.
+         * @param requestId request ıd
+         * @param requestParams request parameters
+         */
         public Client(DataReceivable content, int requestId, Object[] requestParams) {
             this.content = content;
             this.requestId = requestId;
@@ -123,6 +148,9 @@ public class ServerBridge {
         }
 
         @Override
+        /**
+         * This method runs in the background.
+         */
         protected Object[] doInBackground(Void... arg0) {
 
             System.out.println("Async task started");
@@ -174,6 +202,9 @@ public class ServerBridge {
         }
 
         @Override
+        /**
+         * This method runs when the doInBackground method is finished
+         */
         protected void onPostExecute(Object[] results) {
             super.onPostExecute(results);
             for(int i=0;i<leastRecentlyReceivedData.size();i++){
@@ -184,6 +215,9 @@ public class ServerBridge {
         }
 
 
+        /**
+         * This method closes the socket to prevent memory leaks.
+         */
         public void disconnectClient() {
             try {
                 if (socket != null) {
