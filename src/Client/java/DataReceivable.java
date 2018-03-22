@@ -10,4 +10,5 @@ package dicomp.debateit;
 public interface DataReceivable {
 
     public boolean receiveAndUpdateUI(Object[] objects);
+    public void updateRetrieveProgress(int progress);
 }
