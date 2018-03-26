@@ -1,0 +1,6 @@
+\sql
+\connect root@localhost
+
+use mysql
+grant all on *.* to root@'110.1.1.2' identified by 'dicomp319';
+FLUSH PRIVILEGES;
