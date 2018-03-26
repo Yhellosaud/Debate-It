@@ -10,6 +10,7 @@ package server;
  * @author Cagatay
  */
 import SharedModels.*;
+import java.beans.Introspector;
 import java.net.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,14 +19,14 @@ import java.util.ArrayList;
 import java.io.Serializable;
 
 public class PlayerHandler implements Runnable {
-    
+
     private Player player;
     private Socket clientSocket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private BattleThread battleThread;
     private boolean running;
-    
+
     public PlayerHandler(Player player, Socket clientSocket, ObjectOutputStream out, ObjectInputStream in, BattleThread battleThread) {
         this.player = player;
         this.clientSocket = clientSocket;
@@ -33,70 +34,89 @@ public class PlayerHandler implements Runnable {
         this.in = in;
         this.battleThread = battleThread;
         running = true;
-        
+
     }
-    
+
     @Override
+    /**
+     * This method listens for players requests.
+     */
     public void run() {
-        
+
+        System.out.println("Player handler started");
         ArrayList<Serializable> requestParams = new ArrayList<Serializable>();
         while (running) {
-            
+
             boolean endOfStreamReached = false;
             try {
 
-                //Reading request id
-                int requestId = in.readInt();
-                System.out.println("Player Handler request id: " + requestId);
+                synchronized (in) {
+                    //Reading request id
+                    int requestId = in.readInt();
+                    requestParams.clear();
+                    System.out.println("Player Handler request id: " + requestId);
 
-                //Reading objects from objectinputstream. There is a null object at the end of stream to mark the end.
-                while (!endOfStreamReached) {
-                    try {
-                        Object curObject = in.readObject();
-                        if (curObject == null) {
+                    //Reading objects from objectinputstream. There is a null object at the end of stream to mark the end.
+                    while (!endOfStreamReached) {
+                        try {
+                            Object curObject = in.readObject();
+                            if (curObject == null) {
+                                endOfStreamReached = true;
+                            } else {
+                                requestParams.add((Serializable) curObject);
+                            }
+
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                            e.printStackTrace();
                             endOfStreamReached = true;
-                        } else {
-                            requestParams.add((Serializable) curObject);
                         }
-                        
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        e.printStackTrace();
-                        endOfStreamReached = true;
                     }
-                }  
-                //Updating players
-                //Correct here
-                battleThread.updatePlayers(requestId, requestParams);
-                
-                
-                
+                    for (int i = 0; i < requestParams.size(); i++) {
+                        System.out.println(requestParams.get(i).toString());
+                    }
+                    if (requestId != UserHandler.CLIENT_CONNECTED) {
+                        //Updating players
+                        //Correct here
+                        battleThread.updateDebate(requestId,requestParams);
+                        battleThread.updatePlayers(requestId, requestParams);
+                        
+                    }
+
+                }
+
             } catch (Exception e) {
-                System.out.println(e.getMessage());
-                e.printStackTrace();
+                battleThread.disconnectPlayer(player);
+                System.out.println("user disconected");               
+                //e.printStackTrace();
+
             }
         }
-        
+
     }
-    
+
     /**
      * This method sends the responseId and responseData to client.
+     *
      * @param responseId
-     * @param responseData 
+     * @param responseData
      */
     public synchronized void updateBattle(int responseId, ArrayList<Serializable> responseData) {
-        
+
         try {
             out.writeInt(responseId);
-            
+
             for (int i = 0; i < responseData.size(); i++) {
                 out.writeObject(responseData.get(i));
             }
+            //Sending terminator
+            out.writeObject(null);
+            out.flush();
         } catch (Exception e) {
-            
+
             e.printStackTrace();
         }
-        
+
     }
 
     /**
@@ -107,7 +127,7 @@ public class PlayerHandler implements Runnable {
      * @param time
      */
     public synchronized void sendCurTimeToClient(int time) {
-        
+
         System.out.println("----send cur time calisti. time: " + time);
         try {
             //Sending request id
@@ -120,41 +140,41 @@ public class PlayerHandler implements Runnable {
             out.flush();
 
             //Reading response
-            try {
-                
+            /*try {
+
                 int response = in.readInt();
-                System.out.println("Response: "+response);
-                
+                System.out.println("Response: " + response);
+
+                //reading terminator
+                Object nullObj = in.readObject();
+
                 if (response != UserHandler.CLIENT_CONNECTED) {
                     battleThread.disconnectPlayer(player);
                     System.out.println("user disconected");
                 }
-                
+
             } catch (Exception e) {
-                e.printStackTrace();
                 battleThread.disconnectPlayer(player);
                 System.out.println("user disconected");
-            }
-            
+            }*/
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-        
     }
-    
+
     public void terminate() {
-        
+
         running = false;
         try {
             out.close();
         } catch (Exception ignored) {
-            
+
         }
     }
-    
+
     public Player getPlayer() {
         return player;
     }
-    
+
 }

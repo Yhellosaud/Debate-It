@@ -16,16 +16,18 @@ public class BattleTimer implements Runnable {
     private ArrayList<PlayerHandler>playerHandlers;
     private BattleThread battleThread;
 
-    public BattleTimer(int timer,ArrayList<PlayerHandler> playerHandlers) {
+    public BattleTimer(BattleThread battleThread,ArrayList<PlayerHandler> playerHandlers) {
 
-        this.timer = timer;
+        this.battleThread = battleThread;
         this.playerHandlers = playerHandlers;
+        this.timer = 0;
+        
+        
         
             
     }
 
     public void run() {
-
         
         while (true) {
             while (timer != 0) {
@@ -40,7 +42,7 @@ public class BattleTimer implements Runnable {
                 
                 for(int i=0;i<playerHandlers.size();i++){
                     PlayerHandler curHandler = playerHandlers.get(i);
-                    
+                    System.out.println("Timer will create new thread");
                     Thread timeSenderThread =new Thread(){
                         public void run(){
                             curHandler.sendCurTimeToClient(timer);
@@ -49,8 +51,12 @@ public class BattleTimer implements Runnable {
                     timeSenderThread.start();
                     
                 }
-                timer--;
-            }            
+                
+                timer--;                
+            }     
+            //Going to next stage
+            battleThread.nextStage();
+           
         }
 
     }

@@ -31,6 +31,7 @@ public class UserHandler implements Runnable {
     public static final int REQUEST_CHANGE_SELECTED_TITLE = 6;
     public static final int REQUEST_CHANGE_SELECTED_FRAME = 7;
     public static final int REQUEST_JOIN_BATTLE = 8;
+    public static final int REQUEST_SEND_ARGUMENT = 9;
 
     //Request in which client will expect to receive data
     public static final int REQUEST_GET_INVENTORY = 10;
@@ -120,6 +121,7 @@ public class UserHandler implements Runnable {
             }*/
 
         }
+        
 
     }
 

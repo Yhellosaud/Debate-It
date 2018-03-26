@@ -26,8 +26,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Server {
 
     public static final String serverIpAccessPoint = "192.168.43.193";
-    public static final String serverIpBilkent = "139.179.227.149";
-    public static final String serverIpEv = "192.168.1.43";
+    public static final String serverIpBilkent = "139.179.226.170";
+    public static final String serverIpEv = "192.168.1.42";
     public static final int serverPort = 54134;
     public static final AtomicInteger numConnectedClients = new AtomicInteger(0);
 
@@ -44,7 +44,7 @@ public class Server {
         try {
 
             //Starting server
-            serverSocket = new ServerSocket(serverPort, 0, InetAddress.getByName(serverIpEv));
+            serverSocket = new ServerSocket(serverPort, 0, InetAddress.getByName(serverIpBilkent));
             int serverPort = serverSocket.getLocalPort();
             String serverAddress = serverSocket.getLocalSocketAddress().toString();
             System.out.println("Server is running on port: " + serverPort + " and adress: " + serverAddress);
