@@ -20,6 +20,12 @@ import java.io.Serializable;
 
 public class PlayerHandler implements Runnable {
 
+    public static final int REQUEST_SEND_ARGUMENT = 8;
+
+    public static final int RESPONSE_BATTLE_TIME = 105;
+    public static final int RESPONSE_NEW_STAGE = 106;
+    public static final int RESPONSE_NEW_ARGUMENT = 107;
+
     private Player player;
     private Socket clientSocket;
     private ObjectOutputStream out;
@@ -78,16 +84,16 @@ public class PlayerHandler implements Runnable {
                     if (requestId != UserHandler.CLIENT_CONNECTED) {
                         //Updating players
                         //Correct here
-                        battleThread.updateDebate(requestId,requestParams);
+                        battleThread.updateDebate(requestId, requestParams);
                         battleThread.updatePlayers(requestId, requestParams);
-                        
+
                     }
 
                 }
 
             } catch (Exception e) {
                 battleThread.disconnectPlayer(player);
-                System.out.println("user disconected");               
+                System.out.println("user disconected");
                 //e.printStackTrace();
 
             }
@@ -101,7 +107,59 @@ public class PlayerHandler implements Runnable {
      * @param responseId
      * @param responseData
      */
-    public synchronized void updateBattle(int responseId, ArrayList<Serializable> responseData) {
+    public synchronized void updatePlayer(int requestId, ArrayList<Serializable> requestParams) {
+
+        switch (requestId) {
+            case (REQUEST_SEND_ARGUMENT):
+                int argumentSenderId = (int) requestParams.get(0);
+                String argument = (String) requestParams.get(1);
+                responseSendArgument(argumentSenderId, argument);
+                break;
+            case (RESPONSE_NEW_STAGE):
+                int newStage = (int) requestParams.get(0);
+                responseNewStage(newStage);
+                break;
+            case (RESPONSE_BATTLE_TIME):
+                int time = (int) requestParams.get(0);
+                responseBattleTime(time);
+                break;
+
+        }
+    }
+
+    private void responseNewStage(int newStage) {
+        ArrayList<Serializable> responseParams = new ArrayList<Serializable>();
+        responseParams.add(newStage);
+        response(RESPONSE_NEW_STAGE, responseParams);
+    }
+
+    private void responseSendArgument(int argumentSenderId, String argument) {
+        ArrayList<Serializable> responseParams = new ArrayList<Serializable>();
+        responseParams.add(player);
+        responseParams.add(argument);
+        response(RESPONSE_NEW_ARGUMENT, responseParams);
+    }
+
+    /**
+     * This method sends battle time to client.
+     *
+     * @param time
+     */
+    private void responseBattleTime(int time) {
+
+        System.out.println("----send cur time calisti. time: " + time);
+        ArrayList<Serializable> responseParams = new ArrayList<Serializable>();
+        responseParams.add(time);
+        response(RESPONSE_BATTLE_TIME, responseParams);
+    }
+
+    /**
+     * This method sends the responseId and responseData to clients.
+     *
+     * @param responseId
+     * @param responseData
+     */
+    private void response(int responseId, ArrayList<Serializable> responseData) {
 
         try {
             out.writeInt(responseId);
@@ -114,51 +172,6 @@ public class PlayerHandler implements Runnable {
             out.flush();
         } catch (Exception e) {
 
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
-     * This method sends time to client and reads the response to see if client
-     * is still connected. If client does not send connected response it
-     * disconnects the client from battle.
-     *
-     * @param time
-     */
-    public synchronized void sendCurTimeToClient(int time) {
-
-        System.out.println("----send cur time calisti. time: " + time);
-        try {
-            //Sending request id
-            out.writeInt(UserHandler.RESPONSE_BATTLE_TIME);
-            //Sending time
-            out.writeInt(time);
-            System.out.println("time has sent");
-            //Sending terminator of stream
-            out.writeObject(null);
-            out.flush();
-
-            //Reading response
-            /*try {
-
-                int response = in.readInt();
-                System.out.println("Response: " + response);
-
-                //reading terminator
-                Object nullObj = in.readObject();
-
-                if (response != UserHandler.CLIENT_CONNECTED) {
-                    battleThread.disconnectPlayer(player);
-                    System.out.println("user disconected");
-                }
-
-            } catch (Exception e) {
-                battleThread.disconnectPlayer(player);
-                System.out.println("user disconected");
-            }*/
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }

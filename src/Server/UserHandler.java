@@ -26,12 +26,11 @@ public class UserHandler implements Runnable {
     public static final int REQUEST_ADD_NEW_USER_ITEM = 1;
     public static final int REQUEST_ADD_NEW_PLAYED_DEBATE = 2;
     public static final int REQUEST_ADD_NEW_PAST_DEBATE = 3;
-    public static final int REQUEST_ENTER_LOBBY = 4;
+    public static final int REQUEST_JOIN_BATTLE = 4;
     public static final int REQUEST_CHANGE_SELECTED_AVATAR = 5;
     public static final int REQUEST_CHANGE_SELECTED_TITLE = 6;
-    public static final int REQUEST_CHANGE_SELECTED_FRAME = 7;
-    public static final int REQUEST_JOIN_BATTLE = 8;
-    public static final int REQUEST_SEND_ARGUMENT = 9;
+    public static final int REQUEST_CHANGE_SELECTED_FRAME = 7;    
+    public static final int REQUEST_SEND_ARGUMENT = 8;
 
     //Request in which client will expect to receive data
     public static final int REQUEST_GET_INVENTORY = 10;
@@ -46,7 +45,7 @@ public class UserHandler implements Runnable {
     public static final int RESPONSE_PLAYED_DEBATES = 102;
     public static final int RESPONSE_PAST_DEBATES = 103;
     public static final int RESPONSE_BUYABLE_ITEMS = 104;
-    public static final int RESPONSE_BATTLE_TIME = 105;
+    
 
     private Socket socket;
     private String clientAddress;
@@ -145,10 +144,7 @@ public class UserHandler implements Runnable {
             case (REQUEST_ADD_NEW_PLAYED_DEBATE):
                 break;
             case (REQUEST_ADD_NEW_PAST_DEBATE):
-                break;
-            case (REQUEST_ENTER_LOBBY):
-
-                break;
+                break;            
             case (REQUEST_CHANGE_SELECTED_AVATAR):
                 break;
             case (REQUEST_CHANGE_SELECTED_TITLE):

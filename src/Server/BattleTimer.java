@@ -9,68 +9,83 @@ package server;
  *
  * @author Cagatay
  */
+import java.io.Serializable;
 import java.util.ArrayList;
+
 public class BattleTimer implements Runnable {
 
     private volatile int timer;
-    private ArrayList<PlayerHandler>playerHandlers;
+    private volatile boolean running;
+    private volatile boolean counting;
+    private ArrayList<PlayerHandler> playerHandlers;
     private BattleThread battleThread;
 
-    public BattleTimer(BattleThread battleThread,ArrayList<PlayerHandler> playerHandlers) {
+    public BattleTimer(BattleThread battleThread, ArrayList<PlayerHandler> playerHandlers) {
 
         this.battleThread = battleThread;
         this.playerHandlers = playerHandlers;
         this.timer = 0;
-        
-        
-        
-            
+        this.running = true;
+        this.counting = false;
+
     }
 
     public void run() {
-        
-        while (true) {
-            while (timer != 0) {
-                
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    e.printStackTrace();
+
+        while (running) {
+
+            while (counting) {
+                while (timer != 0 && counting) {
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        e.printStackTrace();
+                    }
+                    System.out.println(timer);
+
+                    for (int i = 0; i < playerHandlers.size(); i++) {
+                        PlayerHandler curHandler = playerHandlers.get(i);
+
+                        Thread timeSenderThread = new Thread() {
+                            public void run() {
+                                ArrayList<Serializable> responseParams = new ArrayList<Serializable>();
+                                responseParams.add(timer);
+                                curHandler.updatePlayer(PlayerHandler.RESPONSE_BATTLE_TIME, responseParams);
+                            }
+                        };
+                        timeSenderThread.start();
+                    }
+                    timer--;
                 }
-                System.out.println(timer);
-                
-                for(int i=0;i<playerHandlers.size();i++){
-                    PlayerHandler curHandler = playerHandlers.get(i);
-                    System.out.println("Timer will create new thread");
-                    Thread timeSenderThread =new Thread(){
-                        public void run(){
-                            curHandler.sendCurTimeToClient(timer);
-                        }
-                    };
-                    timeSenderThread.start();
-                    
-                }
-                
-                timer--;                
-            }     
-            //Going to next stage
-            battleThread.nextStage();
-           
+                //Going to next stage
+                battleThread.nextStage();
+            }
+
         }
 
     }
 
-    public synchronized void startTimer(int timer) {
+    public void startTimer(int timer) {
+
+        this.counting = true;
         this.timer = timer;
     }
-    
-    public synchronized int getTimer(){
+
+    public synchronized int getTimer() {
         return timer;
     }
-    
-    public synchronized void stopTimer(){
+
+    public void stopTimer() {
         timer = 0;
+        this.counting = false;
+
+    }
+
+    public void terminate() {
+        stopTimer();
+        this.running = false;
     }
 
 }
