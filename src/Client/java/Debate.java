@@ -1,6 +1,8 @@
 package dicomp.debateit;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * Created by Yasin on 9.03.2018.
@@ -8,7 +10,7 @@ import java.io.Serializable;
 
 public class Debate implements Serializable {
     private Idea idea;
-    private Player[] players;
+    private ArrayList<Player> players;
     private int debateID;
     private long debateLength;
     private int yesVotes;
@@ -17,7 +19,7 @@ public class Debate implements Serializable {
     private int stage2Length;
     private int stage3Length;
 
-    public Debate(Idea idea, Player[] players, int debateID, long debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length) {
+    public Debate(Idea idea, ArrayList<Player> players, int debateID, long debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length) {
         this.idea = idea;
         this.players = players;
         this.debateID = debateID;
@@ -29,6 +31,21 @@ public class Debate implements Serializable {
         this.stage3Length = stage3Length;
     }
 
+    public Debate(Idea idea, int debateID) {
+        this.idea = idea;
+        this.debateID = debateID;
+    }
+
+    public void addPlayer(Player player){
+        players.add(player);
+    }
+
+    public void deletePlayer(Player player){
+        for(int i = 0; i < players.size(); i++)
+            if(players.get(i).getId() == player.getId())
+                players.remove(i);
+    }
+
     public Idea getIdea() {
         return idea;
     }
@@ -37,12 +54,8 @@ public class Debate implements Serializable {
         this.idea = idea;
     }
 
-    public Player[] getPlayers() {
+    public ArrayList<Player> getPlayers() {
         return players;
-    }
-
-    public void setPlayers(Player[] players) {
-        this.players = players;
     }
 
     public int getDebateID() {
@@ -99,5 +112,20 @@ public class Debate implements Serializable {
 
     public void setStage3Length(int stage3Length) {
         this.stage3Length = stage3Length;
+    }
+
+    @Override
+    public String toString() {
+        return "Debate{" +
+                "idea=" + idea +
+                ", players=" + players +
+                ", debateID=" + debateID +
+                ", debateLength=" + debateLength +
+                ", yesVotes=" + yesVotes +
+                ", noVotes=" + noVotes +
+                ", stage1Length=" + stage1Length +
+                ", stage2Length=" + stage2Length +
+                ", stage3Length=" + stage3Length +
+                '}';
     }
 }

@@ -1,6 +1,7 @@
 package dicomp.debateit;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Created by Yasin on 9.03.2018.
@@ -9,6 +10,42 @@ import java.io.Serializable;
 public class Player implements Serializable {
     public final int SIDE_NEGATIVE = -1;
     public final int SIDE_POSITIVE = 1;
+    public final int SIDE_SPECTATOR = 0;
+    public final int VOTE_YES = 2;
+    public final int VOTE_NO = 3;
+    private int id;
+    private String username;
+    private int side;
+    private String[] arguments;
+    private int currentArguments;
+    private int vote;
+    private int consecutiveGamesPlayed;
+
+    public Player(int id, String username, int side, String[] arguments, int currentArguments, int vote, int consecutiveGamesPlayed) {
+        this.id = id;
+        this.username = username;
+        this.side = side;
+        this.arguments = arguments;
+        this.currentArguments = currentArguments;
+        this.vote = vote;
+        this.consecutiveGamesPlayed = consecutiveGamesPlayed;
+    }
+
+    public Player(int id, String username, int consecutiveGamesPlayed) {
+        this.id = id;
+        this.username = username;
+        this.consecutiveGamesPlayed = consecutiveGamesPlayed;
+        currentArguments = 0;
+        arguments = new String[4];
+    }
+
+    public Player(User user){
+        this.id = user.getUserID();
+        this.username = user.getUsername();
+        consecutiveGamesPlayed = 0;
+        currentArguments = 0;
+        arguments = new String[4];
+    }
 
     public int getId() {
         return id;
@@ -58,22 +95,20 @@ public class Player implements Serializable {
         this.consecutiveGamesPlayed = consecutiveGamesPlayed;
     }
 
-    public final int SIDE_SPECTATOR = 0;
-    public final int VOTE_YES = 2;
-    public final int VOTE_NO = 3;
-    private int id;
-    private String username;
-    private int side;
-    private String[] arguments;
-    private int vote;
-    private int consecutiveGamesPlayed;
+    public void addArgument(String argument){
+        arguments[currentArguments] = argument;
+        currentArguments++;
+    }
 
-    public Player(int id, String username, int side, String[] arguments, int vote, int consecutiveGamesPlayed) {
-        this.id = id;
-        this.username = username;
-        this.side = side;
-        this.arguments = arguments;
-        this.vote = vote;
-        this.consecutiveGamesPlayed = consecutiveGamesPlayed;
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", side=" + side +
+                ", arguments=" + Arrays.toString(arguments) +
+                ", vote=" + vote +
+                ", consecutiveGamesPlayed=" + consecutiveGamesPlayed +
+                '}';
     }
 }
