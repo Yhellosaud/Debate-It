@@ -46,6 +46,12 @@ public class Debate implements Serializable {
                 players.remove(i);
     }
 
+    public void addArgument(Player player, String argument){
+        for(int i = 0; i < players.size(); i++)
+            if(players.get(i).getId() == player.getId())
+                player.addArgument(argument);
+    }
+
     public Idea getIdea() {
         return idea;
     }
