@@ -113,23 +113,29 @@ public class DebateManager {
     
     public void InsertDebate(Debate debate) throws SQLException {
         
+        int idea = 0;
+        int players = 0;
         int debateID = debate.getDebateID();
+        long debateLength = debate.getDebateLength();
         int yesVotes = debate.getYesVotes();
         int noVotes = debate.getNoVotes();
         int stage1Length = debate.getStage1Length();
         int stage2Length = debate.getStage2Length();
         int stage3Length = debate.getStage3Length();
         
-        debateData = "INSERT INTO debates (debateID, yesVotes, noVotes, stage1Length, stage2Length, stage3Length) VALUES (?, ?, ?, ?, ?, ?)";
+        debateData = "INSERT INTO debates (idea, players, debateID, debateLength, yesVotes, noVotes, stage1Length, stage2Length, stage3Length) VALUES (?, ?, ?, ?, ?, ?)";
 
         PreparedStatement statement = c.prepareStatement(debateData);
         
-        statement.setInt(1, 00001);
-        statement.setInt(2, 3);
-        statement.setInt(3, 1);
-        statement.setInt(4, 1000);
-        statement.setInt(5, 1000);
-        statement.setInt(6, 750);
+        statement.setInt(1, idea);
+        statement.setInt(2, players);
+        statement.setInt(3, debateID);
+        statement.setLong(4, debateLength);
+        statement.setInt(5, yesVotes);
+        statement.setInt(6, noVotes);
+        statement.setInt(7, stage1Length);
+        statement.setInt(8, stage2Length);
+        statement.setInt(9, stage3Length);
         
         int rowsInserted = statement.executeUpdate();
         
