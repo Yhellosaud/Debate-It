@@ -34,18 +34,8 @@ public class DebateManager {
     public DebateManager(Connection c) throws SQLException {
 
         this.c = c;
-        c = (Connection)DriverManager.getConnection(url, username, password);
         s = c.createStatement();
         c.setAutoCommit(true);
-        
-        String mySQL = ("SELECT * FROM posts ORDER BY id DESC LIMIT 1;");
-        rs = s.executeQuery(mySQL);
-        
-        if(rs.next()) {
-            
-            int id = rs.getInt("first_column_name");
-            
-        }
     }
     
     public Debate getDebate(int dID) throws SQLException {
@@ -121,7 +111,14 @@ public class DebateManager {
         return debates;
     }
     
-    public void InsertDebate() throws SQLException {
+    public void InsertDebate(Debate debate) throws SQLException {
+        
+        int debateID = debate.getDebateID();
+        int yesVotes = debate.getYesVotes();
+        int noVotes = debate.getNoVotes();
+        int stage1Length = debate.getStage1Length();
+        int stage2Length = debate.getStage2Length();
+        int stage3Length = debate.getStage3Length();
         
         debateData = "INSERT INTO debates (debateID, yesVotes, noVotes, stage1Length, stage2Length, stage3Length) VALUES (?, ?, ?, ?, ?, ?)";
 
