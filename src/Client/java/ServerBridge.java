@@ -23,7 +23,7 @@ import static java.lang.Thread.sleep;
 public class ServerBridge {
 
     public static final String serverIpAccessPoint = "192.168.43.193";
-    public static final String serverIpBilkent = "139.179.226.170";
+    public static final String serverIpBilkent = "139.179.134.139";
     public static final String serverIpEv = "192.168.1.42";
     public static final int serverPort = 54134;
 
@@ -62,7 +62,7 @@ public class ServerBridge {
     public static final int RESPONSE_BUYABLE_ITEMS = 104;
     public static final int RESPONSE_BATTLE_TIME = 105;
     public static final int RESPONSE_NEW_STAGE = 106;
-    public static final int RESPONSE_NEW_ARGUMENT = 106;
+    public static final int RESPONSE_NEW_ARGUMENT = 107;
 
 
     private volatile ArrayList<Serializable> leastRecentlyReceivedData;
@@ -215,7 +215,7 @@ public class ServerBridge {
                         isDataReady = false;
                         return null;
                     }
-                    System.out.println("Servers response id: " + responseID);
+                    System.out.println("------Servers response id: " + responseID+" -------");
 
                     //Reading data
                     boolean endOfFileReached = false;
@@ -224,7 +224,7 @@ public class ServerBridge {
 
 
                     //Reading data
-                    if (responseID == RESPONSE_BATTLE_TIME) {
+                    /*if (responseID == RESPONSE_BATTLE_TIME) {
                         int time = inFromServer.readInt();
                         System.out.println("Time: " + time);
 
@@ -234,7 +234,7 @@ public class ServerBridge {
                         //Sending client connected request
                         request(CLIENT_CONNECTED, null);
 
-                    } else {
+                    } else */{
                         while (!endOfFileReached) {
 
                             try {
@@ -258,7 +258,7 @@ public class ServerBridge {
 
                         isDataReady = true;
                         //Printing retrieved data
-                        System.out.println("-----------Received data --------------");
+                        System.out.println("Received data: ");
                         for (int i = 0; i < leastRecentlyReceivedData.size(); i++) {
 
                             System.out.println(leastRecentlyReceivedData.get(i).toString());
@@ -306,17 +306,21 @@ public class ServerBridge {
          */
         protected Void doInBackground(Void... arg0) {
 
-            System.out.println("Request task started");
+            System.out.println("--------Request task started----------");
             try {
                 //Sending request id
+                System.out.println("Request id: "+ requestId);
                 outToServer.writeInt(requestId);
                 //Sending request parameters
+                System.out.println("Request data:");
                 if (requestParams != null) {
                     int paramSize = requestParams.size();
                     for (int i = 0; i < paramSize; i++) {
+
                         outToServer.writeObject(requestParams.get(i));
+                        System.out.println(requestParams.get(i).toString());
                     }
-                    System.out.println("parameters sent.");
+
                 }
                 //Sending terminator
                 outToServer.writeObject(null);
