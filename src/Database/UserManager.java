@@ -30,7 +30,6 @@ public class UserManager {
     public UserManager(Connection c) throws SQLException {
 
         this.c = c;
-        c = (Connection)DriverManager.getConnection(url, username, password);
         s = c.createStatement();
         c.setAutoCommit(true);
     }
@@ -93,24 +92,30 @@ public class UserManager {
         return (new User(username, password, userID, null, null));
     }
     
-    public void InsertUser() throws SQLException {
+    public void InsertUser(User user) throws SQLException {
         
-        userData = "INSERT INTO debates (userID, username, password, "
-                + "points, selectedAvatar, selectedTitle, selectedFrame, "
-                + "pastDebateIDs, myInventory, votedDebates) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String username = user.getUsername();
+        String password = user.getPassword();
+        int userID = user.getPoints();
+        String pastDebateIDs = "";
+        String votedDebates = "";
+        
+        userData = "INSERT INTO debates (username, password, "
+                + "userID, pastDebateIDs, votedDebates) VALUES (?, ?, ?, ?, ?)";
 
         PreparedStatement statement = c.prepareStatement(userData);
         
-        statement.setInt(1, 001);
-        statement.setString(2, "Eda Hanım");
+        /*statement.setString(2, "Eda Hanım");
         statement.setString(3, "141511");
-        statement.setInt(4, 0);
+        statement.setInt(1, 001);
         statement.setString(5, "");
-        statement.setString(6, "");
-        statement.setString(7, "");
-        statement.setInt(8, 0);
-        statement.setString(9, "");
-        statement.setString(10, "");  
+        statement.setString(6, "");*/
+        
+        statement.setString(1, username);
+        statement.setString(2, password);
+        statement.setInt(3, userID);
+        statement.setString(4, pastDebateIDs);
+        statement.setString(5, votedDebates);
         
         int rowsInserted = statement.executeUpdate();
         
