@@ -8,6 +8,10 @@ import java.util.Arrays;
  */
 
 public class Player implements Serializable {
+
+    private static final long serialVersionUID = 2L;
+
+
     public final int SIDE_NEGATIVE = -1;
     public final int SIDE_POSITIVE = 1;
     public final int SIDE_SPECTATOR = 0;
@@ -20,6 +24,10 @@ public class Player implements Serializable {
     private int currentArguments;
     private int vote;
     private int consecutiveGamesPlayed;
+
+    public Player(String username) {
+        this.username = username;
+    }
 
     public Player(int id, String username, int side, String[] arguments, int currentArguments, int vote, int consecutiveGamesPlayed) {
         this.id = id;
@@ -102,13 +110,6 @@ public class Player implements Serializable {
 
     @Override
     public String toString() {
-        return "Player{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", side=" + side +
-                ", arguments=" + Arrays.toString(arguments) +
-                ", vote=" + vote +
-                ", consecutiveGamesPlayed=" + consecutiveGamesPlayed +
-                '}';
+        return username;
     }
 }

@@ -8,6 +8,9 @@ import java.util.*;
  */
 
 public class Debate implements Serializable {
+
+    private static final long serialVersionUID = 4L;
+
     private Idea idea;
     private ArrayList<Player> players;
     private int debateID;
@@ -17,6 +20,11 @@ public class Debate implements Serializable {
     private int stage1Length;
     private int stage2Length;
     private int stage3Length;
+
+    public Debate(Idea idea, ArrayList<Player> players) {
+        this.idea = idea;
+        this.players = players;
+    }
 
     public Debate(Idea idea, ArrayList<Player> players, int debateID, long debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length) {
         this.idea = idea;
@@ -120,7 +128,7 @@ public class Debate implements Serializable {
     }
 
     public String menuDisplay(){
-        return "Idea: " + idea + "\n" + "Players: " + players;
+        return "Idea: " + idea.getStatement() + "\n" + "Players: " + players;
     }
 
     @Override

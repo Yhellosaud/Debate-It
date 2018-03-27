@@ -7,6 +7,10 @@ import java.io.Serializable;
  */
 
 public class Idea implements Serializable {
+
+    private static final long serialVersionUID = 3L;
+
+
     private int ideaID;
     private String statement;
     private int category;

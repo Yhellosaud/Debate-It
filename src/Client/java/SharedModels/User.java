@@ -8,19 +8,19 @@ import java.util.*;
  */
 
 public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+
     private int userID;
     private String username;
     private String password;
-    private int points;
     private ArrayList<Integer> pastDebateIDs;
     private ArrayList<Integer> votedDebates;
-
-    private static final long serialVersionUID = 1L;
 
     public User(String username, String password, int userID, ArrayList<Integer> pastDebateIDs, ArrayList<Integer> votedDebates){
         this.username = username;
         this.password = password;
-        this.points = points;
         this.votedDebates = votedDebates;
         this.pastDebateIDs = pastDebateIDs;
     }
@@ -47,14 +47,6 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
     }
 
     public ArrayList<Integer> getPastDebateIDs() {
@@ -84,7 +76,6 @@ public class User implements Serializable {
                 "userID=" + userID +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", points=" + points +
                 ", pastDebateIDs=" + pastDebateIDs +
                 ", votedDebates=" + votedDebates +
                 '}';
