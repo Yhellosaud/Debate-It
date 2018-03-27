@@ -67,6 +67,10 @@ public class BattleTimer implements Runnable {
 
     }
 
+    /**
+     * This method start timer if the thread is running.
+     * @param timer 
+     */
     public void startTimer(int timer) {
 
         this.counting = true;
@@ -77,15 +81,22 @@ public class BattleTimer implements Runnable {
         return timer;
     }
 
+    /**
+     * This method stops counting.
+     */
     public void stopTimer() {
         timer = 0;
         this.counting = false;
 
     }
 
+    /**
+     * This method terminates the run method
+     */
     public void terminate() {
         stopTimer();
         this.running = false;
+        
     }
 
 }

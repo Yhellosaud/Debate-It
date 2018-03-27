@@ -53,12 +53,22 @@ public class UserHandler implements Runnable {
 
     private volatile ObjectOutputStream out;
     private volatile ObjectInputStream in;
+    
+    /*private DebateManager dm;
+    private ItemManager im;
+    private UserManager um;*/
 
     public UserHandler(Socket socket, int threadId,BattleThread battleThread) {
 
         this.socket = socket;
         this.clientAddress = socket.getRemoteSocketAddress().toString();
         this.battleThread = battleThread;
+        
+        /*this.dm = dm;
+        this.im = im;
+        this.um = um;*/
+        
+        
 
         //Initiating input and output streams
         try {
