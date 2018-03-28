@@ -8,25 +8,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-import SharedModels.User;
+import SharedModels.*;
 
 public class LoginActivity extends AppCompatActivity implements DataReceivable {
     EditText inusername, inpassword;
     Button login;
     int dataRetrieceAttempts;
-    private ServerBridge sb = new ServerBridge(this);
+    private ServerBridge sb;
     Button goToRegister;
     String username, password;
     User user;
-    ArrayList<Object> coming;
-    LoginActivity la = this;
+    ArrayList<Serializable> coming;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
-
+        sb = new ServerBridge(this);
+        sb.startListeningToServer();
         login = (Button)findViewById(R.id.login);
         inusername   = (EditText)findViewById(R.id.username);
         inpassword   = (EditText)findViewById(R.id.password);
@@ -36,11 +37,13 @@ public class LoginActivity extends AppCompatActivity implements DataReceivable {
                 {
                     public void onClick(View view)
                     {
+
                         login.setClickable(false);
                         username = inusername.getText().toString();
                         password = inpassword.getText().toString();
-                        Object[] req = new Object[]{username, password};
-                        sb.request(ServerBridge.REQUEST_REGISTER,req);
+                        System.out.println(username);
+                        System.out.println(password);
+                        sb.requestSignIn(username, password);
                         Helper helper = new Helper();
                         helper.execute();
                     }
@@ -56,6 +59,11 @@ public class LoginActivity extends AppCompatActivity implements DataReceivable {
         return done;
     }
 
+    @Override
+    public void updateRetrieveProgress(int progress) {
+
+    }
+
     private class Helper extends AsyncTask<Void, Void, User> {
         protected User doInBackground(Void... arg0) {
             coming = sb.getLeastRecentlyReceivedData();
@@ -63,8 +71,10 @@ public class LoginActivity extends AppCompatActivity implements DataReceivable {
                 login.setClickable(true);
             else{
                 user = (User)coming.get(0);
-                System.out.println(user.getUsername());
-                Intent intent = new Intent(la, MainActivity.class);
+                System.out.println(user);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                sb.disconnectFromServer();
+                login.setClickable(true);
                 intent.putExtra("user", user);
                 startActivity(intent);
             }
