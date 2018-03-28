@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="dicomp.debateit.RegisterActivity">
+    tools:context="dicomp.debateit.SharedModels.RegisterActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,11 +50,26 @@
             android:inputType="textPassword"
             android:padding="5dp" />
 
+        <TextView
+            android:id="@+id/warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:text="Passwords do not match." />
+
+        <TextView
+            android:id="@+id/successful"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Registered Successfully!"
+            android:textColor="@color/red" />
+
         <Button
             android:id="@+id/register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:onClick="register"
             android:text="@string/action_register" />
 
         <TextView
