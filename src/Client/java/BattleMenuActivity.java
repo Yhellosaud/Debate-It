@@ -1,6 +1,7 @@
 package dicomp.debateit;
 
 import android.content.Intent;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,12 +11,18 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
-public class BattleMenuActivity extends AppCompatActivity {
+import SharedModels.*;
+
+public class BattleMenuActivity extends AppCompatActivity implements DataReceivable {
 
     // *********************
     // ***** VARIABLES *****
     // *********************
-
+    ServerBridge sb;
+    User user;
+    Button sendArgument;
+    EditText inargument;
+    String argument;
     TextView player1Label, player2Label, player3Label, player4Label, ideaName, remainingTime, topic;
     EditText arg1, arg2, counter1, counter2, answer1, answer2, conclusion1, conclusion2;
     TextView stage1Label, stage2Label, stage3Label, stage4Label;
@@ -29,7 +36,13 @@ public class BattleMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_battle_menu);
-
+/*
+        sb = new ServerBridge(this);
+        user = (User)getIntent().getSerializableExtra("user");
+        sendArgument = (Button)findViewById(R.id.send_argument);
+        sb.startListeningToServer();
+        sb.requestJoinBattle(user);
+*/
         player1Label = (TextView) findViewById(R.id.player1View);
         player2Label = (TextView) findViewById(R.id.player2View);
         player3Label = (TextView) findViewById(R.id.player3View);
@@ -50,14 +63,7 @@ public class BattleMenuActivity extends AppCompatActivity {
         stage2Label = (TextView) findViewById(R.id.stage2View);
         stage3Label = (TextView) findViewById(R.id.stage3View);
         stage4Label = (TextView) findViewById(R.id.stage4View);
-        exitButton = (Button) findViewById(R.id.exitButton);
 
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish(); // Eğer bu class'a geldiğimiz gibi yönlendirme yapar isek, bak tuşu ile geri bu sayfaya dönülebilir. Screen Stack'ten çıkartmak için finish yapıypruz.
-            }
-        });
 
         Set_Active_Stage(0);
 
@@ -238,5 +244,19 @@ public class BattleMenuActivity extends AppCompatActivity {
     public String Get_Conclusion2()
     {
         return conclusion2.getText().toString();
+    }
+
+    @Override
+    public boolean receiveAndUpdateUI(Object[] objects) {
+        return false;
+    }
+    public void sendArgument(View view){
+        argument = inargument.getText().toString();
+        sb.requestSendArgument(user, argument);
+    }
+
+    @Override
+    public void updateRetrieveProgress(int progress) {
+
     }
 }
