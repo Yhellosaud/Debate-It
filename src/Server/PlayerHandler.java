@@ -26,7 +26,7 @@ public class PlayerHandler implements Runnable {
     public static final int RESPONSE_NEW_STAGE = 106;
     public static final int RESPONSE_NEW_ARGUMENT = 107;
 
-    private Player player;
+    private volatile Player player;
     private Socket clientSocket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
@@ -73,13 +73,13 @@ public class PlayerHandler implements Runnable {
                             }
 
                         } catch (Exception e) {
-                            System.out.println(e.getMessage());
+                            
                             e.printStackTrace();
                             endOfStreamReached = true;
                         }
                     }
                     for (int i = 0; i < requestParams.size(); i++) {
-                        System.out.println(requestParams.get(i).toString());
+                        System.out.println(i+": "+requestParams.get(i).toString());
                     }
                     if (requestId != UserHandler.CLIENT_CONNECTED) {
                         //Updating players
@@ -147,7 +147,7 @@ public class PlayerHandler implements Runnable {
      */
     private void responseBattleTime(int time) {
 
-        System.out.println("----send cur time calisti. time: " + time);
+        System.out.println("Sending battle time to player: " + time);
         ArrayList<Serializable> responseParams = new ArrayList<Serializable>();
         responseParams.add(time);
         response(RESPONSE_BATTLE_TIME, responseParams);

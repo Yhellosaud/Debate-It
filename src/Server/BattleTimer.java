@@ -17,7 +17,7 @@ public class BattleTimer implements Runnable {
     private volatile int timer;
     private volatile boolean running;
     private volatile boolean counting;
-    private ArrayList<PlayerHandler> playerHandlers;
+    private volatile ArrayList<PlayerHandler> playerHandlers;
     private BattleThread battleThread;
 
     public BattleTimer(BattleThread battleThread, ArrayList<PlayerHandler> playerHandlers) {
@@ -43,7 +43,7 @@ public class BattleTimer implements Runnable {
                         System.out.println(e.getMessage());
                         e.printStackTrace();
                     }
-                    System.out.println(timer);
+                    System.out.println("Battle time: "+timer);
 
                     for (int i = 0; i < playerHandlers.size(); i++) {
                         PlayerHandler curHandler = playerHandlers.get(i);

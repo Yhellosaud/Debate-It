@@ -29,7 +29,7 @@ import java.sql.SQLException;
 public class Server {
 
     public static final String serverIpAccessPoint = "192.168.43.193";
-    public static final String serverIpBilkent = "139.179.134.139";
+    public static final String serverIpBilkent = "139.179.55.85";
     public static final String serverIpEv = "192.168.1.42";
     public static final String databaseIp = "139.179.227.218";
     public static final String databasePort = "3306";
@@ -50,8 +50,16 @@ public class Server {
         UserManager um = null;
         Connection conn = null;
 
-        //Establishing connection to database          
-        System.out.println("Connecting database...");
+        ArrayList<Integer> pastDebateIDs = new ArrayList<Integer>();
+        ArrayList<Integer> votedDebates = new ArrayList<Integer>();
+        pastDebateIDs.add(23);
+        pastDebateIDs.add(24);
+        votedDebates.add(33);
+        votedDebates.add(34);
+        User user1 = new User("Cagatay", "password", 1, pastDebateIDs, votedDebates);
+
+        //////////////////////////////////////////Establishing connection to database///////////////////////////////////
+        /*System.out.println("Connecting database...");
         try {
             //Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             //String url = "jdbc:mysql://139.179.227.218:3306/diDatabase";
@@ -76,10 +84,9 @@ public class Server {
         } catch (Exception e) {
             System.out.println("Could not connected to database");
             e.printStackTrace();
-        }
-
-        //Starting server
-        /*try {
+        }*/
+        ///////////////////////////////////////////////Starting server///////////////////////////////////////////////////////////////
+        try {
 
             //Opening server socket
             serverSocket = new ServerSocket(serverPort, 0, InetAddress.getByName(serverIpBilkent));
@@ -87,7 +94,227 @@ public class Server {
             String serverAddress = serverSocket.getLocalSocketAddress().toString();
             System.out.println("Server is running on port: " + serverPort + " and adress: " + serverAddress);
 
-            //Starting battle thread
+            //Starting battle thread           
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+           
+            
             battleThread = new BattleThread();
             new Thread(battleThread).start();
             System.out.println("Battle started");
@@ -97,7 +324,7 @@ public class Server {
 
                 Socket newClient = serverSocket.accept();
                 System.out.println("Client connected.");
-                System.out.println("Address: " + newClient.getRemoteSocketAddress().toString() + " port: " + newClient.getLocalPort());
+                System.out.println("Address: " + newClient.getRemoteSocketAddress().toString() + " port: " + newClient.getLocalPort()+"\n");
                 UserHandler userHandler = new UserHandler(newClient, numTotalConnections, battleThread);
                 new Thread(userHandler).start();
                 //userHandlers.add(userHandler);
@@ -105,7 +332,7 @@ public class Server {
             }
 
         } catch (Exception e) {
-            System.out.println("Could not opened the server");            
+            System.out.println("Could not opened the server");
             e.printStackTrace();
 
         } finally {
@@ -117,7 +344,7 @@ public class Server {
             } catch (Exception e) {
                 System.out.println("Couldn't closed server socket.");
             }
-        }*/
+        }
     }
 
 }
