@@ -1,24 +1,20 @@
 Week 2 - 5-11 February  Participants: Ahmet, Çağatay, Yağız, Yasin
-
 Platform to be used in this project was discussed.  
 Decided to keep meeting logs.  
 Gameplay and the skeleton of the game were discussed.  
 Talked about some possible features to implement.
 
 Week 3 - 12-18 February Participants: Ahmet, Çağatay, Yağız, Yasin
-
 UML diagrams were drawn.
 Mockups were drawn.
 Analysis report was written.
 
 Week 4 - 19-25 February Participants: Çağatay, Yağız, Yasin
 (Ahmet: Could not come to school entire week due to illness)
-
 Decided instances and functions of some classes.
 Talked about database management.
 
 Week 5 - 26 February - 2 March Participants : Çağatay, Yağız, Yasin, Ahmet
-
 We continued the design stage of our project. We determined the system design and subsystem design. 
 The ingredients of each subsystem is determined. 
 The needed classes are divided into 3 main categories. Model, view and control classes.
@@ -31,7 +27,14 @@ Android tutotial is done about xml-java relationships on Android Studio.
 Some basic programs are written for exercise.
 
 Week 7 - 12 March - 18 March Participants: Çağatay, Yağız, Yasin, Ahmet
-
 All group members worked on the implementation stage of the project.
 Final report is written according to what is done so far.
 
+Week 8 18 March - 25 March Participants: Çağatay, Yağız, Yasin, Ahmet
+Code writing is done by each group member for the first iteration demo.
+
+Week 9 18 March - 25 March Participants: Çağatay, Yağız, Yasin, Ahmet
+Code implementation is done and some modifications on some classes are done for the demo.
+Presentation for the demo is prepared.
+Server connection is achieved on the application.
+Demo is performed and feedback is taken from the instructor.
