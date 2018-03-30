@@ -6,6 +6,7 @@ import java.util.*;
 /**
  * Created by Yasin on 9.03.2018.
  */
+
 public class Debate implements Serializable {
 
     private static final long serialVersionUID = 4L;
@@ -13,20 +14,19 @@ public class Debate implements Serializable {
     private Idea idea;
     private ArrayList<Player> players;
     private int debateID;
-    private int debateLength;
+    private long debateLength;
     private int yesVotes;
     private int noVotes;
     private int stage1Length;
     private int stage2Length;
     private int stage3Length;
-    private int stage4length;
 
     public Debate(Idea idea, ArrayList<Player> players) {
         this.idea = idea;
         this.players = players;
     }
 
-    public Debate(Idea idea, ArrayList<Player> players, int debateID, int debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length, int stage4Length) {
+    public Debate(Idea idea, ArrayList<Player> players, int debateID, long debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length) {
         this.idea = idea;
         this.players = players;
         this.debateID = debateID;
@@ -36,7 +36,6 @@ public class Debate implements Serializable {
         this.stage1Length = stage1Length;
         this.stage2Length = stage2Length;
         this.stage3Length = stage3Length;
-        this.stage4length = stage4Length;
     }
 
     public Debate(Idea idea, int debateID) {
@@ -44,24 +43,20 @@ public class Debate implements Serializable {
         this.debateID = debateID;
     }
 
-    public void addPlayer(Player player) {
+    public void addPlayer(Player player){
         players.add(player);
     }
 
-    public void removePlayer(Player player) {
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getId() == player.getId()) {
+    public void deletePlayer(Player player){
+        for(int i = 0; i < players.size(); i++)
+            if(players.get(i).getId() == player.getId())
                 players.remove(i);
-            }
-        }
     }
 
-    public void addArgument(Player player, String argument) {
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getId() == player.getId()) {
+    public void addArgument(Player player, String argument){
+        for(int i = 0; i < players.size(); i++)
+            if(players.get(i).getId() == player.getId())
                 player.addArgument(argument);
-            }
-        }
     }
 
     public Idea getIdea() {
@@ -84,11 +79,11 @@ public class Debate implements Serializable {
         this.debateID = debateID;
     }
 
-    public int getDebateLength() {
+    public long getDebateLength() {
         return debateLength;
     }
 
-    public void setDebateLength(int debateLength) {
+    public void setDebateLength(long debateLength) {
         this.debateLength = debateLength;
     }
 
@@ -132,44 +127,22 @@ public class Debate implements Serializable {
         this.stage3Length = stage3Length;
     }
 
-    public String menuDisplay() {
+    public String menuDisplay(){
         return "Idea: " + idea.getStatement() + "\n" + "Players: " + players;
     }
 
     @Override
     public String toString() {
-        return "Debate{"
-                + "idea=" + idea
-                + ", players=" + players
-                + ", debateID=" + debateID
-                + ", debateLength=" + debateLength
-                + ", yesVotes=" + yesVotes
-                + ", noVotes=" + noVotes
-                + ", stage1Length=" + stage1Length
-                + ", stage2Length=" + stage2Length
-                + ", stage3Length=" + stage3Length
-                + '}';
-    }
-
-    public void closeDebate(int yesVotes, int noVotes) {
-
-        debateLength = stage1Length + stage2Length + stage3Length + stage4length;
-        this.yesVotes = yesVotes;
-        this.noVotes = noVotes;
-
-        synchronized (players) {
-            for (int i = 0; i < players.size(); i++) {
-                Player curPlayer = players.get(i);
-                if(curPlayer.getSide()==Player.SIDE_SPECTATOR){
-                    curPlayer.incrementConsecutiveGamesWatched();
-                    
-                }else{
-                    curPlayer.setConsecutiveGamesWatched(0);                   
-                }
-                curPlayer.incrementGamesPlayedInSession();
-
-            }
-        }
-
+        return "Debate{" +
+                "idea=" + idea +
+                ", players=" + players +
+                ", debateID=" + debateID +
+                ", debateLength=" + debateLength +
+                ", yesVotes=" + yesVotes +
+                ", noVotes=" + noVotes +
+                ", stage1Length=" + stage1Length +
+                ", stage2Length=" + stage2Length +
+                ", stage3Length=" + stage3Length +
+                '}';
     }
 }
