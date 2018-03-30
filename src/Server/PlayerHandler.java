@@ -25,6 +25,11 @@ public class PlayerHandler implements Runnable {
     public static final int RESPONSE_BATTLE_TIME = 105;
     public static final int RESPONSE_NEW_STAGE = 106;
     public static final int RESPONSE_NEW_ARGUMENT = 107;
+    
+    public static final int REQUEST_SUBMIT_SIDES = 108;
+    public static final int REQUEST_SUBMIT_ARGUMENTS = 109;
+    public static final int REQUEST_SUBMIT_VOTE = 110;
+    
 
     private volatile Player player;
     private Socket clientSocket;

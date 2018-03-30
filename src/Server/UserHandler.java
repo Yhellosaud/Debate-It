@@ -22,7 +22,7 @@ public class UserHandler implements Runnable {
 
     //Request in which client does not expect to receive data
     public static final int REQUEST_REGISTER = 0;
-    public static final int REQUEST_ADD_NEW_USER_ITEM = 1;
+    public static final int REQUEST_BUY_ITEM = 1;
     public static final int REQUEST_ADD_NEW_PLAYED_DEBATE = 2;
     public static final int REQUEST_ADD_NEW_PAST_DEBATE = 3;
     public static final int REQUEST_JOIN_BATTLE = 4;
@@ -82,10 +82,11 @@ public class UserHandler implements Runnable {
 
         ArrayList<Serializable> requestParams = new ArrayList<Serializable>();
         boolean endOfStreamReached = false;
+        int requestId = INVALID_REQUEST_ID;
         try {
 
             //Reading request id
-            int requestId = in.readInt();
+            requestId = in.readInt();
             System.out.println("User handler request id: " + requestId);
 
             //Reading objects from objectinputstream. There is a null object at the end of stream to mark the end.
@@ -116,12 +117,16 @@ public class UserHandler implements Runnable {
             System.out.println(e.getMessage());
             e.printStackTrace();
         } finally {
-            /*try {
-                socket.close();
-                System.out.println("Client connection ended");
-            } catch (Exception ignored) {
+            //Closing sockets if request is not to join battle
+            if (requestId != REQUEST_JOIN_BATTLE) {
 
-            }*/
+                try {
+                    socket.close();
+                    System.out.println("Client connection ended");
+                } catch (Exception ignored) {
+
+                }
+            }
 
         }
 
@@ -139,36 +144,77 @@ public class UserHandler implements Runnable {
 
         switch (requestId) {
 
-            case (REQUEST_REGISTER):
-                handleRequestRegister(requestParams);
+            case (REQUEST_REGISTER): {
+                String userName = (String) requestParams.get(0);
+                String password = (String) requestParams.get(1);
+                handleRequestRegister(userName, password);
                 break;
-            case (REQUEST_SIGN_IN):
-                handleRequestSignIn(requestParams);
+            }
+            case (REQUEST_SIGN_IN): {
+                String userName = (String) requestParams.get(0);
+                String password = (String) requestParams.get(1);
+                handleRequestSignIn(userName, password);
                 break;
-            case (REQUEST_ADD_NEW_USER_ITEM):
+            }
+
+            case (REQUEST_BUY_ITEM): {
+                int userId = (int) requestParams.get(0);
+                int itemId = (int) requestParams.get(1);
+                handleRequestBuyItem(userId, itemId);
                 break;
-            case (REQUEST_ADD_NEW_PLAYED_DEBATE):
+            }
+            /*case (REQUEST_ADD_NEW_PLAYED_DEBATE):
+                handleRequestAddNewPlayedDebate(requestParams);
                 break;
             case (REQUEST_ADD_NEW_PAST_DEBATE):
+                handleRequestAddNewPastDebate(requestParams);
+                break;*/
+            case (REQUEST_CHANGE_SELECTED_AVATAR):{
+                int userId = (int) requestParams.get(0);
+                int avatarId = (int) requestParams.get(1);
+                handleRequestChangeSelectedAvatar(userId,avatarId);
                 break;
-            case (REQUEST_CHANGE_SELECTED_AVATAR):
+            }
+            case (REQUEST_CHANGE_SELECTED_TITLE):{
+                int userId = (int) requestParams.get(0);
+                int titleId = (int) requestParams.get(1);
+                handleRequestChangeSelectedTitle(userId,titleId);
                 break;
-            case (REQUEST_CHANGE_SELECTED_TITLE):
+            }
+            case (REQUEST_CHANGE_SELECTED_FRAME):{
+                int userId = (int) requestParams.get(0);
+                int frameId = (int) requestParams.get(1);
+                handleRequestChangeSelectedFrame(userId,frameId);
                 break;
-            case (REQUEST_CHANGE_SELECTED_FRAME):
+            }
+            case (REQUEST_GET_INVENTORY):{
+                int userId = (int)requestParams.get(0);
+                handleRequestGetInventory(userId);
                 break;
-            case (REQUEST_GET_INVENTORY):
+            }
+                
+            case (REQUEST_GET_PLAYED_DEBATES):{
+                int userId = (int)requestParams.get(0);
+                handleRequestGetPlayedDebates(userId);
                 break;
-            case (REQUEST_GET_PLAYED_DEBATES):
-                handleRequestGetPlayedDebates(requestParams);
+            }
+                
+            case (REQUEST_GET_PAST_DEBATES):{
+                int userId = (int)requestParams.get(0);               
+                handleRequestGetPastDebates(userId);
                 break;
-            case (REQUEST_GET_PAST_DEBATES):
+            }
+            case (REQUEST_GET_BUYABLE_ITEMS):{
+                handleRequestGetBuyableItems();
                 break;
-            case (REQUEST_GET_BUYABLE_ITEMS):
+            }
+                
+            case (REQUEST_JOIN_BATTLE):{
+                User user = (User)requestParams.get(0);
+                handleRequestJoinBattle(user);
                 break;
-            case (REQUEST_JOIN_BATTLE):
-                handleRequestJoinBattle(requestParams);
-                break;
+            }
+                
         }
         return false;
     }
@@ -180,7 +226,7 @@ public class UserHandler implements Runnable {
      * @param requestParams
      * @return
      */
-    private boolean handleRequestRegister(ArrayList<Serializable> requestParams) {
+    private boolean handleRequestRegister(String userName, String password) {
         String data1 = "data1";
         String data2 = "data2";
 
@@ -207,7 +253,7 @@ public class UserHandler implements Runnable {
 
     }
 
-    private boolean handleRequestSignIn(ArrayList<Serializable> requestParams) {
+    private boolean handleRequestSignIn(String userName, String password) {
         ArrayList<Integer> pastDebateIDs = new ArrayList<Integer>();
         ArrayList<Integer> votedDebates = new ArrayList<Integer>();
         pastDebateIDs.add(23);
@@ -215,83 +261,79 @@ public class UserHandler implements Runnable {
         votedDebates.add(33);
         votedDebates.add(34);
 
-        String userName = (String) requestParams.get(0);
-        String password = (String) requestParams.get(1);
-
         User user = new User(userName, password, 1, pastDebateIDs, votedDebates);
 
         forwardUserObject(user);
         return false;
     }
 
-    private boolean handleRequestAddNewUserItem(ArrayList<Serializable> requestParams) {
+    private boolean handleRequestBuyItem(int userId, int itemId) {
         return false;
     }
 
-    private boolean handleRequestAddNewPlayedDebate(ArrayList<Serializable> requestParams) {
+   /* private boolean handleRequestAddNewPlayedDebate(ArrayList<Serializable> requestParams) {
         //DebateManager.addNewPlayedDebate(debate);
         return false;
     }
 
     private boolean handleRequestAddNewPastDebate(ArrayList<Serializable> requestParams) {
         return false;
-    }
+    }*/
 
     private boolean handleRequestEnterLooby(ArrayList<Serializable> requestParams) {
         return false;
     }
 
-    private boolean handleRequestChangeSelectedAvatar(ArrayList<Serializable> requestParams) {
+    private boolean handleRequestChangeSelectedAvatar(int userId,int avatarId) {
         return false;
     }
 
-    private boolean handleRequestChangeSelectedTitle(ArrayList<Serializable> requestParams) {
+    private boolean handleRequestChangeSelectedTitle(int userId,int titleId) {
         return false;
     }
 
-    private boolean handleRequestChangeSelectedFrame(ArrayList<Serializable> requestParams) {
+    private boolean handleRequestChangeSelectedFrame(int userId,int frameId) {
         return false;
     }
 
-    /*private boolean handleRequestGetInventory(ArrayList<Serializable> requestParams) {
-        Inventory inventory;
-        forwardInventory(inventory);
+    private boolean handleRequestGetInventory(int userId) {
+        
         return false;
-    }*/
-    private boolean handleRequestGetPlayedDebates(ArrayList<Serializable> requestParams) {
+    }
+    private boolean handleRequestGetPlayedDebates(int userId) {
         //Debate[] debates = DebateManager.getPlayaedDebates(userId);
         //Debate(Idea idea, ArrayList<Player> players, int debateID, long debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length)
-        Idea idea = new Idea(22,"Should street animals be allowed to Bilkent?",5);
-        Player player1 = new Player(1,"Player 1",0);
-        Player player2 = new Player(2,"Player 2",0);
-        Player player3 = new Player(3,"Player 3",0);
-        Player player4 = new Player(4,"Player 4",0);
+        Idea idea = new Idea(22, "Should street animals be allowed to Bilkent?", 5);
+        Player player1 = new Player(1, "Player 1", 0);
+        Player player2 = new Player(2, "Player 2", 0);
+        Player player3 = new Player(3, "Player 3", 0);
+        Player player4 = new Player(4, "Player 4", 0);
         ArrayList<Player> players = new ArrayList<Player>();
-        Debate debate1 = new Debate(idea,players,1,15,1,3,4,3,4,5);
-        Debate debate2 = new Debate(idea,players,2,15,1,3,4,3,4,5);
+        Debate debate1 = new Debate(idea, players, 1, 15, 1, 3, 4, 3, 4, 5);
+        Debate debate2 = new Debate(idea, players, 2, 15, 1, 3, 4, 3, 4, 5);
         ArrayList<Serializable> responseData = new ArrayList<Serializable>();
         responseData.add(debate1);
         responseData.add(debate2);
-        
-        response(RESPONSE_PLAYED_DEBATES,responseData);      
+
+        response(RESPONSE_PLAYED_DEBATES, responseData);
 
         return false;
 
     }
 
-    private boolean handleRequestGetPastDebates(ArrayList<Serializable> requestParams) {
+    private boolean handleRequestGetPastDebates(int userId) {
         Debate[] debates;
         return false;
     }
 
-    /*private boolean handleRequestGetBuyableItems(ArrayList<Object> requestParams) {
-        Item[] items;
+    private boolean handleRequestGetBuyableItems() {
+        
         return false;
-    }*/
-    private boolean handleRequestJoinBattle(ArrayList<Serializable> requestParams) {
+    }
+    private boolean handleRequestJoinBattle(User user) {
 
-        //Player player = (Player)requestParams.get(0);
-        Player player = new Player(123, "Cagatay", 123, null, 0, 0, 0);
+        Player player = new Player(user);
+        //Player player = new Player(123, "Cagatay", 123, null, 0, 0, 0);
         battleThread.joinNewPlayer(player, socket, out, in);
 
         return false;
