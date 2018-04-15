@@ -24,6 +24,12 @@ public class User implements Serializable {
         this.votedDebates = votedDebates;
         this.pastDebateIDs = pastDebateIDs;
     }
+    
+    public User(String username, String password) {
+
+        this.username = username;
+        this.password = password;
+    }
 
     public int getUserID() {
         return userID;
@@ -63,11 +69,6 @@ public class User implements Serializable {
 
     public void setVotedDebates(ArrayList<Integer> votedDebates) {
         this.votedDebates = votedDebates;
-    }
-    public User(String username, String password) {
-
-        this.username = username;
-        this.password = password;
     }
 
     @Override
