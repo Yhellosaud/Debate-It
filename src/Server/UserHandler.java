@@ -304,10 +304,10 @@ public class UserHandler implements Runnable {
         //Debate[] debates = DebateManager.getPlayaedDebates(userId);
         //Debate(Idea idea, ArrayList<Player> players, int debateID, long debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length)
         Idea idea = new Idea(22, "Should street animals be allowed to Bilkent?", 5);
-        Player player1 = new Player(1, "Player 1", 0);
-        Player player2 = new Player(2, "Player 2", 0);
-        Player player3 = new Player(3, "Player 3", 0);
-        Player player4 = new Player(4, "Player 4", 0);
+        Player player1 = new Player(1, "Player 1");
+        Player player2 = new Player(2, "Player 2");
+        Player player3 = new Player(3, "Player 3");
+        Player player4 = new Player(4, "Player 4");
         ArrayList<Player> players = new ArrayList<Player>();
         Debate debate1 = new Debate(idea, players, 1, 15, 1, 3, 4, 3, 4, 5);
         Debate debate2 = new Debate(idea, players, 2, 15, 1, 3, 4, 3, 4, 5);

@@ -95,7 +95,7 @@ public class Server {
             System.out.println("Server is running on port: " + serverPort + " and adress: " + serverAddress);
 
             //Starting battle thread      
-            battleThread = new BattleThread();
+            battleThread = new BattleThread(dm);
             new Thread(battleThread).start();
             System.out.println("Battle started");
 
