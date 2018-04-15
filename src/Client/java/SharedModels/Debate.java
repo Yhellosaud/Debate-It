@@ -19,14 +19,13 @@ public class Debate implements Serializable {
     private int stage1Length;
     private int stage2Length;
     private int stage3Length;
-    private int stage4length;
 
     public Debate(Idea idea, ArrayList<Player> players) {
         this.idea = idea;
         this.players = players;
     }
 
-    public Debate(Idea idea, ArrayList<Player> players, int debateID, int debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length, int stage4Length) {
+    public Debate(Idea idea, ArrayList<Player> players, int debateID, int debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length) {
         this.idea = idea;
         this.players = players;
         this.debateID = debateID;
@@ -36,7 +35,6 @@ public class Debate implements Serializable {
         this.stage1Length = stage1Length;
         this.stage2Length = stage2Length;
         this.stage3Length = stage3Length;
-        this.stage4length = stage4Length;
     }
 
     public Debate(Idea idea, int debateID) {
