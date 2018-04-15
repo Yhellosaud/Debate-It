@@ -92,7 +92,7 @@ public class Player implements Serializable {
         return playerID;
     }
 
-    public void setId(int playerID) {
+    public void setPlayerID(int playerID) {
         this.playerID = playerID;
     }
 
