@@ -18,7 +18,7 @@ public class Player implements Serializable {
     public static final int VOTE_YES = 2;
     public static final int VOTE_NO = 3;
     
-    private int id;
+    private int playerID;
     private String username;
     private int side;
     private String[] arguments;
@@ -31,8 +31,8 @@ public class Player implements Serializable {
         this.username = username;
     }
 
-    public Player(int id, String username, int side, String[] arguments, int currentArguments, int vote, int consecutiveGamesPlayed) {
-        this.id = id;
+    public Player(int playerID, String username, int side, String[] arguments, int currentArguments, int vote, int consecutiveGamesPlayed) {
+        this.playerID = playerID;
         this.username = username;
         this.side = side;
         this.arguments = arguments;
@@ -41,8 +41,8 @@ public class Player implements Serializable {
         this.consecutiveGamesWatched = consecutiveGamesPlayed;
     }
 
-    public Player(int id, String username, int consecutiveGamesPlayed) {
-        this.id = id;
+    public Player(int playerID, String username, int consecutiveGamesPlayed) {
+        this.playerID = playerID;
         this.username = username;
         this.consecutiveGamesWatched = consecutiveGamesPlayed;
         currentArguments = 0;
@@ -50,7 +50,7 @@ public class Player implements Serializable {
     }
 
     public Player(User user){
-        this.id = user.getUserID();
+        this.playerID = user.getUserID();
         this.username = user.getUsername();
         side = SIDE_SPECTATOR;
         arguments = new String[4];
@@ -88,12 +88,12 @@ public class Player implements Serializable {
         return username;
     }
 
-    public int getId() {
-        return id;
+    public int getplayerID() {
+        return playerID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int playerID) {
+        this.playerID = playerID;
     }
 
     public String getUsername() {
