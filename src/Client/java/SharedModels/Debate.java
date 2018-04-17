@@ -19,13 +19,14 @@ public class Debate implements Serializable {
     private int stage1Length;
     private int stage2Length;
     private int stage3Length;
+    private int stage4Length;
 
     public Debate(Idea idea, ArrayList<Player> players) {
         this.idea = idea;
         this.players = players;
     }
 
-    public Debate(Idea idea, ArrayList<Player> players, int debateID, int debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length) {
+    public Debate(Idea idea, ArrayList<Player> players, int debateID, int debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length, int stage4Length) {
         this.idea = idea;
         this.players = players;
         this.debateID = debateID;
@@ -35,6 +36,7 @@ public class Debate implements Serializable {
         this.stage1Length = stage1Length;
         this.stage2Length = stage2Length;
         this.stage3Length = stage3Length;
+        this.stage4Length = stage4Length;
     }
 
     public Debate(Idea idea, int debateID) {
@@ -48,15 +50,15 @@ public class Debate implements Serializable {
 
     public void removePlayer(Player player) {
         for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getId() == player.getId()) {
+            if (players.get(i).getPlayerID() == player.getPlayerID()) {
                 players.remove(i);
             }
         }
     }
 
-    public void addArgument(Player player, String argument) {
+    public void addArgument(Player player, Argument argument) {
         for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getId() == player.getId()) {
+            if (players.get(i).getPlayerID() == player.getPlayerID()) {
                 player.addArgument(argument);
             }
         }
@@ -64,10 +66,6 @@ public class Debate implements Serializable {
 
     public Idea getIdea() {
         return idea;
-    }
-
-    public void setIdea(Idea idea) {
-        this.idea = idea;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -78,56 +76,48 @@ public class Debate implements Serializable {
         return debateID;
     }
 
-    public void setDebateID(int debateID) {
-        this.debateID = debateID;
-    }
-
     public int getDebateLength() {
         return debateLength;
-    }
-
-    public void setDebateLength(int debateLength) {
-        this.debateLength = debateLength;
     }
 
     public int getYesVotes() {
         return yesVotes;
     }
 
-    public void setYesVotes(int yesVotes) {
-        this.yesVotes = yesVotes;
-    }
-
     public int getNoVotes() {
         return noVotes;
-    }
-
-    public void setNoVotes(int noVotes) {
-        this.noVotes = noVotes;
     }
 
     public int getStage1Length() {
         return stage1Length;
     }
 
-    public void setStage1Length(int stage1Length) {
-        this.stage1Length = stage1Length;
-    }
-
     public int getStage2Length() {
         return stage2Length;
-    }
-
-    public void setStage2Length(int stage2Length) {
-        this.stage2Length = stage2Length;
     }
 
     public int getStage3Length() {
         return stage3Length;
     }
-
+    
+    public int getStage4Length() {
+        return stage4Length;
+    }
+    
+    public void setStage1Length(int stage1Length) {
+        this.stage1Length = stage1Length;
+    }
+    
+    public void setStage2Length(int stage2Length) {
+        this.stage2Length = stage2Length;
+    }
+    
     public void setStage3Length(int stage3Length) {
         this.stage3Length = stage3Length;
+    }
+    
+    public void setStage4Length(int stage4Length) {
+        this.stage4Length = stage4Length;
     }
 
     public String menuDisplay() {
@@ -151,7 +141,7 @@ public class Debate implements Serializable {
 
     public void closeDebate(int yesVotes, int noVotes) {
 
-        debateLength = stage1Length + stage2Length + stage3Length + stage4length;
+        debateLength = stage1Length + stage2Length + stage3Length + stage4Length;
         this.yesVotes = yesVotes;
         this.noVotes = noVotes;
 
