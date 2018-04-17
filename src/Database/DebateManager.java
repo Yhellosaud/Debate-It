@@ -111,7 +111,7 @@ public class DebateManager {
         return debates;
     }
     
-    public void InsertDebate(Debate debate) throws SQLException {
+    public void insertDebate(Debate debate) throws SQLException {
         
         int idea = 0;
         int players = 0;
