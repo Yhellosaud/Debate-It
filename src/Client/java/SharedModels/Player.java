@@ -1,7 +1,7 @@
 package SharedModels;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Created by Yasin on 9.03.2018.
@@ -21,40 +21,33 @@ public class Player implements Serializable {
     private int playerID;
     private String username;
     private int side;
-    private String[] arguments;
-    private int currentArguments;
+    private ArrayList<Argument> arguments;
     private int vote;
     private volatile int consecutiveGamesWatched;
     private volatile int gamesPlayedInSession;
 
-    public Player(String username) {
-        this.username = username;
-    }
-
-    public Player(int playerID, String username, int side, String[] arguments, int currentArguments, int vote, int consecutiveGamesPlayed) {
+    public Player(int playerID, String username, int side, ArrayList<Argument> arguments, int vote, int consecutiveGamesWatched, int gamesPlayedInSession) {
         this.playerID = playerID;
         this.username = username;
         this.side = side;
         this.arguments = arguments;
-        this.currentArguments = currentArguments;
         this.vote = vote;
-        this.consecutiveGamesWatched = consecutiveGamesPlayed;
+        this.consecutiveGamesWatched = consecutiveGamesWatched;
+ this.gamesPlayedInSession = gamesPlayedInSession;
     }
 
-    public Player(int playerID, String username, int consecutiveGamesPlayed) {
+    public Player(int playerID, String username) {
         this.playerID = playerID;
         this.username = username;
-        this.consecutiveGamesWatched = consecutiveGamesPlayed;
-        currentArguments = 0;
-        arguments = new String[4];
+        this.consecutiveGamesWatched = 0;
+        arguments = new ArrayList<Argument>();
     }
 
     public Player(User user){
         this.playerID = user.getUserID();
         this.username = user.getUsername();
         side = SIDE_SPECTATOR;
-        arguments = new String[4];
-        currentArguments = 0;
+        arguments = new ArrayList<Argument>();
         vote = VOTE_YES;
         consecutiveGamesWatched = 0;
         gamesPlayedInSession = 0;        
@@ -77,31 +70,13 @@ public class Player implements Serializable {
     public int getGamesPlayedInSession(){
         return gamesPlayedInSession;
     }
-    
-    public void addArgument(String argument){
-        arguments[currentArguments] = argument;
-        currentArguments++;
-    }
 
-    @Override
-    public String toString() {
-        return username;
-    }
-
-    public int getplayerID() {
+    public int getPlayerID() {
         return playerID;
-    }
-
-    public void setPlayerID(int playerID) {
-        this.playerID = playerID;
     }
 
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public int getSide() {
@@ -112,12 +87,12 @@ public class Player implements Serializable {
         this.side = side;
     }
 
-    public String[] getArguments() {
+    public ArrayList<Argument> getArguments() {
         return arguments;
     }
 
-    public void setArguments(String[] arguments) {
-        this.arguments = arguments;
+    public void addArgument(Argument argument) {
+        arguments.add(argument);
     }
 
     public int getVote() {
@@ -145,5 +120,9 @@ public class Player implements Serializable {
         this.consecutiveGamesWatched = consecutiveGamesPlayed;
     }
 
+    @Override
+    public String toString() {
+        return username;
+    }
     
 }

@@ -10,8 +10,6 @@ import java.util.*;
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-
     private int userID;
     private String username;
     private String password;
@@ -23,52 +21,42 @@ public class User implements Serializable {
         this.password = password;
         this.votedDebates = votedDebates;
         this.pastDebateIDs = pastDebateIDs;
-    }
-    
-    public User(String username, String password) {
-
-        this.username = username;
-        this.password = password;
+        this.userID = userID;
+        this.pastDebateIDs = pastDebateIDs;
+        this.votedDebates = votedDebates;
     }
 
     public int getUserID() {
         return userID;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public ArrayList<Integer> getPastDebateIDs() {
         return pastDebateIDs;
     }
 
-    public void setPastDebateIDs(ArrayList<Integer> pastDebateIDs) {
-        this.pastDebateIDs = pastDebateIDs;
+    public void addPastDebateID(int pastDebateID) {
+        pastDebateIDs.add(pastDebateID);
     }
 
     public ArrayList<Integer> getVotedDebates() {
         return votedDebates;
     }
 
-    public void setVotedDebates(ArrayList<Integer> votedDebates) {
-        this.votedDebates = votedDebates;
+    public void addVotedDebate(int votedDebate) {
+        votedDebates.add(votedDebate);
+    }
+    public User(String username, String password) {
+
+        this.username = username;
+        this.password = password;
     }
 
     @Override
