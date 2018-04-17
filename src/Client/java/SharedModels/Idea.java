@@ -25,24 +25,12 @@ public class Idea implements Serializable {
         return ideaID;
     }
 
-    public void setIdeaID(int ideaID) {
-        this.ideaID = ideaID;
-    }
-
     public String getStatement() {
         return statement;
     }
 
-    public void setStatement(String statement) {
-        this.statement = statement;
-    }
-
     public int getCategory() {
         return category;
-    }
-
-    public void setCategory(int category) {
-        this.category = category;
     }
 
     @Override
