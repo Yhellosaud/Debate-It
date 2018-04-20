@@ -160,11 +160,9 @@ public class Debate implements Serializable {
                 + '}';
     }
 
-    public void closeDebate(int yesVotes, int noVotes) {
+    public void closeDebate() {
 
-        debateLength = stage1Length + stage2Length + stage3Length + stage4Length;
-        this.yesVotes = yesVotes;
-        this.noVotes = noVotes;
+        debateLength = stage1Length + stage2Length + stage3Length + stage4length;       
 
         synchronized (players) {
             for (int i = 0; i < players.size(); i++) {
@@ -174,11 +172,25 @@ public class Debate implements Serializable {
 
                 } else {
                     curPlayer.setConsecutiveGamesWatched(0);
+                    curPlayer.incrementGamesPlayedInSession();
                 }
-                curPlayer.incrementGamesPlayedInSession();
 
             }
-        }
+        }      
 
+    }
+    
+    public void addYesVote(){
+        yesVotes++;
+        
+    }
+    public void addNoVote(){
+        noVotes++;
+    }
+
+    public void printPlayers() {
+        for (int i = 0; i < players.size(); i++) {
+            System.out.println(players.get(i).toString());
+        }
     }
 }
