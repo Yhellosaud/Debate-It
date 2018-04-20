@@ -23,7 +23,7 @@ import static java.lang.Thread.sleep;
 public class ServerBridge {
 
     public static final String serverIpAccessPoint = "192.168.43.193";
-    public static final String serverIpBilkent = "139.179.134.139";
+    public static final String serverIpBilkent = "139.179.224.73";
     public static final String serverIpEv = "192.168.1.42";
     public static final int serverPort = 54134;
 
@@ -64,6 +64,10 @@ public class ServerBridge {
     public static final int RESPONSE_NEW_STAGE = 106;
     public static final int RESPONSE_NEW_ARGUMENT = 107;
 
+    public static final int REQUEST_SUBMIT_SIDES = 108;
+    public static final int REQUEST_SUBMIT_ARGUMENTS = 109;
+    public static final int REQUEST_SUBMIT_VOTE = 110;
+
 
     private volatile ArrayList<Serializable> leastRecentlyReceivedData;
     private volatile boolean isDataReady;
@@ -85,6 +89,11 @@ public class ServerBridge {
         listening = false;
         this.context = context;
 
+    }
+
+    public synchronized void requestGetBuyableItems(){
+        ArrayList<Serializable> requestParams = new ArrayList<Serializable>();
+        request(REQUEST_GET_BUYABLE_ITEMS,requestParams);
     }
 
     public synchronized void requestGetPastDebates(){
@@ -112,11 +121,12 @@ public class ServerBridge {
         request(REQUEST_JOIN_BATTLE,requestParams);
     }
 
-    public synchronized void requestSendArgument(User user,String argument){
+    public synchronized void requestSendArgument(User user,String argument,int stage){
 
         ArrayList<Serializable> requestParams = new ArrayList<Serializable>();
         requestParams.add(user.getUserID());
         requestParams.add(argument);
+        requestParams.add(stage);
         request(REQUEST_SEND_ARGUMENT,requestParams);
     }
 
@@ -185,7 +195,7 @@ public class ServerBridge {
         listening = true;
     }
 
-    private class ServerListeningTask extends AsyncTask<Void, ArrayList<Serializable>,Void> {
+    private class ServerListeningTask extends AsyncTask<Void, Object,Void> {
 
         protected Void doInBackground(Void... args) {
 
@@ -255,7 +265,6 @@ public class ServerBridge {
                                 isDataReady = false;
                             }
                         }
-
                         isDataReady = true;
                         //Printing retrieved data
                         System.out.println("Received data: ");
@@ -263,6 +272,8 @@ public class ServerBridge {
 
                             System.out.println(leastRecentlyReceivedData.get(i).toString());
                         }
+
+                        publishProgress(responseID,leastRecentlyReceivedData);
                     }
 
                 } catch (Exception e) {
@@ -270,8 +281,20 @@ public class ServerBridge {
                     listening = false;
                 }
             }
-            System.out.print("Stopped listening to server.");
+            System.out.println("Stopped listening to server.");
             return null;
+        }
+        @Override
+        /**
+         * This method is called in the background method after data is completely received.
+         */
+        protected void onProgressUpdate(Object... progress) {
+
+            int requestId = (int)progress[0];
+            ArrayList<Serializable> requestParams = (ArrayList<Serializable>)progress[1];
+            context.receiveAndUpdateUI(requestId,requestParams);
+
+
         }
 
 
@@ -332,6 +355,7 @@ public class ServerBridge {
             }
             return null;
         }
+
 
         @Override
         /**
