@@ -162,7 +162,7 @@ public class Debate implements Serializable {
 
     public void closeDebate() {
 
-        debateLength = stage1Length + stage2Length + stage3Length + stage4length;       
+        debateLength = stage1Length + stage2Length + stage3Length + stage4Length;       
 
         synchronized (players) {
             for (int i = 0; i < players.size(); i++) {
