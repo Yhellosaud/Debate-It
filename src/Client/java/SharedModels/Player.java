@@ -25,6 +25,16 @@ public class Player implements Serializable {
     private volatile int consecutiveGamesWatched;
     private volatile int gamesPlayedInSession;
 
+    public Player(){
+        playerID = 0;
+        username = "";
+        side = 0;
+        arguments = new ArrayList<Argument>();
+        vote = 0;
+        consecutiveGamesWatched = 0;
+        gamesPlayedInSession = 0;
+    }
+
     public Player(int playerID, String username, int side, ArrayList<Argument> arguments, int vote, int consecutiveGamesWatched, int gamesPlayedInSession) {
         this.playerID = playerID;
         this.username = username;
