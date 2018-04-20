@@ -26,7 +26,7 @@ public class User implements Serializable {
         selectedAvatar = new Avatar();
     }
 
-    public User(String username, String password, int userID, ArrayList<Integer> pastDebateIDs, ArrayList<Integer> votedDebates) {
+    public User(String username, String password, int userID, ArrayList<Integer> pastDebateIDs, ArrayList<Integer> votedDebates, Avatar selectedAvatar) {
         this.username = username;
         this.password = password;
         this.votedDebates = votedDebates;
@@ -34,6 +34,7 @@ public class User implements Serializable {
         this.userID = userID;
         this.pastDebateIDs = pastDebateIDs;
         this.votedDebates = votedDebates;
+        this.selectedAvatar = selectedAvatar;
     }
 
     public int getUserID() {
