@@ -21,6 +21,19 @@ public class Debate implements Serializable {
     private int stage3Length;
     private int stage4Length;
 
+    public Debate() {
+        this.idea = new Idea();
+        this.players = new ArrayList<Player>();
+        this.debateID = 0;
+        this.debateLength = 0;
+        this.yesVotes = 0;
+        this.noVotes = 0;
+        this.stage1Length = 0;
+        this.stage2Length = 0;
+        this.stage3Length = 0;
+        this.stage4Length = 0;
+    }
+
     public Debate(Idea idea, ArrayList<Player> players) {
         this.idea = idea;
         this.players = players;
@@ -42,6 +55,14 @@ public class Debate implements Serializable {
     public Debate(Idea idea, int debateID) {
         this.idea = idea;
         this.debateID = debateID;
+        this.players = new ArrayList<Player>();
+        this.debateLength = 0;
+        this.yesVotes = 0;
+        this.noVotes = 0;
+        this.stage1Length = 0;
+        this.stage2Length = 0;
+        this.stage3Length = 0;
+        this.stage4Length = 0;
     }
 
     public void addPlayer(Player player) {
@@ -99,23 +120,23 @@ public class Debate implements Serializable {
     public int getStage3Length() {
         return stage3Length;
     }
-    
+
     public int getStage4Length() {
         return stage4Length;
     }
-    
+
     public void setStage1Length(int stage1Length) {
         this.stage1Length = stage1Length;
     }
-    
+
     public void setStage2Length(int stage2Length) {
         this.stage2Length = stage2Length;
     }
-    
+
     public void setStage3Length(int stage3Length) {
         this.stage3Length = stage3Length;
     }
-    
+
     public void setStage4Length(int stage4Length) {
         this.stage4Length = stage4Length;
     }
@@ -148,11 +169,11 @@ public class Debate implements Serializable {
         synchronized (players) {
             for (int i = 0; i < players.size(); i++) {
                 Player curPlayer = players.get(i);
-                if(curPlayer.getSide()==Player.SIDE_SPECTATOR){
+                if (curPlayer.getSide() == Player.SIDE_SPECTATOR) {
                     curPlayer.incrementConsecutiveGamesWatched();
-                    
-                }else{
-                    curPlayer.setConsecutiveGamesWatched(0);                   
+
+                } else {
+                    curPlayer.setConsecutiveGamesWatched(0);
                 }
                 curPlayer.incrementGamesPlayedInSession();
 

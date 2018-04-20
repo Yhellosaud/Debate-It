@@ -15,7 +15,13 @@ public class Idea implements Serializable {
     private String statement;
     private int category;
 
-    public Idea(int ideaID, String statement, int category){
+    public Idea() {
+        ideaID = 0;
+        statement = "";
+        category = 0;
+    }
+
+    public Idea(int ideaID, String statement, int category) {
         this.ideaID = ideaID;
         this.category = category;
         this.statement = statement;

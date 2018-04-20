@@ -11,7 +11,6 @@ public class Player implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
-
     public static final int SIDE_NEGATIVE = -1;
     public static final int SIDE_POSITIVE = 1;
     public static final int SIDE_SPECTATOR = 0;
@@ -33,14 +32,12 @@ public class Player implements Serializable {
         this.arguments = arguments;
         this.vote = vote;
         this.consecutiveGamesWatched = consecutiveGamesWatched;
- this.gamesPlayedInSession = gamesPlayedInSession;
+        this.gamesPlayedInSession = gamesPlayedInSession;
     }
 
-    public Player(int playerID, String username) {
-        this.playerID = playerID;
+    //Debug Constructor
+    public Player(String username){
         this.username = username;
-        this.consecutiveGamesWatched = 0;
-        arguments = new ArrayList<Argument>();
     }
 
     public Player(User user){
@@ -50,21 +47,19 @@ public class Player implements Serializable {
         arguments = new ArrayList<Argument>();
         vote = VOTE_YES;
         consecutiveGamesWatched = 0;
-        gamesPlayedInSession = 0;        
-        
+        gamesPlayedInSession = 0;
     }
+
     public void setAsSpectator(){
         setSide(SIDE_SPECTATOR);
     }
     
     public void setAsPositiveDebater(){
         setSide(SIDE_POSITIVE);
-        
     }
     
     public void setAsNegativeDebater(){
         setSide(SIDE_NEGATIVE);
-        
     }
     
     public int getGamesPlayedInSession(){
@@ -113,7 +108,6 @@ public class Player implements Serializable {
     
     public void incrementGamesPlayedInSession(){
         gamesPlayedInSession++;
-        
     }
 
     public void setConsecutiveGamesWatched(int consecutiveGamesPlayed) {

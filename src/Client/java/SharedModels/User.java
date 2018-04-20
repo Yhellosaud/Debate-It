@@ -15,8 +15,18 @@ public class User implements Serializable {
     private String password;
     private ArrayList<Integer> pastDebateIDs;
     private ArrayList<Integer> votedDebates;
+    private Avatar selectedAvatar;
 
-    public User(String username, String password, int userID, ArrayList<Integer> pastDebateIDs, ArrayList<Integer> votedDebates){
+    public User() {
+        userID = 0;
+        username = "";
+        password = "";
+        pastDebateIDs = new ArrayList<Integer>();
+        votedDebates = new ArrayList<Integer>();
+        selectedAvatar = new Avatar();
+    }
+
+    public User(String username, String password, int userID, ArrayList<Integer> pastDebateIDs, ArrayList<Integer> votedDebates) {
         this.username = username;
         this.password = password;
         this.votedDebates = votedDebates;
@@ -28,6 +38,10 @@ public class User implements Serializable {
 
     public int getUserID() {
         return userID;
+    }
+
+    public Avatar getSelectedAvatar() {
+        return selectedAvatar;
     }
 
     public String getUsername() {
@@ -53,8 +67,10 @@ public class User implements Serializable {
     public void addVotedDebate(int votedDebate) {
         votedDebates.add(votedDebate);
     }
-    public User(String username, String password) {
 
+    //Debug Constructor
+    public User(String username, String password, Avatar selectedAvatar) {
+        this.selectedAvatar = selectedAvatar;
         this.username = username;
         this.password = password;
     }
