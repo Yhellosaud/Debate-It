@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="dicomp.debate_it.BattleMenuActivity">
+    tools:context="dicomp.debateit.BattleMenuActivity">
 
     <TextView
         android:id="@+id/stage3View"

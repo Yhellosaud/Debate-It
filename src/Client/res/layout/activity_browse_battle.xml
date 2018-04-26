@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="dicomp.debate_it.BrowseBattleActivity">
+    tools:context="dicomp.debateit.BrowseBattleActivity">
 
     <Button
         android:id="@+id/browseButton"

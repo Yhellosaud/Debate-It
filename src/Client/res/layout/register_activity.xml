@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="dicomp.debateit.SharedModels.RegisterActivity">
+    tools:context="dicomp.debateit.RegisterActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="OR"
+            android:text="@string/or"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
