@@ -34,9 +34,11 @@ public class Debate implements Serializable {
         this.stage4Length = 0;
     }
 
-    public Debate(Idea idea, ArrayList<Player> players) {
+    public Debate(Idea idea, ArrayList<Player> players, int yesVotes, int noVotes) {
         this.idea = idea;
         this.players = players;
+        this.yesVotes = yesVotes;
+        this.noVotes = noVotes;
     }
 
     public Debate(Idea idea, ArrayList<Player> players, int debateID, int debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length, int stage4Length) {
@@ -67,6 +69,10 @@ public class Debate implements Serializable {
 
     public void addPlayer(Player player) {
         players.add(player);
+    }
+
+    public int getProgress(){
+        return 100 * yesVotes / (yesVotes + noVotes);
     }
 
     public void removePlayer(Player player) {
@@ -162,7 +168,7 @@ public class Debate implements Serializable {
 
     public void closeDebate() {
 
-        debateLength = stage1Length + stage2Length + stage3Length + stage4Length;       
+        debateLength = stage1Length + stage2Length + stage3Length + stage4Length;
 
         synchronized (players) {
             for (int i = 0; i < players.size(); i++) {
@@ -174,10 +180,8 @@ public class Debate implements Serializable {
                     curPlayer.setConsecutiveGamesWatched(0);
                     curPlayer.incrementGamesPlayedInSession();
                 }
-
             }
-        }      
-
+        }
     }
     
     public void addYesVote(){
