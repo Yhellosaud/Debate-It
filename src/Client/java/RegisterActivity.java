@@ -58,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity implements DataReceivabl
     public void goToLogin(View view){
         finish();
     }
-    public boolean receiveAndUpdateUI(Object[] objects) {
+    public boolean receiveAndUpdateUI(int responseId,ArrayList<Serializable> responseData) {
         return false;
     }
 

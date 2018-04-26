@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 import SharedModels.*;
 
 public class BattleMenuActivity extends AppCompatActivity implements DataReceivable {
@@ -247,12 +250,12 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
     }
 
     @Override
-    public boolean receiveAndUpdateUI(Object[] objects) {
+    public boolean receiveAndUpdateUI(int responseId,ArrayList<Serializable> responseData) {
         return false;
     }
     public void sendArgument(View view){
         argument = inargument.getText().toString();
-        sb.requestSendArgument(user, argument);
+       // sb.requestSendArgument(user, argument);
     }
 
     @Override
