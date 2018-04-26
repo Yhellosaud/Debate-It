@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.*;
 
 public class Frame extends Item implements Serializable {
+    private static final long serialVersionUID = 8L;
+
     int frameID;
 
     public Frame(int frameID) {

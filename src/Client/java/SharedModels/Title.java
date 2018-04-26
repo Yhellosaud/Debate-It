@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.*;
 
 public class Title extends Item implements Serializable {
+
+    private static final long serialVersionUID = 7L;
+
     int titleID;
     String title;
 

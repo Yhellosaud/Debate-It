@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.*;
 
 public class Avatar extends Item implements Serializable {
+
+    private static final long serialVersionUID = 6L;
+
     int avatarID;
 
     public Avatar(int avatarID) {
