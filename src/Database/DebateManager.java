@@ -13,9 +13,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import SharedModels.*;
 
-
-        
-
 /**
  *
  * @author Yhellosaud
@@ -27,9 +24,6 @@ public class DebateManager {
     private ResultSet rs;
     private String debateData;
     private final Connection c;
-    private final String url = "jdbc:mysql://localhost:3306/diDatabase";
-    private final String username = "root";
-    private final String password = "dicomp";
     
     public DebateManager(Connection c) throws SQLException {
 
@@ -56,8 +50,8 @@ public class DebateManager {
 
         while (rs.next()) {
             
-            if(rs.getInt(1) == dID) {
-            
+            if(rs.getInt(3) == dID) {
+                
                 debateID = rs.getInt(1);
                 yesVotes = rs.getInt(2);
                 noVotes = rs.getInt(3);
@@ -71,7 +65,7 @@ public class DebateManager {
                 break;
             }
         }
-        
+                
         return (new Debate(null, null, debateID, 0, yesVotes, noVotes, stage1Length, stage2Length, stage3Length));
     }
     
@@ -111,10 +105,10 @@ public class DebateManager {
         return debates;
     }
     
-    public void insertDebate(Debate debate) throws SQLException {
+    public void InsertDebate(Debate debate) throws SQLException {
         
-        int idea = 0;
-        int players = 0;
+        int idea = 2750;
+        int players = 10;
         int debateID = debate.getDebateID();
         long debateLength = debate.getDebateLength();
         int yesVotes = debate.getYesVotes();
@@ -123,7 +117,7 @@ public class DebateManager {
         int stage2Length = debate.getStage2Length();
         int stage3Length = debate.getStage3Length();
         
-        debateData = "INSERT INTO debates (idea, players, debateID, debateLength, yesVotes, noVotes, stage1Length, stage2Length, stage3Length) VALUES (?, ?, ?, ?, ?, ?)";
+        debateData = "INSERT INTO debates (idea, players, debateID, debateLength, yesVotes, noVotes, stage1Length, stage2Length, stage3Length) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement statement = c.prepareStatement(debateData);
         
