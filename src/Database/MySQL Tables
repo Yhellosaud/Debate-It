@@ -1,0 +1,65 @@
+CREATE TABLE `battle` (
+  `debate` int(11) NOT NULL,
+  `playerHandlers` varchar(45) DEFAULT NULL,
+  `remainingTime` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`debate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `debate` (
+  `idea` int(11) NOT NULL,
+  `players` varchar(45) DEFAULT NULL,
+  `debateID` int(11) NOT NULL AUTO_INCREMENT,
+  `yesVotes` int(11) DEFAULT NULL,
+  `noVotes` int(11) DEFAULT NULL,
+  `stage1Length` int(11) DEFAULT NULL,
+  `stage2Length` int(11) DEFAULT NULL,
+  `stage3Length` int(11) DEFAULT NULL,
+  PRIMARY KEY (`debateID`,`idea`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `idea` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `statement` varchar(45) DEFAULT NULL,
+  `category` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `player` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) NOT NULL,
+  `selectedAvatar` varchar(45) DEFAULT NULL,
+  `selectedTitle` varchar(45) DEFAULT NULL,
+  `selectedFrame` varchar(45) DEFAULT NULL,
+  `side` int(11) NOT NULL,
+  `arguments` varchar(45) DEFAULT NULL,
+  `vote` int(11) DEFAULT NULL,
+  `consecutiveGamesPlayed` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username_UNIQUE` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user` (
+
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `pastDebateIDs` int(11) DEFAULT NULL,
+  `votedDebates` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username_UNIQUE` (`username`)
+  
+	/*declare @listOfIDs table (id int);
+	insert listOfIDs(id) values(1),(2),(3);    
+
+	select *
+	from TabA
+	where TabA.ID in (select id from listOfIDs)*/
+  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
