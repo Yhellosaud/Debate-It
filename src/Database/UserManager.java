@@ -15,6 +15,7 @@ import java.sql.Array;
 import java.sql.Connection.*;
 import SharedModels.*;
 import java.util.*;
+import java.lang.*;
 
 /**
  *
@@ -55,15 +56,9 @@ public class UserManager {
         
         int userID = 0;
         String password = "";
-        int points = 0;
-        String selectedAvatar = "";
-        String selectedTitle = "";
-        String selectedFrame = "";
-        int pastDebateIDs = 0;
-        String myInventory = "";
         String votedDebates = "";
         
-        userData = "SELECT * FROM debates";
+        userData = "SELECT * FROM user";
 
         s = c.createStatement();
         rs = s.executeQuery(userData);
@@ -76,13 +71,8 @@ public class UserManager {
 
                 userID = rs.getInt(1);
                 password = rs.getString(3);
-                points = rs.getInt(4);
-                selectedAvatar = rs.getString(5);
-                selectedTitle = rs.getString(6);
-                selectedFrame = rs.getString(7);
-                pastDebateIDs = rs.getInt(8);
-                myInventory = rs.getString(9);
-                votedDebates = rs.getString(10);
+                Integer[] pastDebateIDs = rs.getObject(4);
+                votedDebates = rs.getString(5);
 
                 /*String output = "User #%d: %i - %i - %i - %i";
                 System.out.println(String.format(output, ++index, debateID, yesVotes, noVotes, stage1Length, stage2Length, stage3Length));*/
@@ -94,44 +84,51 @@ public class UserManager {
     
     public void InsertUser(User user) throws SQLException {
         
+        int id = user.getUserID();
         String username = user.getUsername();
-        int userID = user.getUserID();
         String password = user.getPassword();
         ArrayList<Integer> pastDebateIDs = user.getPastDebateIDs();
         String votedDebates = "";
         
-        userData = "INSERT INTO users (username, userID, password, pastDebateIDs, votedDebates) VALUES (?, ?, ?, ?, ?)";
+        userData = "INSERT INTO user (id, username, password, pastDebateIDs, votedDebates) VALUES (?, ?, ?, ?, ?)";
 
         PreparedStatement statement = c.prepareStatement(userData);
 
-        int[] arr = new int[pastDebateIDs.size()];
-        arr = pastDebateIDs.toArray(arr);
+        Integer[] pdIDs = new Integer[pastDebateIDs.size()];
+        pdIDs = pastDebateIDs.toArray(pdIDs);
         
-        Array pdIDs = c.createArrayOf("VARCHAR", pastDebateIDs.toArray());
+        //Array p = c.createArrayOf("VARCHAR", pastDebateIDs.toArray());
         
-        statement.setString(1, username);
-        statement.setInt(2, userID);
+        statement.setInt(1, id);
+        statement.setString(2, username);
         statement.setString(3, password);
-        statement.setArray(4, pdIDs);
+        statement.setObject(4, pdIDs);
         statement.setString(5, votedDebates);
 
         Iterator<Integer> it = pastDebateIDs.iterator();
         
         while(it.hasNext()){
             
-            int debateID = it.next();
-            statement.setInt(1,debateID);
+            int pastDebateID = it.next();
+            statement.setInt(4, pastDebateID);
             statement.addBatch();                      
         }
         
         int [] numUpdates = statement.executeBatch();
+        
         for (int i=0; i < numUpdates.length; i++) {
-          if (numUpdates[i] == -2)
-            System.out.println("Execution " + i + 
-              ": unknown number of rows updated");
-          else
-            System.out.println("Execution " + i + 
-              "successful: " + numUpdates[i] + " rows updated");
+
+            if (numUpdates[i] == -2) {
+
+                System.out.println("Execution " + i + 
+                  ": unknown number of rows updated");
+            }
+            
+            else {
+
+                System.out.println("Execution " + i + 
+                  "successful: " + numUpdates[i] + " rows updated");
+            }
         }
         
         int rowsInserted = statement.executeUpdate();
