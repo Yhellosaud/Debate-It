@@ -11,7 +11,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Array;
+import java.sql.Connection.*;
 import SharedModels.*;
+import java.util.*;
 
 /**
  *
@@ -23,9 +26,6 @@ public class UserManager {
     private ResultSet rs;
     private String userData;
     private final Connection c;
-    private final String url = "jdbc:mysql://localhost:3306/diDatabase";
-    private final String username = "root";
-    private final String password = "dicomp";
     
     public UserManager(Connection c) throws SQLException {
 
@@ -95,32 +95,49 @@ public class UserManager {
     public void InsertUser(User user) throws SQLException {
         
         String username = user.getUsername();
+        int userID = user.getUserID();
         String password = user.getPassword();
-        int userID = user.getPoints();
-        String pastDebateIDs = "";
+        ArrayList<Integer> pastDebateIDs = user.getPastDebateIDs();
         String votedDebates = "";
         
-        userData = "INSERT INTO debates (username, password, "
-                + "userID, pastDebateIDs, votedDebates) VALUES (?, ?, ?, ?, ?)";
+        userData = "INSERT INTO users (username, userID, password, pastDebateIDs, votedDebates) VALUES (?, ?, ?, ?, ?)";
 
         PreparedStatement statement = c.prepareStatement(userData);
+
+        int[] arr = new int[pastDebateIDs.size()];
+        arr = pastDebateIDs.toArray(arr);
         
-        /*statement.setString(2, "Eda Hanım");
-        statement.setString(3, "141511");
-        statement.setInt(1, 001);
-        statement.setString(5, "");
-        statement.setString(6, "");*/
+        Array pdIDs = c.createArrayOf("VARCHAR", pastDebateIDs.toArray());
         
         statement.setString(1, username);
-        statement.setString(2, password);
-        statement.setInt(3, userID);
-        statement.setString(4, pastDebateIDs);
+        statement.setInt(2, userID);
+        statement.setString(3, password);
+        statement.setArray(4, pdIDs);
         statement.setString(5, votedDebates);
+
+        Iterator<Integer> it = pastDebateIDs.iterator();
+        
+        while(it.hasNext()){
+            
+            int debateID = it.next();
+            statement.setInt(1,debateID);
+            statement.addBatch();                      
+        }
+        
+        int [] numUpdates = statement.executeBatch();
+        for (int i=0; i < numUpdates.length; i++) {
+          if (numUpdates[i] == -2)
+            System.out.println("Execution " + i + 
+              ": unknown number of rows updated");
+          else
+            System.out.println("Execution " + i + 
+              "successful: " + numUpdates[i] + " rows updated");
+        }
         
         int rowsInserted = statement.executeUpdate();
         
         if (rowsInserted > 0) {
             System.out.println("A new user was inserted successfully!");
-        }        
+        }
     }
 }
