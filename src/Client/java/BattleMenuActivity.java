@@ -25,8 +25,9 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
     User user;
     Button sendArgument;
     EditText inargument;
-    String argument;
-    TextView player1Label, player2Label, player3Label, player4Label, ideaName, remainingTime, topic;
+    int stage;
+
+    TextView player1Label, player2Label, player3Label, player4Label, ideaName, remainingTime, topic,remainingTimeEdit;
     EditText arg1, arg2, counter1, counter2, answer1, answer2, conclusion1, conclusion2;
     TextView stage1Label, stage2Label, stage3Label, stage4Label;
     Button exitButton;
@@ -67,23 +68,28 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
         stage3Label = (TextView) findViewById(R.id.stage3View);
         stage4Label = (TextView) findViewById(R.id.stage4View);
 
+        remainingTimeEdit = (TextView)findViewById(R.id.remainingTimeEdit);
 
-        Set_Active_Stage(0);
+        user = (User) getIntent().getSerializableExtra("user");
+
+
+        /*setStage(0);
 
         // TEST İÇİN AÇ!
-        Set_Active_Stage(1);
-        Set_Active_Stage(2);
-        Set_Active_Stage(3);
-        Set_Active_Stage(4);
-        Set_Active_Stage(5);
+        setStage(1);
+        setStage(2);
+        setStage(3);
+        setStage(4);
+        setStage(5);*/
     }
 
     // *******************
     // ***** METHODS *****
     // *******************
 
-    public void Set_Active_Stage(int stageNo) // !!! DipNot: Sırasıyla, 0-1-2-3-4-5 olarak kullanılmazsa, hatalı çalışır.!
+    public void setStage(int stageNo) // !!! DipNot: Sırasıyla, 0-1-2-3-4-5 olarak kullanılmazsa, hatalı çalışır.!
     {
+        stage = stageNo;
         if(stageNo == 0) // At Start
         {
             arg1.setVisibility(View.INVISIBLE);
@@ -251,11 +257,37 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
 
     @Override
     public boolean receiveAndUpdateUI(int responseId,ArrayList<Serializable> responseData) {
+
+        if(responseId == ServerBridge.RESPONSE_BATTLE_TIME){
+
+            int time =0;
+            try{
+                time = (int) responseData.get(0);
+            }catch(Exception e){
+                System.out.println("error in casting time");
+                e.printStackTrace();
+            }
+            remainingTimeEdit.setText(time);
+        }else if(responseId==ServerBridge.RESPONSE_NEW_STAGE){
+
+            int stage =0;
+            try{
+                stage = (int)responseData.get(0);
+            }catch(Exception e){
+                System.out.println("error in casting stage");
+                e.printStackTrace();
+            }
+            setStage(stage);
+        }
         return false;
     }
-    public void sendArgument(View view){
-        argument = inargument.getText().toString();
-       // sb.requestSendArgument(user, argument);
+    private void drawDebate(Debate debate){
+
+    }
+
+    private void sendArgument(View view){
+        String argument = inargument.getText().toString();
+        sb.requestSendArgument(user, argument,stage);
     }
 
     @Override
