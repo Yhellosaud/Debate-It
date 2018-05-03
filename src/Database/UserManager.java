@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Array;
 import java.sql.Connection.*;
 import SharedModels.*;
@@ -57,23 +58,41 @@ public class UserManager {
         int userID = 0;
         String password = "";
         String votedDebates = "";
+        int[] pastDebateIDs = new int[10];
         
         userData = "SELECT * FROM user";
 
         s = c.createStatement();
         rs = s.executeQuery(userData);
 
+        ResultSetMetaData rsmd = rs.getMetaData();
+        
         int index = 0;
 
-        while (rs.next()) {
 
+
+        while (rs.next()) {
+            
+            for(int i = 1; i <= rsmd.getColumnCount(); i++) { 
+                
+                if (i > 1) { 
+                    System.out.print(",  ");
+                }
+
+                String columnValue = rs.getString(i);
+                System.out.print(rsmd.getColumnName(i) + ": " + columnValue);
+            }
+
+            System.out.println("");
+            
             if(rs.getString(2).equals(username)) {
 
                 userID = rs.getInt(1);
                 password = rs.getString(3);
-                Integer[] pastDebateIDs = rs.getObject(4);
-                votedDebates = rs.getString(5);
+                //pastDebateIDs[index] = rs.getInt(4);
+                //votedDebates = rs.getString(5);
 
+                index++;
                 /*String output = "User #%d: %i - %i - %i - %i";
                 System.out.println(String.format(output, ++index, debateID, yesVotes, noVotes, stage1Length, stage2Length, stage3Length));*/
             }     
@@ -88,7 +107,7 @@ public class UserManager {
         String username = user.getUsername();
         String password = user.getPassword();
         ArrayList<Integer> pastDebateIDs = user.getPastDebateIDs();
-        String votedDebates = "";
+        ArrayList<String> votedDebates = new ArrayList<String>();
         
         userData = "INSERT INTO user (id, username, password, pastDebateIDs, votedDebates) VALUES (?, ?, ?, ?, ?)";
 
@@ -103,7 +122,7 @@ public class UserManager {
         statement.setString(2, username);
         statement.setString(3, password);
         statement.setObject(4, pdIDs);
-        statement.setString(5, votedDebates);
+        statement.setString(5, "asdasd");
 
         Iterator<Integer> it = pastDebateIDs.iterator();
         
@@ -113,8 +132,8 @@ public class UserManager {
             statement.setInt(4, pastDebateID);
             statement.addBatch();                      
         }
-        
-        int [] numUpdates = statement.executeBatch();
+
+        int[] numUpdates = statement.executeBatch();
         
         for (int i=0; i < numUpdates.length; i++) {
 
