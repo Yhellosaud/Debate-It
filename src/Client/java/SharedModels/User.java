@@ -14,7 +14,7 @@ public class User implements Serializable {
     private String username;
     private String password;
     private ArrayList<Integer> pastDebateIDs;
-    private ArrayList<Integer> votedDebates;
+    private ArrayList<Integer> votedDebateIDs;
     private Avatar selectedAvatar;
 
     public User() {
@@ -22,18 +22,16 @@ public class User implements Serializable {
         username = "";
         password = "";
         pastDebateIDs = new ArrayList<Integer>();
-        votedDebates = new ArrayList<Integer>();
+        votedDebateIDs = new ArrayList<Integer>();
         selectedAvatar = new Avatar();
     }
 
     public User(String username, String password, int userID, ArrayList<Integer> pastDebateIDs, ArrayList<Integer> votedDebates, Avatar selectedAvatar) {
         this.username = username;
         this.password = password;
-        this.votedDebates = votedDebates;
+        this.votedDebateIDs = votedDebates;
         this.pastDebateIDs = pastDebateIDs;
         this.userID = userID;
-        this.pastDebateIDs = pastDebateIDs;
-        this.votedDebates = votedDebates;
         this.selectedAvatar = selectedAvatar;
     }
 
@@ -61,12 +59,12 @@ public class User implements Serializable {
         pastDebateIDs.add(pastDebateID);
     }
 
-    public ArrayList<Integer> getVotedDebates() {
-        return votedDebates;
+    public ArrayList<Integer> getVotedDebateIDs() {
+        return votedDebateIDs;
     }
 
     public void addVotedDebate(int votedDebate) {
-        votedDebates.add(votedDebate);
+        votedDebateIDs.add(votedDebate);
     }
 
     //Debug Constructor
@@ -83,7 +81,7 @@ public class User implements Serializable {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", pastDebateIDs=" + pastDebateIDs +
-                ", votedDebates=" + votedDebates +
+                ", votedDebates=" + votedDebateIDs +
                 '}';
     }
 }
