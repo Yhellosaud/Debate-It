@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements DataReceivable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        System.out.println("çalıştı");
+
         imavatar = (ImageView) findViewById(R.id.avatar);
         username = (TextView) findViewById(R.id.textView2);
         debateList = (ListView) findViewById(R.id.list1);
@@ -40,9 +40,11 @@ public class MainActivity extends AppCompatActivity implements DataReceivable {
         output[0] = "not ready";
         user = (User) getIntent().getSerializableExtra("user");
         int avatarID = user.getSelectedAvatar().getItemID();
-        String avatarFile = "a" + avatarID;
+        String avatarFile = "a" + avatarID+"m";
+
         int id = getResources().getIdentifier(avatarFile, "drawable", getPackageName());
         imavatar.setImageResource(id);
+        System.out.println("çalıştı");
         /*
         System.out.println(user);
         sb = new ServerBridge(this);
@@ -71,12 +73,14 @@ public class MainActivity extends AppCompatActivity implements DataReceivable {
     }
 
     public void browseBattle(View view) {
-        Intent intent = new Intent(this, BattleMenuActivity.class);
+        Intent intent = new Intent(this, BrowseBattleActivity.class);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 
     public void finishedDebates(View view) {
         Intent intent = new Intent(this, PastDebatesActivity.class);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 
