@@ -63,8 +63,8 @@ public class User implements Serializable {
         return votedDebateIDs;
     }
 
-    public void addVotedDebate(int votedDebate) {
-        votedDebateIDs.add(votedDebate);
+    public void addVotedDebateID(int votedDebateID) {
+        votedDebateIDs.add(votedDebateID);
     }
 
     //Debug Constructor
