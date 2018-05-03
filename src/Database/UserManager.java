@@ -25,8 +25,10 @@ import java.lang.*;
 public class UserManager {
     
     private Statement s;
-    private ResultSet rs;
-    private String userData;
+    private ResultSet rs1, rs2, rs3;
+    private String userData1, userData2, userData3;
+    private ResultSetMetaData rsmd1, rsmd2, rsmd3; 
+    private PreparedStatement statement1, statement2, statement3;
     private final Connection c;
     
     public UserManager(Connection c) throws SQLException {
@@ -56,42 +58,63 @@ public class UserManager {
     public User getUserDetails(String username) throws SQLException {
         
         int userID = 0;
-        String password = "";
-        String votedDebates = "";
-        int[] pastDebateIDs = new int[10];
+        String password = " ";
+        ArrayList<Integer> pastDebateIDs = new ArrayList<Integer>();
+        ArrayList<Integer> votedDebates = new ArrayList<Integer>();
         
-        userData = "SELECT * FROM user";
+        userData1 = "SELECT * FROM user";
+        userData2 = "SELECT * FROM user_pastdebateid";
+        userData3 = "SELECT * FROM user_voteddebateid";
 
         s = c.createStatement();
-        rs = s.executeQuery(userData);
-
-        ResultSetMetaData rsmd = rs.getMetaData();
+        rs1 = s.executeQuery(userData1);
+        rsmd1 = rs1.getMetaData();
+        
+        s = c.createStatement();
+        rs2 = s.executeQuery(userData2);
+        rsmd2 = rs2.getMetaData();
+        
+        s = c.createStatement();
+        rs3 = s.executeQuery(userData3);
+        rsmd3 = rs3.getMetaData();
         
         int index = 0;
 
-
-
-        while (rs.next()) {
-            
-            for(int i = 1; i <= rsmd.getColumnCount(); i++) { 
-                
+        while (rs1.next()) {
+            ///////////////////////////////
+            /////////TABLE DISPLAY/////////
+            ///////////////////////////////
+            for(int i = 1; i <= rsmd1.getColumnCount(); i++) { 
                 if (i > 1) { 
                     System.out.print(",  ");
                 }
+                
+                System.out.print(rsmd1.getColumnName(i) + ": " + rs1.getString(i));
+                
+                while(rs2.next()) {
 
-                String columnValue = rs.getString(i);
-                System.out.print(rsmd.getColumnName(i) + ": " + columnValue);
+                    System.out.print(",  ");
+                    System.out.print(rsmd2.getColumnName(2) + ": " + rs2.getString(2));
+                }
+                
+                while(rs3.next()) {
+
+                    System.out.print(",  ");
+                    System.out.print(rsmd3.getColumnName(2) + ": " + rs3.getString(2));
+                }
             }
-
-            System.out.println("");
             
-            if(rs.getString(2).equals(username)) {
+            System.out.println("");
+            ///////////////////////////////
+            /////////TABLE DISPLAY/////////
+            ///////////////////////////////
+            //Searched user data is found and retrieved respectively
+            if(rs1.getString(2).equals(username)) {
 
-                userID = rs.getInt(1);
-                password = rs.getString(3);
+                userID = rs1.getInt(1);
+                password = rs1.getString(3);
                 //pastDebateIDs[index] = rs.getInt(4);
                 //votedDebates = rs.getString(5);
-
                 index++;
                 /*String output = "User #%d: %i - %i - %i - %i";
                 System.out.println(String.format(output, ++index, debateID, yesVotes, noVotes, stage1Length, stage2Length, stage3Length));*/
@@ -103,28 +126,53 @@ public class UserManager {
     
     public void InsertUser(User user) throws SQLException {
         
+        //Each single information data of user is attained one by one
         int id = user.getUserID();
         String username = user.getUsername();
         String password = user.getPassword();
         ArrayList<Integer> pastDebateIDs = user.getPastDebateIDs();
-        ArrayList<String> votedDebates = new ArrayList<String>();
+        ArrayList<Integer> votedDebateIDs = user.getVotedDebates();
         
-        userData = "INSERT INTO user (id, username, password, pastDebateIDs, votedDebates) VALUES (?, ?, ?, ?, ?)";
-
-        PreparedStatement statement = c.prepareStatement(userData);
-
-        Integer[] pdIDs = new Integer[pastDebateIDs.size()];
-        pdIDs = pastDebateIDs.toArray(pdIDs);
+        //Related database tables are prepared in order to perform insertion
+        userData1 = "INSERT INTO user (id, username, password) VALUES (?, ?, ?)";
+        userData2 = "INSERT INTO user_pastdebateid (userID, debateID) VALUES (?, ?)"; 
+        userData3 = "INSERT INTO user_pastdebateid (userID, debateID) VALUES (?, ?)";
         
-        //Array p = c.createArrayOf("VARCHAR", pastDebateIDs.toArray());
+        //The table is transfered into a prepared statement
+        statement1 = c.prepareStatement(userData1);
+        statement2 = c.prepareStatement(userData2); 
+        statement3 = c.prepareStatement(userData3); 
         
-        statement.setInt(1, id);
-        statement.setString(2, username);
-        statement.setString(3, password);
-        statement.setObject(4, pdIDs);
-        statement.setString(5, "asdasd");
+        /*Integer[] pdIDs = new Integer[pastDebateIDs.size()];
+        pdIDs = pastDebateIDs.toArray(pdIDs);*/
+        
+        //Statement variants are loaded with user information
+        statement1.setInt(1, id);
+        statement1.setString(2, username);
+        statement1.setString(3, password);
+        
+        statement1.executeBatch();
+        statement1.executeUpdate();
 
-        Iterator<Integer> it = pastDebateIDs.iterator();
+        for(int i = 0; i < pastDebateIDs.size(); i++) {
+            
+            statement2.setInt(1, id);
+            statement2.setInt(2, pastDebateIDs.get(i));
+        }
+        
+        statement2.executeBatch();
+        statement2.executeUpdate();
+        
+        for(int i = 0; i < pastDebateIDs.size(); i++) {
+            
+            statement3.setInt(1, id);
+            statement3.setInt(2, votedDebateIDs.get(i));
+        }
+        
+        statement3.executeBatch();
+        statement3.executeUpdate();
+
+        /*Iterator<Integer> it = pastDebateIDs.iterator();
         
         while(it.hasNext()){
             
@@ -154,6 +202,6 @@ public class UserManager {
         
         if (rowsInserted > 0) {
             System.out.println("A new user was inserted successfully!");
-        }
+        }*/
     }
 }
