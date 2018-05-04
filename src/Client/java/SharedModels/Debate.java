@@ -34,6 +34,7 @@ public class Debate implements Serializable {
         this.stage4Length = 0;
     }
 
+    //Debug
     public Debate(Idea idea, ArrayList<Player> players, int yesVotes, int noVotes) {
         this.idea = idea;
         this.players = players;
