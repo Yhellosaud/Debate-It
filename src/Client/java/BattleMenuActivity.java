@@ -337,6 +337,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
             }else{
                 if(spectator == 0){
                     player1Label.setText(curPlayer.getUsername());
+                    spectator++;
                 }else{
                     player2Label.setText(curPlayer.getUsername());
                 }
