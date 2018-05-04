@@ -34,7 +34,6 @@ public class Debate implements Serializable {
         this.stage4Length = 0;
     }
 
-    //Debug
     public Debate(Idea idea, ArrayList<Player> players, int yesVotes, int noVotes) {
         this.idea = idea;
         this.players = players;
@@ -84,10 +83,10 @@ public class Debate implements Serializable {
         }
     }
 
-    public void addArgument(Player player, Argument argument) {
+    public void addArgument(int playerId, Argument argument) {
         for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getPlayerID() == player.getPlayerID()) {
-                player.addArgument(argument);
+            if (players.get(i).getPlayerID() == playerId) {
+                players.get(i).addArgument(argument);
             }
         }
     }
