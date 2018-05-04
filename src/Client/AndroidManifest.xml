@@ -3,21 +3,22 @@
     package="dicomp.debateit">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:resizeableActivity="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".MainActivity">
-        </activity>
+        <activity android:name=".MainActivity" />
         <activity
-            android:name=".LoginActivity">
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -25,6 +26,8 @@
         <activity android:name=".BattleMenuActivity" />
         <activity android:name=".BrowseBattleActivity" />
         <activity android:name=".PastDebatesActivity" />
+        <activity android:name=".MarketActivity" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>
