@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity implements DataReceivable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         sb = new ServerBridge(this);
-        sb.startListeningToServer();
+
         login = (Button)findViewById(R.id.login);
         inusername   = (EditText)findViewById(R.id.username);
         inpassword   = (EditText)findViewById(R.id.password);
@@ -56,12 +56,19 @@ public class LoginActivity extends AppCompatActivity implements DataReceivable {
                 }
         );
     }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        sb.startListeningToServer();
+
+
+    }
     public void goToRegister(View view){
-        /*
+
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
-        */
-        sb.startListeningToServer();
+
+
     }
     public boolean receiveAndUpdateUI(int responseId,ArrayList<Serializable> responseData) {
         System.out.println("Receive tamam");
