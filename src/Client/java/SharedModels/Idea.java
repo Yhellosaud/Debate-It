@@ -8,7 +8,15 @@ import java.io.Serializable;
 
 public class Idea implements Serializable {
 
+    public static final int CATEGORY_HEALTH =0;
+    public static final int CATEGORY_ECONOMY =1;
+    public static final int CATEGORY_PHILOSOPHY =2;
+    public static final int CATEGORY_HISTORY =3;
+    public static final int CATEGORY_EDUCATION =4;
+    
+    
     private static final long serialVersionUID = 3L;
+    
 
 
     private int ideaID;
