@@ -12,6 +12,9 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import SharedModels.*;
+import java.sql.ResultSetMetaData;
+import java.util.ArrayList;
+import SharedModels.*;
 
 /**
  *
@@ -23,25 +26,38 @@ public class DebateManager {
     private Statement s;
     private ResultSet rs;
     private String debateData;
+    private ResultSetMetaData rsmd;
+    private PreparedStatement statement;
     private final Connection c;
+    public int numberOfDebates;
     
     public DebateManager(Connection c) throws SQLException {
 
         this.c = c;
         s = c.createStatement();
         c.setAutoCommit(true);
+        
+        int numberOfDebates = 0;
     }
     
     public Debate getDebate(int dID) throws SQLException {
-
-        int debateID = 0;
+        
+        int ideaID = 0;
+        String statement = "";
+        int category = 0;
+        
+        int debateLength = 0;
         int yesVotes = 0;
         int noVotes = 0;
         int stage1Length = 0;
         int stage2Length = 0;
         int stage3Length = 0;
+        int stage4Length = 0;
+            
+        Idea idea = new Idea(ideaID, statement, category);
+        ArrayList<Player> players = new ArrayList<Player>();
         
-        debateData = "SELECT * FROM debates";
+        debateData = "SELECT * FROM debate";
 
         s = c.createStatement();
         ResultSet rs = s.executeQuery(debateData);
@@ -51,35 +67,80 @@ public class DebateManager {
         while (rs.next()) {
             
             if(rs.getInt(3) == dID) {
-                
-                debateID = rs.getInt(1);
-                yesVotes = rs.getInt(2);
-                noVotes = rs.getInt(3);
-                stage1Length = rs.getInt(4);
-                stage2Length = rs.getInt(5);
-                stage3Length = rs.getInt(6);
 
-                /*String output = "User #%d: %i - %i - %i - %i";
-                System.out.println(String.format(output, ++index, debateID, yesVotes, noVotes, stage1Length, stage2Length, stage3Length));*/
+                debateLength = rs.getInt(2);
+                yesVotes = rs.getInt(3);
+                noVotes = rs.getInt(4);
+                stage1Length = rs.getInt(5);
+                stage2Length = rs.getInt(6);
+                stage3Length = rs.getInt(7);
+                stage4Length = rs.getInt(8);
                 
                 break;
             }
         }
                 
-        return (new Debate(null, null, debateID, 0, yesVotes, noVotes, stage1Length, stage2Length, stage3Length));
+        return (new Debate(idea, players, dID, debateLength, yesVotes, noVotes, stage1Length, stage2Length, stage3Length, stage4Length));
     }
     
-    public Debate[] getUserDebates(int[] debateIDs) throws SQLException {
+    public Debate[] getUserDebates(String username, int[] debateIDs) throws SQLException {
 
-        debateData = "SELECT * FROM debates";
+        String[] dids = new String[debateIDs.length];
 
+        while(rs.next()) {
+
+            System.out.print(",  ");
+            System.out.println(rsmd.getColumnName(2) + " " + rs.getString(2));
+            String ids = rs.getString(2);
+            dids = ids.split(",");
+        }
+
+        for(int i = 0; i < dids.length; i++) {
+
+            int id = Integer.parseInt(dids[i]);
+            pastDebateIDs.add(i, id);
+
+        }
+        
+        debateData = "SELECT * FROM user_pastdebateid";
         s = c.createStatement();
         rs = s.executeQuery(debateData);
-
-        Debate[] debates = new Debate[10];
+        rsmd = rs.getMetaData();
+        Debate[] debates = new Debate[debateIDs.length];
         
         int index = 0;
+        
+        int ideaID = 0;
+        String statement = "";
+        int category = 0;
 
+        Idea idea = new Idea(ideaID, statement, category);
+        ArrayList<Player> players = new ArrayList<>();
+        
+        while (rs.next()) {
+            //Table display
+            for(int i = 1; i <= rsmd.getColumnCount(); i++) {
+
+                if (i > 1) { 
+                    System.out.print(",  ");
+                }
+
+                System.out.print(rsmd.getColumnName(i) + ": " + rs.getString(i));
+            }
+            System.out.println("");
+            //Searched user data is found and retrieved respectively
+            if(rs.getString(2).equals(username)) {
+
+                userID = rs.getInt(1);
+                password = rs.getString(3);
+            }
+        }
+        
+        debateData = "SELECT * FROM debate";
+        s = c.createStatement();
+        rs = s.executeQuery(debateData);
+        rsmd = rs.getMetaData();
+        
         while (rs.next()) {
             
             for(int i = 0; i < debateIDs.length; i++) {
@@ -87,22 +148,48 @@ public class DebateManager {
                 if(rs.getInt(1) == debateIDs[i]) {
                     
                     int debateID = rs.getInt(1);
-                    int yesVotes = rs.getInt(2);
-                    int noVotes = rs.getInt(3);
-                    int stage1Length = rs.getInt(4);
-                    int stage2Length = rs.getInt(5);
-                    int stage3Length = rs.getInt(6);
+                    int debateLength = rs.getInt(2);
+                    int yesVotes = rs.getInt(3);
+                    int noVotes = rs.getInt(4);
+                    int stage1Length = rs.getInt(5);
+                    int stage2Length = rs.getInt(6);
+                    int stage3Length = rs.getInt(7);
+                    int stage4Length = rs.getInt(8);
 
-                    debates[index] = new Debate(null, null, debateID, 0, yesVotes, noVotes, stage1Length, stage2Length, stage3Length);
-                    
-                    /*String output = "User #%d: %i - %i - %i - %i";
-                    System.out.println(String.format(output, ++index, debateID, yesVotes, noVotes, stage1Length, stage2Length, stage3Length));*/
+                    debates[index] = new Debate(idea, players, debateID, debateLength, yesVotes, noVotes, stage1Length, stage2Length, stage3Length, stage4Length);
                 }
             }
             
         }
         
         return debates;
+    }
+    
+    public Debate[] getAllDebates() throws SQLException {
+        
+        Debate[] debates = new Debate[getNumberOfDebates()];
+        
+        debateData = "SELECT * FROM debate";
+        s = c.createStatement();
+        rs = s.executeQuery(debateData);
+        rsmd = rs.getMetaData();
+        
+        for(int i = 0; i < numberOfDebates; i++) {
+            
+            
+        }
+        
+        return debates;
+    }
+    
+    public void updateNumberOfDebates() {
+        
+        numberOfDebates = 0;
+    }
+    
+    public int getNumberOfDebates() {
+
+        return numberOfDebates;
     }
     
     public void InsertDebate(Debate debate) throws SQLException {
@@ -117,7 +204,7 @@ public class DebateManager {
         int stage2Length = debate.getStage2Length();
         int stage3Length = debate.getStage3Length();
         
-        debateData = "INSERT INTO debates (idea, players, debateID, debateLength, yesVotes, noVotes, stage1Length, stage2Length, stage3Length) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        debateData = "INSERT INTO debate (idea, players, debateID, debateLength, yesVotes, noVotes, stage1Length, stage2Length, stage3Length) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement statement = c.prepareStatement(debateData);
         
