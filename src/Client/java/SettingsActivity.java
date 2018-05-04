@@ -34,5 +34,13 @@ public class SettingsActivity extends AppCompatActivity {
                 catSound.stop();
             }
         });
+        
+         logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(loginIntent);
+            }
+        });
     }
 }
