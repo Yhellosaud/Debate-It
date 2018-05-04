@@ -45,6 +45,7 @@ public class BrowseBattleActivity extends AppCompatActivity implements DataRecei
     @Override
     public boolean receiveAndUpdateUI(int responseId, ArrayList<Serializable> responseData) {
 
+
         if(responseId == ServerBridge.RESPONSE_UPDATED_DEBATE){
             Intent myIntent = new Intent(getApplicationContext(), BattleMenuActivity.class);
             Debate debate = (Debate)responseData.get(0);

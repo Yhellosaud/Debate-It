@@ -27,10 +27,12 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
     EditText inargument;
     int stage;
 
-    TextView player1Label, player2Label, player3Label, player4Label, ideaName, remainingTime, topic,remainingTimeEdit;
-    EditText arg1, arg2, counter1, counter2, answer1, answer2, conclusion1, conclusion2;
+    TextView player1Label, player2Label, player3Label, player4Label, ideaName, remainingTime, categoryView,remainingTimeEdit;
+    TextView arg1, arg2, counter1, counter2, answer1, answer2, conclusion1, conclusion2;
     TextView stage1Label, stage2Label, stage3Label, stage4Label;
     Button exitButton;
+
+    Debate curDebate;
 
     // **********************************
     // ***** CONSTRUCTOR - ONCREATE *****
@@ -38,6 +40,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_battle_menu);
 /*
@@ -53,16 +56,16 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
         player4Label = (TextView) findViewById(R.id.player4View);
         ideaName = (TextView) findViewById(R.id.ideaNameView);
         remainingTime = (TextView) findViewById(R.id.remainingTimeView);
-        topic = (TextView) findViewById(R.id.topicView);
+        categoryView = (TextView) findViewById(R.id.categoryView);
 
-        arg1 = (EditText) findViewById(R.id.arguement1Text);
-        arg2 = (EditText) findViewById(R.id.arguement2Text);
-        counter1 = (EditText) findViewById(R.id.counter1Text);
-        counter2 = (EditText) findViewById(R.id.counter2Text);
-        answer1 = (EditText) findViewById(R.id.answer1Text);
-        answer2 = (EditText) findViewById(R.id.answer2Text);
-        conclusion1 = (EditText) findViewById(R.id.conclusion1Text);
-        conclusion2 = (EditText) findViewById(R.id.conclusion2Text);
+        arg1 = (TextView) findViewById(R.id.arguement1Text);
+        arg2 = (TextView) findViewById(R.id.arguement2Text);
+        counter1 = (TextView) findViewById(R.id.counter1Text);
+        counter2 = (TextView) findViewById(R.id.counter2Text);
+        answer1 = (TextView) findViewById(R.id.answer1Text);
+        answer2 = (TextView) findViewById(R.id.answer2Text);
+        conclusion1 = (TextView) findViewById(R.id.conclusion1Text);
+        conclusion2 = (TextView)findViewById(R.id.conclusion2Text);
         stage1Label = (TextView) findViewById(R.id.stage1View);
         stage2Label = (TextView) findViewById(R.id.stage2View);
         stage3Label = (TextView) findViewById(R.id.stage3View);
@@ -71,6 +74,9 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
         remainingTimeEdit = (TextView)findViewById(R.id.remainingTimeEdit);
 
         user = (User) getIntent().getSerializableExtra("user");
+
+        curDebate = (Debate) getIntent().getSerializableExtra("DEBATE");
+        drawDebate(curDebate);
 
 
         /*setStage(0);
@@ -175,9 +181,9 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
     {
         ideaName.setText(text);
     }
-    public void Set_Topic(String text)
+    public void Set_categoryView(String text)
     {
-        topic.setText(text);
+        categoryView.setText(text);
     }
     public void Set_Remaining_Time(int seconds)
     {
@@ -258,6 +264,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
     @Override
     public boolean receiveAndUpdateUI(int responseId,ArrayList<Serializable> responseData) {
 
+        System.out.println("Battle Menu receiveAndUpdateUI, responseID: "+responseId);
         if(responseId == ServerBridge.RESPONSE_BATTLE_TIME){
 
             int time =0;
@@ -278,12 +285,76 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
                 e.printStackTrace();
             }
             setStage(stage);
+        }else if(responseId==ServerBridge.RESPONSE_UPDATED_DEBATE){
+            Debate updatedDebate = (Debate)responseData.get(0);
+            drawDebate(updatedDebate);
         }
         return false;
     }
-    private void drawDebate(Debate debate){
+
+
+    private void drawDebate(Debate updatedDebate){
+
+        curDebate = updatedDebate;
+        String ideaText = curDebate.getIdea().getStatement();
+        ideaName.setText(ideaText);
+        int category =curDebate.getIdea().getCategory();
+        String categoryString ="Idea";
+
+        switch(category){
+
+            case(Idea.CATEGORY_ECONOMY):
+                categoryString = "ECONOMY";
+                break;
+            case(Idea.CATEGORY_EDUCATION):
+                categoryString = "EDUCATION";
+                break;
+            case(Idea.CATEGORY_HEALTH):
+                categoryString = "HEALTH";
+                break;
+            case(Idea.CATEGORY_HISTORY):
+                categoryString = "HISTORY";
+                break;
+            case(Idea.CATEGORY_PHILOSOPHY):
+                categoryString = "PHILOSOPHY";
+                break;
+        }
+
+        categoryView.setText(categoryString);
+
+
+        ArrayList<Player> players = curDebate.getPlayers();
+        int spectator=0;
+
+        for(int i=0;i<players.size();i++){
+
+            Player curPlayer = players.get(i);
+            if(curPlayer.getSide()==Player.SIDE_POSITIVE){
+                player3Label.setText(curPlayer.getUsername());
+                //Set avatar here
+            }else if(curPlayer.getSide()==Player.SIDE_NEGATIVE){
+                player4Label.setText(curPlayer.getUsername());
+            }else{
+                if(spectator == 0){
+                    player1Label.setText(curPlayer.getUsername());
+                }else{
+                    player2Label.setText(curPlayer.getUsername());
+                }
+            }
+
+        }
+
+
+
+
+
 
     }
+
+    private void changeCategory(int category){
+
+    }
+
 
     private void sendArgument(View view){
         String argument = inargument.getText().toString();
