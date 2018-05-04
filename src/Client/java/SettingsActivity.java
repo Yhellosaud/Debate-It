@@ -1,5 +1,6 @@
 package dicomp.debateit;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,8 +35,8 @@ public class SettingsActivity extends AppCompatActivity {
                 catSound.stop();
             }
         });
-        
-         logoutButton.setOnClickListener(new View.OnClickListener() {
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
