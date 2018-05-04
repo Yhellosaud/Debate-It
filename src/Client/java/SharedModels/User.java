@@ -13,7 +13,7 @@ public class User implements Serializable {
     private int userID;
     private String username;
     private String password;
-    private ArrayList<Integer> pastDebateIDs;
+    private ArrayList<Integer> playedDebateIDs;
     private ArrayList<Integer> votedDebateIDs;
     private Avatar selectedAvatar;
 
@@ -21,16 +21,16 @@ public class User implements Serializable {
         userID = 0;
         username = "";
         password = "";
-        pastDebateIDs = new ArrayList<Integer>();
+        playedDebateIDs = new ArrayList<Integer>();
         votedDebateIDs = new ArrayList<Integer>();
         selectedAvatar = new Avatar();
     }
 
-    public User(String username, String password, int userID, ArrayList<Integer> pastDebateIDs, ArrayList<Integer> votedDebates, Avatar selectedAvatar) {
+    public User(String username, String password, int userID, ArrayList<Integer> playedDebateIDs, ArrayList<Integer> votedDebates, Avatar selectedAvatar) {
         this.username = username;
         this.password = password;
         this.votedDebateIDs = votedDebates;
-        this.pastDebateIDs = pastDebateIDs;
+        this.playedDebateIDs = playedDebateIDs;
         this.userID = userID;
         this.selectedAvatar = selectedAvatar;
     }
@@ -51,12 +51,12 @@ public class User implements Serializable {
         return password;
     }
 
-    public ArrayList<Integer> getPastDebateIDs() {
-        return pastDebateIDs;
+    public ArrayList<Integer> getPlayedDebateIDs() {
+        return playedDebateIDs;
     }
 
-    public void addPastDebateID(int pastDebateID) {
-        pastDebateIDs.add(pastDebateID);
+    public void addPlayedDebateID(int playedDebateID) {
+        playedDebateIDs.add(playedDebateID);
     }
 
     public ArrayList<Integer> getVotedDebateIDs() {
@@ -80,7 +80,7 @@ public class User implements Serializable {
                 "userID=" + userID +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", pastDebateIDs=" + pastDebateIDs +
+                ", playedDebateIDs=" + playedDebateIDs +
                 ", votedDebates=" + votedDebateIDs +
                 '}';
     }
