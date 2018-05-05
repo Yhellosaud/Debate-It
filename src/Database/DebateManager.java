@@ -83,39 +83,118 @@ public class DebateManager {
         return (new Debate(idea, players, dID, debateLength, yesVotes, noVotes, stage1Length, stage2Length, stage3Length, stage4Length));
     }
     
-    public Debate[] getUserDebates(String username, int[] debateIDs) throws SQLException {
-
-        String[] dids = new String[debateIDs.length];
-
-        while(rs.next()) {
-
-            System.out.print(",  ");
-            System.out.println(rsmd.getColumnName(2) + " " + rs.getString(2));
-            String ids = rs.getString(2);
-            dids = ids.split(",");
-        }
-
-        for(int i = 0; i < dids.length; i++) {
-
-            int id = Integer.parseInt(dids[i]);
-            pastDebateIDs.add(i, id);
-
-        }
+    public Debate[] getUserDebates(int[] debateIDs) throws SQLException {
         
-        debateData = "SELECT * FROM user_pastdebateid";
+        int index = 0;
+        int size = debateIDs.length;
+        
+        ArrayList<Player> players = new ArrayList<>();
+        Debate[] debates = new Debate[size];
+        Idea[] ideas = new Idea[size];
+        
+        debateData = "SELECT * FROM debate_idea";
         s = c.createStatement();
         rs = s.executeQuery(debateData);
         rsmd = rs.getMetaData();
-        Debate[] debates = new Debate[debateIDs.length];
-        
-        int index = 0;
-        
-        int ideaID = 0;
-        String statement = "";
-        int category = 0;
 
-        Idea idea = new Idea(ideaID, statement, category);
-        ArrayList<Player> players = new ArrayList<>();
+        while (rs.next()) {
+            //Searched user data is found and retrieved respectively
+            for(int i = 0; i < debateIDs.length; i++) {
+                
+                if(rs.getInt(1) == debateIDs[i]) {
+
+                    ideas[index++] = new Idea(rs.getInt(2), "", 0);
+                }
+            }
+        }
+        
+        debateData = "SELECT * FROM idea";
+        s = c.createStatement();
+        rs = s.executeQuery(debateData);
+        rsmd = rs.getMetaData();
+        
+        while(rs.next()) {
+            //Table display
+            for(int i = 1; i <= rsmd.getColumnCount(); i++) {
+
+                if(i > 1) { 
+                    System.out.print(",  ");
+                }
+
+                System.out.print(rsmd.getColumnName(i) + ": " + rs.getString(i));
+            }
+            System.out.println("");
+            
+            for(int i = 0; i < size; i++) {
+                
+                if(rs.getInt(1) == ideas[i].getIdeaID()) {
+                    
+                    ideas[i].setStatement(rs.getString(2));
+                    ideas[i].setCategory(rs.getInt(3));
+                }
+            }
+        }
+        
+        debateData = "SELECT * FROM player_argument";
+        s = c.createStatement();
+        rs = s.executeQuery(debateData);
+        rsmd = rs.getMetaData();
+        
+        while(rs.next()) {
+            //Table display
+            for(int i = 1; i <= rsmd.getColumnCount(); i++) {
+
+                if(i > 1) { 
+                    System.out.print(",  ");
+                }
+
+                System.out.print(rsmd.getColumnName(i) + ": " + rs.getString(i));
+            }
+            System.out.println("");
+            
+            for(int i = 0; i < size; i++) {
+                
+                if(rs.getInt(1) == ideas[i].getIdeaID()) {
+                    
+                    ideas[i].setStatement(rs.getString(2));
+                    ideas[i].setCategory(rs.getInt(3));
+                }
+            }
+        }
+        
+        debateData = "SELECT * FROM player";
+        s = c.createStatement();
+        rs = s.executeQuery(debateData);
+        rsmd = rs.getMetaData();
+        
+        while(rs.next()) {
+            //Table display
+            for(int i = 1; i <= rsmd.getColumnCount(); i++) {
+
+                if(i > 1) { 
+                    System.out.print(",  ");
+                }
+
+                System.out.print(rsmd.getColumnName(i) + ": " + rs.getString(i));
+            }
+            System.out.println("");
+            
+            for(int i = 0; i < size; i++) {
+                
+                if(rs.getInt(1) == ideas[i].getIdeaID()) {
+                    
+                    ideas[i].setStatement(rs.getString(2));
+                    ideas[i].setCategory(rs.getInt(3));
+                }
+            }
+        }
+        
+        debateData = "SELECT * FROM debate";
+        s = c.createStatement();
+        rs = s.executeQuery(debateData);
+        rsmd = rs.getMetaData();
+        
+        index = 0;
         
         while (rs.next()) {
             //Table display
@@ -128,21 +207,7 @@ public class DebateManager {
                 System.out.print(rsmd.getColumnName(i) + ": " + rs.getString(i));
             }
             System.out.println("");
-            //Searched user data is found and retrieved respectively
-            if(rs.getString(2).equals(username)) {
-
-                userID = rs.getInt(1);
-                password = rs.getString(3);
-            }
-        }
-        
-        debateData = "SELECT * FROM debate";
-        s = c.createStatement();
-        rs = s.executeQuery(debateData);
-        rsmd = rs.getMetaData();
-        
-        while (rs.next()) {
-            
+            //Desired debate datas are found and retrieved respectively by id's
             for(int i = 0; i < debateIDs.length; i++) {
                 
                 if(rs.getInt(1) == debateIDs[i]) {
@@ -156,10 +221,9 @@ public class DebateManager {
                     int stage3Length = rs.getInt(7);
                     int stage4Length = rs.getInt(8);
 
-                    debates[index] = new Debate(idea, players, debateID, debateLength, yesVotes, noVotes, stage1Length, stage2Length, stage3Length, stage4Length);
+                    debates[index] = new Debate(ideas[index++], players, debateID, debateLength, yesVotes, noVotes, stage1Length, stage2Length, stage3Length, stage4Length);
                 }
-            }
-            
+            }    
         }
         
         return debates;
@@ -192,7 +256,7 @@ public class DebateManager {
         return numberOfDebates;
     }
     
-    public void InsertDebate(Debate debate) throws SQLException {
+    public void insertDebate(Debate debate) throws SQLException {
         
         int idea = 2750;
         int players = 10;
