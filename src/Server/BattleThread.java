@@ -21,13 +21,11 @@ public class BattleThread implements Runnable {
     private static final int STAGE_CONCLUSION = 4;
     private static final int STAGE_VOTING = 5;
 
-    private static final int MAX_PLAYERS = 2;
+    private static final int MAX_PLAYERS = 4;
 
     private static final int REQUEST_SEND_ARGUMENT = 9;
-    
-    
 
-    private Debate currentDebate;
+    private volatile Debate currentDebate;
     private volatile ArrayList<PlayerHandler> playerHandlers;
     private BattleTimer timer;
     private volatile int numPlayers;
@@ -53,24 +51,30 @@ public class BattleThread implements Runnable {
         } else {
             System.out.println("new player joined");
             /////////////////////////////Change This set id part ////////////////////////////////////////
-            newPlayer.setId(numPlayers);
+            //newPlayer.setId(numPlayers);
             numPlayers++;
+            currentDebate.addPlayer(newPlayer);
             PlayerHandler newHandler = new PlayerHandler(newPlayer, socket, out, in, this);
             playerHandlers.add(newHandler);
-            currentDebate.addPlayer(newPlayer);
             new Thread(newHandler).start();
+
+            ArrayList<Serializable> responseParams = new ArrayList<Serializable>();
+            responseParams.add(currentDebate);
+            updatePlayers(PlayerHandler.RESPONSE_UPDATED_DEBATE, responseParams);
+            //newHandler.updatePlayer(PlayerHandler.RESPONSE_UPDATED_DEBATE,responseParams);                     
+
         }
 
     }
 
     public synchronized void disconnectPlayer(Player player) {
 
-        int playerId = player.getId();
+        int playerId = player.getPlayerID();
 
         for (int i = 0; i < playerHandlers.size(); i++) {
 
             PlayerHandler curPlayerHandler = playerHandlers.get(i);
-            int curPlayerId = curPlayerHandler.getPlayer().getId();
+            int curPlayerId = curPlayerHandler.getPlayer().getPlayerID();
 
             //Terminating the player handler with matching id and removing from list
             if (playerId == curPlayerId) {
@@ -79,6 +83,9 @@ public class BattleThread implements Runnable {
                 currentDebate.removePlayer(player);
             }
         }
+        ArrayList<Serializable> responseParams = new ArrayList<Serializable>();
+        responseParams.add(currentDebate);
+        updatePlayers(PlayerHandler.RESPONSE_UPDATED_DEBATE, responseParams);
         numPlayers--;
     }
 
@@ -92,27 +99,29 @@ public class BattleThread implements Runnable {
 
         int responseId = UserHandler.INVALID_REQUEST_ID;
         ArrayList<Serializable> responseData = new ArrayList<Serializable>();
-     
-        switch(requestId){
-            
-            case(PlayerHandler.REQUEST_SEND_ARGUMENT):
-                responseId = PlayerHandler.RESPONSE_NEW_ARGUMENT;
-                
+
+        switch (requestId) {
+
+            case (PlayerHandler.REQUEST_SEND_ARGUMENT):
+                responseId = PlayerHandler.RESPONSE_UPDATED_DEBATE;
+
                 int playerId = (int) requestParams.get(0);
-                String argumentStr = (String)requestParams.get(1);
-                
+                String argumentStr = (String) requestParams.get(1);
+
                 Argument argument = new Argument(timer.getTimer(), currentStage, argumentStr);
-                
-                responseData.add(responseId);
-                responseData.add(argument);
-                
+                currentDebate.addArgument(playerId, argument);
+                responseData.add(currentDebate);              
+
                 break;
-                
-            case(PlayerHandler.REQUEST_SEND_EXPRESSION):
+
+            case (PlayerHandler.REQUEST_SEND_EXPRESSION):
                 break;
-            
+            case (PlayerHandler.RESPONSE_UPDATED_DEBATE):
+                responseId = PlayerHandler.RESPONSE_UPDATED_DEBATE;
+                responseData = requestParams;
+                break;
         }
-     
+
         synchronized (playerHandlers) {
             for (int i = 0; i < playerHandlers.size(); i++) {
                 playerHandlers.get(i).updatePlayer(responseId, responseData);
@@ -137,6 +146,7 @@ public class BattleThread implements Runnable {
         System.out.println("Battle thread started\n");
         //Starting timer thread
         new Thread(timer).start();
+        currentDebate = generateNewDebate(Idea.CATEGORY_ECONOMY);
 
         while (running) {
 
@@ -154,18 +164,17 @@ public class BattleThread implements Runnable {
                 currentStage = 0;
                 System.out.println("Game starting");
 
-                currentDebate = generateNewDebate(Debate.CATEGORY_ECONOMY);
+                currentDebate = generateNewDebate(Idea.CATEGORY_ECONOMY);
                 playStageSideSelection(10);
-                
-                
+
                 playStageInitialArguments(60);
-                
+
                 playStageCounterArguments(60);
-                
+
                 playStageAnswers(60);
-                
+
                 playStageConclusion(60);
-                
+
                 playStageVoting(10);
 
                 //Closing debate
@@ -176,7 +185,7 @@ public class BattleThread implements Runnable {
                     e.printStackTrace();
 
                 }
-                
+
                 currentDebate.closeDebate();
             }
 
@@ -201,8 +210,6 @@ public class BattleThread implements Runnable {
             //System.out.println("Stage 0");
         }
         designateSidesToPlayers(currentDebate.getPlayers());
-        
-        
 
     }
 
@@ -296,6 +303,10 @@ public class BattleThread implements Runnable {
 
     }
 
+    public Debate getCurDebate() {
+        return currentDebate;
+    }
+
     /**
      * This method generates and returns a new debate in the given category.
      *
@@ -303,8 +314,13 @@ public class BattleThread implements Runnable {
      * @return
      */
     private Debate generateNewDebate(int category) {
+        //Idea idea = new Idea(21, "Should street animals be allowed to Bilkent?", 5);
+        Idea newIdea = Idea.generateIdea(category);
+        
+        //Databaseden debate id lazım
+        Debate newDebate = new Debate(newIdea, 0);
 
-        return null;
+        return newDebate;
     }
 
     /**
@@ -317,12 +333,11 @@ public class BattleThread implements Runnable {
         currentStage = STAGE_SIDE_SELECTION;
 
     }*/
-
     public static void testDesignateSides() {
-        Player player1 = new Player(0, "user 1");
-        Player player2 = new Player(1, "user 1");
-        Player player3 = new Player(2, "user 1");
-        Player player4 = new Player(3, "user 1");
+        Player player1 = new Player("user 1");
+        Player player2 = new Player("user 1");
+        Player player3 = new Player("user 1");
+        Player player4 = new Player("user 1");
         player1.setAsNegativeDebater();
         player2.setAsNegativeDebater();
         player3.setAsNegativeDebater();
