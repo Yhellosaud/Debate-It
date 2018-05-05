@@ -44,9 +44,9 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_battle_menu);
-/*
+
         sb = new ServerBridge(this);
-        user = (User)getIntent().getSerializableExtra("user");
+       /* user = (User)getIntent().getSerializableExtra("user");
         sendArgument = (Button)findViewById(R.id.send_argument);
         sb.startListeningToServer();
         sb.requestJoinBattle(user);
@@ -56,7 +56,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
         player3Label = (TextView) findViewById(R.id.player3View);
         player4Label = (TextView) findViewById(R.id.player4View);
         ideaName = (TextView) findViewById(R.id.ideaNameView);
-        remainingTime = (TextView) findViewById(R.id.remainingTimeView);
+        //remainingTime = (TextView) findViewById(R.id.remainingTimeView);
         categoryView = (TextView) findViewById(R.id.categoryView);
 
         arg1 = (TextView) findViewById(R.id.arguement1Text);

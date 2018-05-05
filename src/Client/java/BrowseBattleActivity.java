@@ -50,6 +50,7 @@ public class BrowseBattleActivity extends AppCompatActivity implements DataRecei
             Intent myIntent = new Intent(getApplicationContext(), BattleMenuActivity.class);
             Debate debate = (Debate)responseData.get(0);
             myIntent.putExtra("DEBATE",debate);
+            myIntent.putExtra("user",user);
             startActivity(myIntent);
 
         }
