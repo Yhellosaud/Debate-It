@@ -29,18 +29,28 @@ public class MySqlConnection {
             
             c = (Connection)DriverManager.getConnection(url, username, password); 
             System.out.println("Database connected!\n");
-
-            UserManager um = new UserManager(c);
-            //DebateManager dm = new DebateManager(c);
-            //ItemManager im = new ItemManager(c);
-                        
-            ArrayList<Integer> pastDebateIDs = new ArrayList<>(Arrays.asList(3, 5, 8, 17, 1, 2));
-            ArrayList<Integer> votedDebateIDs = new ArrayList<>(Arrays.asList(31, 71, 6, 10, 14));
-                    
-            User user = new User("Eda Hanım", "141511", 1, pastDebateIDs, votedDebateIDs);
+            //////////////////////////////////////////////////////////////////////////
+            ////////////////////////TEST CASE FOR USER MANAGER////////////////////////
+            //UserManager um = new UserManager(c);
+            //ArrayList<Integer> pastDebateIDs = new ArrayList<>(Arrays.asList(3, 5, 8, 17, 1, 2));
+            //ArrayList<Integer> votedDebateIDs = new ArrayList<>(Arrays.asList(31, 71, 6, 10, 14));
+            //User user = new User("Eda Hanım", "141511", 1, pastDebateIDs, votedDebateIDs);
+            //um.insertUser(user);
+            //um.getUserDetails("Eda Hanım");
+            ////////////////////////TEST CASE FOR USER MANAGER////////////////////////
+            //////////////////////////////////////////////////////////////////////////
             
-            um.InsertUser(user);
-            um.getUserDetails("Eda Hanım");
+            
+            //////////////////////////////////////////////////////////////////////////
+            ////////////////////////TEST CASE FOR DEBATE MANAGER////////////////////////
+            DebateManager dm = new DebateManager(c);
+            ArrayList<Player> players = new ArrayList<>();
+            Idea idea = new Idea(1, "Anam bacım kardeşim midir", 8);
+            int[] debateIDs = {3, 13, 31, 193, 131, 40};
+            Debate debate = new Debate(idea, players, 1, 80, 1, 3, 110, 90, 35, 40);
+            dm.getUserDebates(debateIDs);
+            ////////////////////////TEST CASE FOR USER_MANAGER////////////////////////
+            //////////////////////////////////////////////////////////////////////////
         }
         
         catch (SQLException e) {
