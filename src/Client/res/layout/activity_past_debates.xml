@@ -20,6 +20,14 @@
             android:textColor="@color/black"
             android:textSize="23sp" />
 
+        <Button
+            android:id="@+id/getDebates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="pushed"
+            android:visibility="visible"
+            android:text="Get Past Debates" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

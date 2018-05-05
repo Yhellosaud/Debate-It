@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Base application theme. -->
+    <style name="LoginTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/darkgrey</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+
+
 </resources>

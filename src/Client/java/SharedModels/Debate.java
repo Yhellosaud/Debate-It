@@ -19,11 +19,26 @@ public class Debate implements Serializable {
     private int stage1Length;
     private int stage2Length;
     private int stage3Length;
-    private int stage4length;
+    private int stage4Length;
 
-    public Debate(Idea idea, ArrayList<Player> players) {
+    public Debate() {
+        this.idea = new Idea();
+        this.players = new ArrayList<Player>();
+        this.debateID = 0;
+        this.debateLength = 0;
+        this.yesVotes = 0;
+        this.noVotes = 0;
+        this.stage1Length = 0;
+        this.stage2Length = 0;
+        this.stage3Length = 0;
+        this.stage4Length = 0;
+    }
+
+    public Debate(Idea idea, ArrayList<Player> players, int yesVotes, int noVotes) {
         this.idea = idea;
         this.players = players;
+        this.yesVotes = yesVotes;
+        this.noVotes = noVotes;
     }
 
     public Debate(Idea idea, ArrayList<Player> players, int debateID, int debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length, int stage4Length) {
@@ -36,40 +51,48 @@ public class Debate implements Serializable {
         this.stage1Length = stage1Length;
         this.stage2Length = stage2Length;
         this.stage3Length = stage3Length;
-        this.stage4length = stage4Length;
+        this.stage4Length = stage4Length;
     }
 
     public Debate(Idea idea, int debateID) {
         this.idea = idea;
         this.debateID = debateID;
+        this.players = new ArrayList<Player>();
+        this.debateLength = 0;
+        this.yesVotes = 0;
+        this.noVotes = 0;
+        this.stage1Length = 0;
+        this.stage2Length = 0;
+        this.stage3Length = 0;
+        this.stage4Length = 0;
     }
 
     public void addPlayer(Player player) {
         players.add(player);
     }
 
+    public int getProgress(){
+        return 100 * yesVotes / (yesVotes + noVotes);
+    }
+
     public void removePlayer(Player player) {
         for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getId() == player.getId()) {
+            if (players.get(i).getPlayerID() == player.getPlayerID()) {
                 players.remove(i);
             }
         }
     }
 
-    public void addArgument(Player player, String argument) {
+    public void addArgument(int playerId, Argument argument) {
         for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getId() == player.getId()) {
-                player.addArgument(argument);
+            if (players.get(i).getPlayerID() == playerId) {
+                players.get(i).addArgument(argument);
             }
         }
     }
 
     public Idea getIdea() {
         return idea;
-    }
-
-    public void setIdea(Idea idea) {
-        this.idea = idea;
     }
 
     public ArrayList<Player> getPlayers() {
@@ -80,56 +103,48 @@ public class Debate implements Serializable {
         return debateID;
     }
 
-    public void setDebateID(int debateID) {
-        this.debateID = debateID;
-    }
-
     public int getDebateLength() {
         return debateLength;
-    }
-
-    public void setDebateLength(int debateLength) {
-        this.debateLength = debateLength;
     }
 
     public int getYesVotes() {
         return yesVotes;
     }
 
-    public void setYesVotes(int yesVotes) {
-        this.yesVotes = yesVotes;
-    }
-
     public int getNoVotes() {
         return noVotes;
-    }
-
-    public void setNoVotes(int noVotes) {
-        this.noVotes = noVotes;
     }
 
     public int getStage1Length() {
         return stage1Length;
     }
 
-    public void setStage1Length(int stage1Length) {
-        this.stage1Length = stage1Length;
-    }
-
     public int getStage2Length() {
         return stage2Length;
-    }
-
-    public void setStage2Length(int stage2Length) {
-        this.stage2Length = stage2Length;
     }
 
     public int getStage3Length() {
         return stage3Length;
     }
 
+    public int getStage4Length() {
+        return stage4Length;
+    }
+
+    public void setStage1Length(int stage1Length) {
+        this.stage1Length = stage1Length;
+    }
+
+    public void setStage2Length(int stage2Length) {
+        this.stage2Length = stage2Length;
+    }
+
     public void setStage3Length(int stage3Length) {
         this.stage3Length = stage3Length;
+    }
+
+    public void setStage4Length(int stage4Length) {
+        this.stage4Length = stage4Length;
     }
 
     public String menuDisplay() {
@@ -151,25 +166,35 @@ public class Debate implements Serializable {
                 + '}';
     }
 
-    public void closeDebate(int yesVotes, int noVotes) {
+    public void closeDebate() {
 
-        debateLength = stage1Length + stage2Length + stage3Length + stage4length;
-        this.yesVotes = yesVotes;
-        this.noVotes = noVotes;
+        debateLength = stage1Length + stage2Length + stage3Length + stage4Length;
 
         synchronized (players) {
             for (int i = 0; i < players.size(); i++) {
                 Player curPlayer = players.get(i);
-                if(curPlayer.getSide()==Player.SIDE_SPECTATOR){
+                if (curPlayer.getSide() == Player.SIDE_SPECTATOR) {
                     curPlayer.incrementConsecutiveGamesWatched();
-                    
-                }else{
-                    curPlayer.setConsecutiveGamesWatched(0);                   
-                }
-                curPlayer.incrementGamesPlayedInSession();
 
+                } else {
+                    curPlayer.setConsecutiveGamesWatched(0);
+                    curPlayer.incrementGamesPlayedInSession();
+                }
             }
         }
+    }
+    
+    public void addYesVote(){
+        yesVotes++;
+        
+    }
+    public void addNoVote(){
+        noVotes++;
+    }
 
+    public void printPlayers() {
+        for (int i = 0; i < players.size(); i++) {
+            System.out.println(players.get(i).toString());
+        }
     }
 }

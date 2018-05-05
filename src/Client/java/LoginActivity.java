@@ -24,10 +24,11 @@ public class LoginActivity extends AppCompatActivity implements DataReceivable {
     ArrayList<Serializable> coming;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.LoginTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         sb = new ServerBridge(this);
-        sb.startListeningToServer();
+
         login = (Button)findViewById(R.id.login);
         inusername   = (EditText)findViewById(R.id.username);
         inpassword   = (EditText)findViewById(R.id.password);
@@ -37,48 +38,58 @@ public class LoginActivity extends AppCompatActivity implements DataReceivable {
                 {
                     public void onClick(View view)
                     {
-
-                        login.setClickable(false);
+                        //login.setClickable(false);
                         username = inusername.getText().toString();
                         password = inpassword.getText().toString();
+                        /*
+                        Avatar avatar = new Avatar(101);
+                        User user = new User(username, password, avatar);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra("user", user);
+                        startActivity(intent);
+                        /**/
                         System.out.println(username);
                         System.out.println(password);
                         sb.requestSignIn(username, password);
-                        Helper helper = new Helper();
-                        helper.execute();
+
                     }
                 }
         );
     }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        sb.startListeningToServer();
+
+
+    }
     public void goToRegister(View view){
+
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
+
+
     }
-    public boolean receiveAndUpdateUI(Object[] objects) {
-        boolean done = false;
-        return done;
+    public boolean receiveAndUpdateUI(int responseId,ArrayList<Serializable> responseData) {
+        System.out.println("Receive tamam");
+        if(responseId == ServerBridge.RESPONSE_USER_OBJECT){
+            System.out.println("response id tamam");
+            if(responseData.get(0) == null)
+                return false;
+            user = (User)responseData.get(0);
+            System.out.println("user tamam");
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            sb.disconnectFromServer();
+            login.setClickable(true);
+            intent.putExtra("user", user);
+            startActivity(intent);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void updateRetrieveProgress(int progress) {
 
-    }
-
-    private class Helper extends AsyncTask<Void, Void, User> {
-        protected User doInBackground(Void... arg0) {
-            coming = sb.getLeastRecentlyReceivedData();
-            if(coming == null)
-                login.setClickable(true);
-            else{
-                user = (User)coming.get(0);
-                System.out.println(user);
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                sb.disconnectFromServer();
-                login.setClickable(true);
-                intent.putExtra("user", user);
-                startActivity(intent);
-            }
-            return null;
-        }
     }
 }

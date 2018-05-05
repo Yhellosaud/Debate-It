@@ -21,15 +21,21 @@ import java.io.Serializable;
 public class PlayerHandler implements Runnable {
 
     public static final int REQUEST_SEND_ARGUMENT = 8;
+    public static final int REQUEST_SEND_EXPRESSION = 9;
 
     public static final int RESPONSE_BATTLE_TIME = 105;
     public static final int RESPONSE_NEW_STAGE = 106;
     public static final int RESPONSE_NEW_ARGUMENT = 107;
-    
-    public static final int REQUEST_SUBMIT_SIDES = 108;
-    public static final int REQUEST_SUBMIT_ARGUMENTS = 109;
-    public static final int REQUEST_SUBMIT_VOTE = 110;
-    
+
+    public static final int RESPONSE_STAGE_SIDE_SELECTION_DONE = 108;
+    public static final int RESPONSE_STAGE_INITIAL_ARGUMENT_DONE = 109;
+    public static final int RESPONSE_STAGE_COUNTER_ARGUMENT_DONE = 110;
+    public static final int RESPONSE_STAGE_ANWERS_DONE = 111;
+    public static final int RESPONSE_STAGE_CONCLUSION_DONE = 112;
+    public static final int RESPONSE_STAGE_VOTING_DONE = 113;
+
+    public static final int RESPONSE_NEW_PLAYER_JOINED = 114;
+    public static final int RESPONSE_UPDATED_DEBATE = 115;
 
     private volatile Player player;
     private Socket clientSocket;
@@ -78,13 +84,13 @@ public class PlayerHandler implements Runnable {
                             }
 
                         } catch (Exception e) {
-                            
+
                             e.printStackTrace();
                             endOfStreamReached = true;
                         }
                     }
                     for (int i = 0; i < requestParams.size(); i++) {
-                        System.out.println(i+": "+requestParams.get(i).toString());
+                        System.out.println(i + ": " + requestParams.get(i).toString());
                     }
                     if (requestId != UserHandler.CLIENT_CONNECTED) {
                         //Updating players
@@ -115,7 +121,7 @@ public class PlayerHandler implements Runnable {
     public synchronized void updatePlayer(int requestId, ArrayList<Serializable> requestParams) {
 
         switch (requestId) {
-            case (REQUEST_SEND_ARGUMENT):
+            case (RESPONSE_NEW_ARGUMENT):
                 int argumentSenderId = (int) requestParams.get(0);
                 String argument = (String) requestParams.get(1);
                 responseSendArgument(argumentSenderId, argument);
@@ -128,6 +134,26 @@ public class PlayerHandler implements Runnable {
                 int time = (int) requestParams.get(0);
                 responseBattleTime(time);
                 break;
+            case (RESPONSE_NEW_PLAYER_JOINED):
+                /*int time = (int) requestParams.get(0);
+                responseBattleTime(time);*/
+                break;
+            case (RESPONSE_UPDATED_DEBATE):
+                /*Debate debate = (Debate) requestParams.get(0);
+                System.out.println("Player "+player.getUsername() +"'s handler");
+                System.out.println(debate);*/
+                //responseUpdatedDebate(debate);
+                response(RESPONSE_UPDATED_DEBATE, requestParams);
+
+                break;
+            /*case (RESPONSE_BATTLE_TIME):
+                int time = (int) requestParams.get(0);
+                responseBattleTime(time);
+                break;
+            case (RESPONSE_BATTLE_TIME):
+                int time = (int) requestParams.get(0);
+                responseBattleTime(time);
+                break;*/
 
         }
     }
@@ -140,7 +166,7 @@ public class PlayerHandler implements Runnable {
 
     private void responseSendArgument(int argumentSenderId, String argument) {
         ArrayList<Serializable> responseParams = new ArrayList<Serializable>();
-        responseParams.add(player);
+        responseParams.add(argumentSenderId);
         responseParams.add(argument);
         response(RESPONSE_NEW_ARGUMENT, responseParams);
     }
@@ -158,6 +184,13 @@ public class PlayerHandler implements Runnable {
         response(RESPONSE_BATTLE_TIME, responseParams);
     }
 
+    private void responseUpdatedDebate(Debate debate) {
+        ArrayList<Serializable> responseParams = new ArrayList<Serializable>();
+        responseParams.add(debate);
+
+        response(RESPONSE_UPDATED_DEBATE, responseParams);
+    }
+
     /**
      * This method sends the responseId and responseData to clients.
      *
@@ -165,16 +198,27 @@ public class PlayerHandler implements Runnable {
      * @param responseData
      */
     private void response(int responseId, ArrayList<Serializable> responseData) {
+        Debate debate = null;
+        try {
+            debate = (Debate) responseData.get(0);
+        } catch (Exception e) {
 
+        }
+
+        System.out.println("Player " + player.getUsername() + "'s handler");
+        System.out.println(debate);
+        
         try {
             out.writeInt(responseId);
 
             for (int i = 0; i < responseData.size(); i++) {
                 out.writeObject(responseData.get(i));
+
             }
             //Sending terminator
             out.writeObject(null);
             out.flush();
+            out.reset();
         } catch (Exception e) {
 
             e.printStackTrace();

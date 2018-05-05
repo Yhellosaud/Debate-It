@@ -17,8 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.sql.Connection;
+//import com.mysql.jdbc.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 
 /**
  * This is the main thread of server. This thread accepts user connections and
@@ -29,7 +31,7 @@ import java.sql.SQLException;
 public class Server {
 
     public static final String serverIpAccessPoint = "192.168.43.193";
-    public static final String serverIpBilkent = "139.179.224.73";
+    public static final String serverIpBilkent = "139.179.226.135";
     public static final String serverIpEv = "192.168.1.42";
     public static final String databaseIp = "139.179.227.218";
     public static final String databasePort = "3306";
@@ -56,22 +58,29 @@ public class Server {
         pastDebateIDs.add(24);
         votedDebates.add(33);
         votedDebates.add(34);
-        User user1 = new User("Cagatay", "password", 1, pastDebateIDs, votedDebates);
+        User user1 = new User("Cagatay", "password", 1, pastDebateIDs, votedDebates,null);
 
         //////////////////////////////////////////Establishing connection to database///////////////////////////////////
-        /*System.out.println("Connecting database...");
+       /* System.out.println("Connecting database...");
         try {
             //Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
             //String url = "jdbc:mysql://139.179.227.218:3306/diDatabase";
-            String connectionURL = "jdbc:mysql://139.179.227.218:3306/diDatabase?verifyServerCertificate=false&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Turkey";
+            String connectionURL = "jdbc:mysql://139.179.225.196:3306/diDatabase?verifyServerCertificate=false&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Turkey";
             String userName = "root";
             String pas = "dicomp319";
             conn = DriverManager.getConnection(connectionURL, userName, pas);
             // Do something with the Connection
 
-            dm = new DebateManager(conn);
+            //dm = new DebateManager(conn);
             //im = new ItemManager(connection);
             um = new UserManager(conn);
+            
+            um.InsertUser(user1);
+            
+            
+            User edaHanim = um.getUserDetails("Cagatay");
+            System.out.println(edaHanim);
+            
 
             System.out.println("Database connection established!");
 
@@ -85,6 +94,7 @@ public class Server {
             System.out.println("Could not connected to database");
             e.printStackTrace();
         }*/
+        
         ///////////////////////////////////////////////Starting server///////////////////////////////////////////////////////////////
         try {
 
@@ -95,7 +105,7 @@ public class Server {
             System.out.println("Server is running on port: " + serverPort + " and adress: " + serverAddress);
 
             //Starting battle thread      
-            battleThread = new BattleThread();
+            battleThread = new BattleThread(dm);
             new Thread(battleThread).start();
             System.out.println("Battle started");
 

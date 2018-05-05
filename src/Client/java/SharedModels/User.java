@@ -10,62 +10,66 @@ import java.util.*;
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-
     private int userID;
     private String username;
     private String password;
-    private ArrayList<Integer> pastDebateIDs;
-    private ArrayList<Integer> votedDebates;
+    private ArrayList<Integer> playedDebateIDs;
+    private ArrayList<Integer> votedDebateIDs;
+    private Avatar selectedAvatar;
 
-    public User(String username, String password, int userID, ArrayList<Integer> pastDebateIDs, ArrayList<Integer> votedDebates){
+    public User() {
+        userID = 0;
+        username = "";
+        password = "";
+        playedDebateIDs = new ArrayList<Integer>();
+        votedDebateIDs = new ArrayList<Integer>();
+        selectedAvatar = new Avatar();
+    }
+
+    public User(String username, String password, int userID, ArrayList<Integer> playedDebateIDs, ArrayList<Integer> votedDebates, Avatar selectedAvatar) {
         this.username = username;
         this.password = password;
-        this.votedDebates = votedDebates;
-        this.pastDebateIDs = pastDebateIDs;
+        this.votedDebateIDs = votedDebates;
+        this.playedDebateIDs = playedDebateIDs;
+        this.userID = userID;
+        this.selectedAvatar = selectedAvatar;
     }
 
     public int getUserID() {
         return userID;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public Avatar getSelectedAvatar() {
+        return selectedAvatar;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public ArrayList<Integer> getPlayedDebateIDs() {
+        return playedDebateIDs;
     }
 
-    public ArrayList<Integer> getPastDebateIDs() {
-        return pastDebateIDs;
+    public void addPlayedDebateID(int playedDebateID) {
+        playedDebateIDs.add(playedDebateID);
     }
 
-    public void setPastDebateIDs(ArrayList<Integer> pastDebateIDs) {
-        this.pastDebateIDs = pastDebateIDs;
+    public ArrayList<Integer> getVotedDebateIDs() {
+        return votedDebateIDs;
     }
 
-    public ArrayList<Integer> getVotedDebates() {
-        return votedDebates;
+    public void addVotedDebateID(int votedDebateID) {
+        votedDebateIDs.add(votedDebateID);
     }
 
-    public void setVotedDebates(ArrayList<Integer> votedDebates) {
-        this.votedDebates = votedDebates;
-    }
-    public User(String username, String password) {
-
+    //Debug Constructor
+    public User(String username, String password, Avatar selectedAvatar) {
+        this.selectedAvatar = selectedAvatar;
         this.username = username;
         this.password = password;
     }
@@ -76,8 +80,8 @@ public class User implements Serializable {
                 "userID=" + userID +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", pastDebateIDs=" + pastDebateIDs +
-                ", votedDebates=" + votedDebates +
+                ", playedDebateIDs=" + playedDebateIDs +
+                ", votedDebates=" + votedDebateIDs +
                 '}';
     }
 }

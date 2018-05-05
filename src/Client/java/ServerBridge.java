@@ -23,7 +23,11 @@ import static java.lang.Thread.sleep;
 public class ServerBridge {
 
     public static final String serverIpAccessPoint = "192.168.43.193";
+  
+    public static final String serverIpBilkent = "139.179.226.135";
+
     public static final String serverIpBilkent = "139.179.224.73";
+
     public static final String serverIpEv = "192.168.1.42";
     public static final int serverPort = 54134;
 
@@ -67,6 +71,9 @@ public class ServerBridge {
     public static final int REQUEST_SUBMIT_SIDES = 108;
     public static final int REQUEST_SUBMIT_ARGUMENTS = 109;
     public static final int REQUEST_SUBMIT_VOTE = 110;
+
+
+    public static final int RESPONSE_UPDATED_DEBATE = 115;
 
 
     private volatile ArrayList<Serializable> leastRecentlyReceivedData;
@@ -199,14 +206,15 @@ public class ServerBridge {
 
         protected Void doInBackground(Void... args) {
 
-            System.out.println("started listening.");
+
             try {
                 socket = new Socket(serverIpBilkent, serverPort);
                 outToServer = new ObjectOutputStream(socket.getOutputStream());
                 inFromServer = new ObjectInputStream(socket.getInputStream());
+                System.out.println("started listening.");
 
             } catch (Exception e) {
-                System.out.println("Couldn't opened input output sockets");
+                System.out.println("Couldn't started listening");
                 e.printStackTrace();
             }
 
