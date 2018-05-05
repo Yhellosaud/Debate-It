@@ -5,18 +5,14 @@
  */
 package mysqlconnection;
 
-import com.mysql.jdbc.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.Array;
-import java.sql.Connection.*;
+import java.sql.Connection;
 import SharedModels.*;
 import java.util.*;
-import java.lang.Integer;
 
 /**
  *
@@ -86,7 +82,7 @@ public class UserManager {
             }
         }
             
-        userData = "SELECT * FROM user_pastdebateid";
+        userData = "SELECT * FROM user_playeddebateid";
         s = c.createStatement();
         rs = s.executeQuery(userData);
         rsmd = rs.getMetaData();
@@ -131,13 +127,13 @@ public class UserManager {
         return (new User(username, password, userID, pastDebateIDs, votedDebateIDs));
     }
     
-    public void InsertUser(User user) throws SQLException {
+    public void insertUser(User user) throws SQLException {
         
         //Each single information data of user is attained one by one
-        int id = user.getUserID();
+        int userID = user.getUserID();
         String username = user.getUsername();
         String password = user.getPassword();
-        ArrayList<Integer> pastDebateIDs = user.getPastDebateIDs();
+        ArrayList<Integer> pastDebateIDs = user.getPlayedDebateIDs();
         ArrayList<Integer> votedDebateIDs = user.getVotedDebateIDs();
         
         String pdids = "";
@@ -155,58 +151,26 @@ public class UserManager {
         //Related database tables are prepared in order to perform insertion
         //The table is transfered into a prepared statement
         //Statement variants are loaded with user information
-        userData = "INSERT INTO user (id, username, password) VALUES (?, ?, ?)";
+        userData = "INSERT INTO user (userID, username, password) VALUES (?, ?, ?)";
         statement = c.prepareStatement(userData); 
-        statement.setInt(1, id);
+        statement.setInt(1, userID);
         statement.setString(2, username);
         statement.setString(3, password);
         statement.executeBatch();
         statement.executeUpdate();
         //////////////////////////////////////////////////////////////////////
-        userData = "INSERT INTO user_pastdebateid (userID, debateID) VALUES (?, ?)";
+        userData = "INSERT INTO user_playeddebateid (userID, debateID) VALUES (?, ?)";
         statement = c.prepareStatement(userData); 
-        statement.setInt(1, id);
+        statement.setInt(1, userID);
         statement.setString(2, pdids);
         statement.executeBatch();
         statement.executeUpdate();
         //////////////////////////////////////////////////////////////////////
         userData = "INSERT INTO user_voteddebateid (userID, debateID) VALUES (?, ?)";
         statement = c.prepareStatement(userData);
-        statement.setInt(1, id);
+        statement.setInt(1, userID);
         statement.setString(2, vdids);
         statement.executeBatch();
         statement.executeUpdate();
-
-        /*Iterator<Integer> it = pastDebateIDs.iterator();
-        
-        while(it.hasNext()){
-            
-            int pastDebateID = it.next();
-            statement.setInt(4, pastDebateID);
-            statement.addBatch();                      
-        }
-
-        int[] numUpdates = statement.executeBatch();
-        
-        for (int i=0; i < numUpdates.length; i++) {
-
-            if (numUpdates[i] == -2) {
-
-                System.out.println("Execution " + i + 
-                  ": unknown number of rows updated");
-            }
-            
-            else {
-
-                System.out.println("Execution " + i + 
-                  "successful: " + numUpdates[i] + " rows updated");
-            }
-        }
-        
-        int rowsInserted = statement.executeUpdate();
-        
-        if (rowsInserted > 0) {
-            System.out.println("A new user was inserted successfully!");
-        }*/
     }
 }
