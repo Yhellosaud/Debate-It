@@ -17,9 +17,6 @@ import java.util.*;
  */
 public class MySqlConnection {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         
         String url = "jdbc:mysql://localhost:3306/didatabase?autoReconnect=true&useSSL=false";
@@ -31,20 +28,29 @@ public class MySqlConnection {
         try {
             
             c = (Connection)DriverManager.getConnection(url, username, password); 
-            System.out.println("Database connected!");
-
-            UserManager um = new UserManager(c);
-            //DebateManager dm = new DebateManager(c);
-            //ItemManager im = new ItemManager(c);
-
-            ArrayList<Integer> abc = new ArrayList<Integer>();
+            System.out.println("Database connected!\n");
+            //////////////////////////////////////////////////////////////////////////
+            ////////////////////////TEST CASE FOR USER MANAGER////////////////////////
+            //UserManager um = new UserManager(c);
+            //ArrayList<Integer> pastDebateIDs = new ArrayList<>(Arrays.asList(3, 5, 8, 17, 1, 2));
+            //ArrayList<Integer> votedDebateIDs = new ArrayList<>(Arrays.asList(31, 71, 6, 10, 14));
+            //User user = new User("Eda Hanım", "141511", 1, pastDebateIDs, votedDebateIDs);
+            //um.insertUser(user);
+            //um.getUserDetails("Eda Hanım");
+            ////////////////////////TEST CASE FOR USER MANAGER////////////////////////
+            //////////////////////////////////////////////////////////////////////////
             
-                    
-            User user = new User("Eda Hanım", "141511", 1, abc , abc);
             
-            um.InsertUser(user);
-                    
-            System.out.println("\nUsername: " + (um.getUserDetails("Eda Hanım")).getUsername());
+            //////////////////////////////////////////////////////////////////////////
+            ////////////////////////TEST CASE FOR DEBATE MANAGER////////////////////////
+            DebateManager dm = new DebateManager(c);
+            ArrayList<Player> players = new ArrayList<>();
+            Idea idea = new Idea(1, "Anam bacım kardeşim midir", 8);
+            int[] debateIDs = {3, 13, 31, 193, 131, 40};
+            Debate debate = new Debate(idea, players, 1, 80, 1, 3, 110, 90, 35, 40);
+            dm.getUserDebates(debateIDs);
+            ////////////////////////TEST CASE FOR USER_MANAGER////////////////////////
+            //////////////////////////////////////////////////////////////////////////
         }
         
         catch (SQLException e) {
@@ -53,5 +59,4 @@ public class MySqlConnection {
             e.printStackTrace();
         }
     }
-    
 }
