@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements DataReceivable {
     }
 
     public void browseBattle(View view) {
-        Intent intent = new Intent(this, BrowseBattleActivity.class);
+        Intent intent = new Intent(this, BattleMenuActivity.class);
         intent.putExtra("user", user);
         startActivity(intent);
     }

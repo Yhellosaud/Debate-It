@@ -23,8 +23,8 @@ public class BrowseBattleActivity extends AppCompatActivity implements DataRecei
 
         user = (User) getIntent().getSerializableExtra("user");
         Button browseButton = (Button) findViewById(R.id.joinBattle);
-        sb = new ServerBridge(this);
-        sb.startListeningToServer();
+        //sb = new ServerBridge(this);
+        //sb.startListeningToServer();
 
 
     }
@@ -37,7 +37,13 @@ public class BrowseBattleActivity extends AppCompatActivity implements DataRecei
     public void onClick(View v) {
 
         if (v.getId() == R.id.joinBattle ) {
-            sb.requestJoinBattle(user);
+            Intent myIntent = new Intent(getApplicationContext(), BattleMenuActivity.class);
+            //Debate debate = (Debate)responseData.get(0);
+            //myIntent.putExtra("DEBATE",debate);
+            myIntent.putExtra("user",user);
+
+            startActivity(myIntent);
+            //sb.requestJoinBattle(user);
 
         }
     }
@@ -51,6 +57,7 @@ public class BrowseBattleActivity extends AppCompatActivity implements DataRecei
             Debate debate = (Debate)responseData.get(0);
             myIntent.putExtra("DEBATE",debate);
             myIntent.putExtra("user",user);
+
             startActivity(myIntent);
 
         }

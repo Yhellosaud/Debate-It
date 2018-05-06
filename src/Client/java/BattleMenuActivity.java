@@ -46,6 +46,8 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
         setContentView(R.layout.activity_battle_menu);
 
         sb = new ServerBridge(this);
+        sb.startListeningToServer();
+
        /* user = (User)getIntent().getSerializableExtra("user");
         sendArgument = (Button)findViewById(R.id.send_argument);
         sb.startListeningToServer();
@@ -78,8 +80,9 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
 
         user = (User) getIntent().getSerializableExtra("user");
 
-        curDebate = (Debate) getIntent().getSerializableExtra("DEBATE");
-        drawDebate(curDebate);
+
+        //curDebate = (Debate) getIntent().getSerializableExtra("DEBATE");
+        //drawDebate(curDebate);
 
 
         /*setStage(0);
@@ -98,6 +101,8 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
             String argument = argumentEdit.getText().toString();
             sb.requestSendArgument(user,argument,0);
 
+        }else if (v.getId()==R.id.joinButton){
+            sb.requestJoinBattle(user);
         }
     }
 
@@ -269,6 +274,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
     public boolean receiveAndUpdateUI(int responseId, ArrayList<Serializable> responseData) {
 
         System.out.println("Battle Menu receiveAndUpdateUI, responseID: " + responseId);
+
         if (responseId == ServerBridge.RESPONSE_BATTLE_TIME) {
 
             int time = 0;
