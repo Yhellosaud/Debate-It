@@ -153,7 +153,8 @@ public class Debate implements Serializable {
 
     @Override
     public String toString() {
-        return "Debate{"
+        String str = "";
+        str =  "Debate{"
                 + "idea=" + idea
                 + ", players=" + players
                 + ", debateID=" + debateID
@@ -163,7 +164,15 @@ public class Debate implements Serializable {
                 + ", stage1Length=" + stage1Length
                 + ", stage2Length=" + stage2Length
                 + ", stage3Length=" + stage3Length
-                + '}';
+                + '}'+"\n";
+        for(int i=0;i< players.size();i++){
+            Player curPlayer = players.get(i);
+            str = str+ "Player "+curPlayer.getUsername()+"'s arguments:"+"\n";
+            for(int j=0;j<curPlayer.getArguments().size();j++){
+                str +=curPlayer.getArguments().get(j).toString()+"\n";
+            }
+        }
+        return str;
     }
 
     public void closeDebate() {
