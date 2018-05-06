@@ -30,6 +30,9 @@ public class BattleTimer implements Runnable {
 
     }
 
+    /**
+     * Timer stops when counting is done.
+     */
     public void run() {
 
         while (running) {
@@ -60,7 +63,9 @@ public class BattleTimer implements Runnable {
                     timer--;
                 }
                 //Going to next stage
+                stopTimer();
                 battleThread.nextStage();
+                
             }
 
         }

@@ -31,7 +31,7 @@ import java.sql.SQLException;
 public class Server {
 
     public static final String serverIpAccessPoint = "192.168.43.193";
-    public static final String serverIpBilkent = "139.179.226.135";
+    public static final String serverIpBilkent = "192.168.1.37";
     public static final String serverIpEv = "192.168.1.42";
     public static final String databaseIp = "139.179.227.218";
     public static final String databasePort = "3306";
@@ -115,7 +115,7 @@ public class Server {
                 Socket newClient = serverSocket.accept();
                 System.out.println("Client connected.");
                 System.out.println("Address: " + newClient.getRemoteSocketAddress().toString() + " port: " + newClient.getLocalPort() + "\n");
-                UserHandler userHandler = new UserHandler(newClient, numTotalConnections, battleThread);
+                UserHandler userHandler = new UserHandler(newClient, numTotalConnections, battleThread,numTotalConnections);
                 new Thread(userHandler).start();
                 //userHandlers.add(userHandler);
                 numTotalConnections++;

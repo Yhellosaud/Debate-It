@@ -25,17 +25,20 @@ public class PlayerHandler implements Runnable {
 
     public static final int RESPONSE_BATTLE_TIME = 105;
     public static final int RESPONSE_NEW_STAGE = 106;
-    public static final int RESPONSE_NEW_ARGUMENT = 107;
+    public static final int REQUEST_SUBMIT_SIDES = 108;
+    public static final int REQUEST_SUBMIT_VOTE = 110;
+    
 
-    public static final int RESPONSE_STAGE_SIDE_SELECTION_DONE = 108;
+    /*public static final int RESPONSE_STAGE_SIDE_SELECTION_DONE = 108;
     public static final int RESPONSE_STAGE_INITIAL_ARGUMENT_DONE = 109;
     public static final int RESPONSE_STAGE_COUNTER_ARGUMENT_DONE = 110;
     public static final int RESPONSE_STAGE_ANWERS_DONE = 111;
     public static final int RESPONSE_STAGE_CONCLUSION_DONE = 112;
-    public static final int RESPONSE_STAGE_VOTING_DONE = 113;
+    public static final int RESPONSE_STAGE_VOTING_DONE = 113;*/
 
     public static final int RESPONSE_NEW_PLAYER_JOINED = 114;
     public static final int RESPONSE_UPDATED_DEBATE = 115;
+    
 
     private volatile Player player;
     private Socket clientSocket;
@@ -89,13 +92,14 @@ public class PlayerHandler implements Runnable {
                             endOfStreamReached = true;
                         }
                     }
+                    System.out.println("-----Request Params----");
                     for (int i = 0; i < requestParams.size(); i++) {
                         System.out.println(i + ": " + requestParams.get(i).toString());
                     }
                     if (requestId != UserHandler.CLIENT_CONNECTED) {
                         //Updating players
                         //Correct here
-                        battleThread.updateDebate(requestId, requestParams);
+                        //battleThread.updateDebate(requestId, requestParams);
                         battleThread.updatePlayers(requestId, requestParams);
 
                     }
@@ -121,11 +125,11 @@ public class PlayerHandler implements Runnable {
     public synchronized void updatePlayer(int requestId, ArrayList<Serializable> requestParams) {
 
         switch (requestId) {
-            case (RESPONSE_NEW_ARGUMENT):
+            /*case (RESPONSE_NEW_ARGUMENT):
                 int argumentSenderId = (int) requestParams.get(0);
                 String argument = (String) requestParams.get(1);
                 responseSendArgument(argumentSenderId, argument);
-                break;
+                break;*/
             case (RESPONSE_NEW_STAGE):
                 int newStage = (int) requestParams.get(0);
                 responseNewStage(newStage);
@@ -164,12 +168,12 @@ public class PlayerHandler implements Runnable {
         response(RESPONSE_NEW_STAGE, responseParams);
     }
 
-    private void responseSendArgument(int argumentSenderId, String argument) {
+    /*private void responseSendArgument(int argumentSenderId, String argument) {
         ArrayList<Serializable> responseParams = new ArrayList<Serializable>();
         responseParams.add(argumentSenderId);
         responseParams.add(argument);
         response(RESPONSE_NEW_ARGUMENT, responseParams);
-    }
+    }*/
 
     /**
      * This method sends battle time to client.
@@ -178,7 +182,7 @@ public class PlayerHandler implements Runnable {
      */
     private void responseBattleTime(int time) {
 
-        System.out.println("Sending battle time to player: " + time);
+        //System.out.println("Sending battle time to player: " + time);
         ArrayList<Serializable> responseParams = new ArrayList<Serializable>();
         responseParams.add(time);
         response(RESPONSE_BATTLE_TIME, responseParams);
@@ -198,16 +202,13 @@ public class PlayerHandler implements Runnable {
      * @param responseData
      */
     private void response(int responseId, ArrayList<Serializable> responseData) {
-        Debate debate = null;
-        try {
-            debate = (Debate) responseData.get(0);
-        } catch (Exception e) {
 
+        if (responseId == RESPONSE_UPDATED_DEBATE) {
+            System.out.println("Player " + player.getUsername() + "'s handler sending reponse");
+            Debate debate = (Debate) responseData.get(0);
+            System.out.println(debate);
         }
 
-        System.out.println("Player " + player.getUsername() + "'s handler");
-        System.out.println(debate);
-        
         try {
             out.writeInt(responseId);
 

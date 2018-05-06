@@ -48,6 +48,9 @@ public class UserHandler implements Runnable {
     private Socket socket;
     private String clientAddress;
     private BattleThread battleThread;
+    private int numTotalConnections;
+    
+    
 
     private volatile ObjectOutputStream out;
     private volatile ObjectInputStream in;
@@ -55,11 +58,12 @@ public class UserHandler implements Runnable {
     /*private DebateManager dm;
     private ItemManager im;
     private UserManager um;*/
-    public UserHandler(Socket socket, int threadId, BattleThread battleThread) {
+    public UserHandler(Socket socket, int threadId, BattleThread battleThread,int numTotalConnections) {
 
         this.socket = socket;
         this.clientAddress = socket.getRemoteSocketAddress().toString();
         this.battleThread = battleThread;
+        this.numTotalConnections = numTotalConnections;
 
         /*this.dm = dm;
         this.im = im;
@@ -113,8 +117,7 @@ public class UserHandler implements Runnable {
             //Handling request
             handleIncomingRequests(requestId, requestParams);
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (Exception e) {            
             e.printStackTrace();
         } finally {
             //Closing sockets if request is not to join battle
@@ -200,8 +203,8 @@ public class UserHandler implements Runnable {
             }
                 
             case (REQUEST_GET_PAST_DEBATES):{
-                int userId = (int)requestParams.get(0);               
-                handleRequestGetPastDebates(userId);
+                             
+                handleRequestGetPastDebates();
                 break;
             }
             case (REQUEST_GET_BUYABLE_ITEMS):{
@@ -240,7 +243,8 @@ public class UserHandler implements Runnable {
             /*out.writeObject(data1);
             out.writeObject(data2);
             out.writeObject(null);*/
-            User user1 = new User("cagatay", "123", 1, pastDebateIDs, votedDebates);
+            Avatar userAvatar = new Avatar(101);
+            User user1 = new User("cagatay", "123", 1, pastDebateIDs, votedDebates,userAvatar);
             out.writeObject(user1);
             out.flush();
             System.out.println("objects send");
@@ -261,9 +265,13 @@ public class UserHandler implements Runnable {
         votedDebates.add(33);
         votedDebates.add(34);
 
-        User user = new User(userName, password, 1, pastDebateIDs, votedDebates);
+        Avatar userAvatar = new Avatar(101);
+        User user = new User(userName, password, numTotalConnections, pastDebateIDs, votedDebates,userAvatar);
+        ArrayList<Serializable> responseData = new ArrayList<Serializable>();
+        responseData.add(user);
+        response(RESPONSE_USER_OBJECT, responseData);
 
-        forwardUserObject(user);
+        //forwardUserObject(user);
         return false;
     }
 
@@ -304,13 +312,13 @@ public class UserHandler implements Runnable {
         //Debate[] debates = DebateManager.getPlayaedDebates(userId);
         //Debate(Idea idea, ArrayList<Player> players, int debateID, long debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length)
         Idea idea = new Idea(22, "Should street animals be allowed to Bilkent?", 5);
-        Player player1 = new Player(1, "Player 1");
+        /*Player player1 = new Player();
         Player player2 = new Player(2, "Player 2");
         Player player3 = new Player(3, "Player 3");
-        Player player4 = new Player(4, "Player 4");
+        Player player4 = new Player(4, "Player 4");*/
         ArrayList<Player> players = new ArrayList<Player>();
         Debate debate1 = new Debate(idea, players, 1, 15, 1, 3, 4, 3, 4, 5);
-        Debate debate2 = new Debate(idea, players, 2, 15, 1, 3, 4, 3, 4, 5);
+        Debate debate2 = new Debate(idea, players, 2, 15, 2, 2, 4, 3, 4, 6);
         ArrayList<Serializable> responseData = new ArrayList<Serializable>();
         responseData.add(debate1);
         responseData.add(debate2);
@@ -321,19 +329,62 @@ public class UserHandler implements Runnable {
 
     }
 
-    private boolean handleRequestGetPastDebates(int userId) {
-        Debate[] debates;
+    private boolean handleRequestGetPastDebates() {
+        //Debate[] debates = DebateManager.getPlayaedDebates(userId);
+        //Debate(Idea idea, ArrayList<Player> players, int debateID, long debateLength, int yesVotes, int noVotes, int stage1Length, int stage2Length, int stage3Length)
+        Idea idea = new Idea(21, "Should street animals be allowed to Bilkent?", 5);
+        Idea idea2 = new Idea(22, "Should street animals be allowed to Bilkent?", 6);
+        /*Player player1 = new Player();
+        Player player2 = new Player(2, "Player 2");
+        Player player3 = new Player(3, "Player 3");
+        Player player4 = new Player(4, "Player 4");*/
+        ArrayList<Player> players = new ArrayList<Player>();
+        Debate debate1 = new Debate(idea, players, 1, 15, 1, 3, 4, 3, 4, 5);
+        Debate debate2 = new Debate(idea, players, 2, 15, 2, 2, 4, 3, 4, 5);
+        ArrayList<Serializable> responseData = new ArrayList<Serializable>();
+        responseData.add(debate1);
+        responseData.add(debate2);
+        response(RESPONSE_PAST_DEBATES,responseData);
         return false;
     }
 
     private boolean handleRequestGetBuyableItems() {
+        
+        Avatar avatar1 = new Avatar(100);
+        Avatar avatar2= new Avatar(101);
+        Avatar avatar3 = new Avatar(102);
+        
+        Title title1 = new Title(200,"Kral");
+        Title title2 = new Title(201,"Kralice");
+        Title title3 = new Title(202,"Köylü");
+        
+        Frame frame1 = new Frame(300);
+        Frame frame2 = new Frame(301);
+        Frame frame3 = new Frame(302);
+        
+        ArrayList<Serializable> responseData = new ArrayList<Serializable>();
+        responseData.add(avatar1);
+        responseData.add(avatar2);
+        responseData.add(avatar3);
+        
+        responseData.add(title1);
+        responseData.add(title2);
+        responseData.add(title3);
+        
+        responseData.add(frame1);
+        responseData.add(frame2);
+        responseData.add(frame3);
+        
+        response(RESPONSE_BUYABLE_ITEMS,responseData);
+      
+        //ArrayList<
         
         return false;
     }
     private boolean handleRequestJoinBattle(User user) {
 
         Player player = new Player(user);
-        //Player player = new Player(123, "Cagatay", 123, null, 0, 0, 0);
+      
         battleThread.joinNewPlayer(player, socket, out, in);
 
         return false;

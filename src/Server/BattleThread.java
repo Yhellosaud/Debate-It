@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.Random;
 
 public class BattleThread implements Runnable {
 
@@ -21,7 +22,7 @@ public class BattleThread implements Runnable {
     private static final int STAGE_CONCLUSION = 4;
     private static final int STAGE_VOTING = 5;
 
-    private static final int MAX_PLAYERS = 4;
+    private static final int MAX_PLAYERS = 2;
 
     private static final int REQUEST_SEND_ARGUMENT = 9;
 
@@ -99,6 +100,7 @@ public class BattleThread implements Runnable {
 
         int responseId = UserHandler.INVALID_REQUEST_ID;
         ArrayList<Serializable> responseData = new ArrayList<Serializable>();
+        boolean respond = true;
 
         switch (requestId) {
 
@@ -110,24 +112,45 @@ public class BattleThread implements Runnable {
 
                 Argument argument = new Argument(timer.getTimer(), currentStage, argumentStr);
                 currentDebate.addArgument(playerId, argument);
-                responseData.add(currentDebate);              
+                responseData.add(currentDebate);
 
                 break;
 
             case (PlayerHandler.REQUEST_SEND_EXPRESSION):
                 break;
+            case (PlayerHandler.REQUEST_SUBMIT_SIDES):
+                responseId = PlayerHandler.RESPONSE_UPDATED_DEBATE;
+                playerId = (int) requestParams.get(0);
+                int side = (int) requestParams.get(1);
+
+                for (int i = 0; i < currentDebate.getPlayers().size(); i++) {
+                    if (currentDebate.getPlayers().get(i).getPlayerID() == playerId) {
+                        currentDebate.getPlayers().get(i).setSide(side);
+                    }
+
+                }
+                respond = false;
+                //responseData.add(currentDebate);
+
+                break;
             case (PlayerHandler.RESPONSE_UPDATED_DEBATE):
                 responseId = PlayerHandler.RESPONSE_UPDATED_DEBATE;
                 responseData = requestParams;
                 break;
+            case (PlayerHandler.RESPONSE_NEW_STAGE):
+                responseId = PlayerHandler.RESPONSE_NEW_STAGE;
+                responseData = requestParams;
         }
 
-        synchronized (playerHandlers) {
-            for (int i = 0; i < playerHandlers.size(); i++) {
-                playerHandlers.get(i).updatePlayer(responseId, responseData);
+        if (respond) {
+            synchronized (playerHandlers) {
+                for (int i = 0; i < playerHandlers.size(); i++) {
+                    playerHandlers.get(i).updatePlayer(responseId, responseData);
 
+                }
             }
         }
+
     }
 
     public synchronized void updateDebate(int requestId, ArrayList<Serializable> requestData) {
@@ -146,7 +169,8 @@ public class BattleThread implements Runnable {
         System.out.println("Battle thread started\n");
         //Starting timer thread
         new Thread(timer).start();
-        currentDebate = generateNewDebate(Idea.CATEGORY_ECONOMY);
+        boolean initial = true;
+        currentDebate = generateNewDebate(null);
 
         while (running) {
 
@@ -158,58 +182,71 @@ public class BattleThread implements Runnable {
 
                 }
             }
-
             //Battle keeps repeating as long as max number of players is reached
-            while (numPlayers == MAX_PLAYERS) {
-                currentStage = 0;
-                System.out.println("Game starting");
 
-                currentDebate = generateNewDebate(Idea.CATEGORY_ECONOMY);
-                playStageSideSelection(10);
+            currentStage = 0;
+            System.out.println("Game starting");
+            if (!initial) {
+                currentDebate = generateNewDebate(currentDebate.getPlayers());
+            }
 
-                playStageInitialArguments(60);
+            initial = false;
+            boolean sideSelectionSuccess = playStageSideSelection(10);
 
-                playStageCounterArguments(60);
+            if (sideSelectionSuccess) {
+                playStageInitialArguments(15);
 
-                playStageAnswers(60);
+                playStageCounterArguments(15);
 
-                playStageConclusion(60);
+                playStageAnswers(15);
+
+                playStageConclusion(15);
 
                 playStageVoting(10);
 
-                //Closing debate
                 try {
-                    dm.insertDebate(currentDebate);
+                    //dm.insertDebate(currentDebate);
                 } catch (Exception e) {
                     System.out.println("Could not add closing debate to db");
                     e.printStackTrace();
 
                 }
-
+                //Closing debate
                 currentDebate.closeDebate();
             }
 
-            timer.stopTimer();
         }
 
     }
 
-    private void playStageSideSelection(int stageTime) {
+    private boolean playStageSideSelection(int stageTime) {
 
         //Stage 0
         System.out.println("Stage side selection is starting");
         //Updating players
         ArrayList<Serializable> responseParams = new ArrayList<Serializable>();
+
         responseParams.add(STAGE_SIDE_SELECTION);
         updatePlayers(PlayerHandler.RESPONSE_NEW_STAGE, responseParams);
         responseParams.clear();
+
         //Starting timer
         timer.startTimer(stageTime);
 
         while (currentStage == STAGE_SIDE_SELECTION & numPlayers == MAX_PLAYERS) {
             //System.out.println("Stage 0");
         }
-        designateSidesToPlayers(currentDebate.getPlayers());
+
+        boolean sideSelectionSuccess = designateSidesToPlayers(currentDebate.getPlayers());
+
+        if (!sideSelectionSuccess) {
+            return false;
+        } else {
+            responseParams.add(currentDebate);
+            updatePlayers(PlayerHandler.RESPONSE_UPDATED_DEBATE, responseParams);
+            responseParams.clear();
+            return true;
+        }
 
     }
 
@@ -228,6 +265,10 @@ public class BattleThread implements Runnable {
         while (currentStage == STAGE_INITIAL_ARGUMENTS & numPlayers == MAX_PLAYERS) {
             //System.out.println("Stage 1");
         }
+        currentDebate.closeStage(STAGE_INITIAL_ARGUMENTS);
+        responseParams.add(currentDebate);
+        updatePlayers(PlayerHandler.RESPONSE_UPDATED_DEBATE, responseParams);
+        responseParams.clear();
 
     }
 
@@ -246,6 +287,10 @@ public class BattleThread implements Runnable {
         while (currentStage == STAGE_COUNTER_ARGUMENTS & numPlayers == MAX_PLAYERS) {
             //System.out.println("Stage 2");
         }
+        currentDebate.closeStage(STAGE_COUNTER_ARGUMENTS);
+        responseParams.add(currentDebate);
+        updatePlayers(PlayerHandler.RESPONSE_UPDATED_DEBATE, responseParams);
+        responseParams.clear();
 
     }
 
@@ -264,6 +309,10 @@ public class BattleThread implements Runnable {
         while (currentStage == STAGE_ANSWERS & numPlayers == MAX_PLAYERS) {
             //System.out.println("Stage 3");
         }
+        currentDebate.closeStage(STAGE_ANSWERS);
+        responseParams.add(currentDebate);
+        updatePlayers(PlayerHandler.RESPONSE_UPDATED_DEBATE, responseParams);
+        responseParams.clear();
 
     }
 
@@ -282,6 +331,10 @@ public class BattleThread implements Runnable {
         while (currentStage == STAGE_CONCLUSION & numPlayers == MAX_PLAYERS) {
             //System.out.println("Stage 4");
         }
+        currentDebate.closeStage(STAGE_CONCLUSION);
+        responseParams.add(currentDebate);
+        updatePlayers(PlayerHandler.RESPONSE_UPDATED_DEBATE, responseParams);
+        responseParams.clear();
 
     }
 
@@ -313,12 +366,15 @@ public class BattleThread implements Runnable {
      * @param category
      * @return
      */
-    private Debate generateNewDebate(int category) {
-        //Idea idea = new Idea(21, "Should street animals be allowed to Bilkent?", 5);
+    private Debate generateNewDebate(ArrayList<Player> players) {
+
+        Random random = new Random();
+        //Idea categories are between 0 inclusive and 5 exclusive
+        int category = random.nextInt(5);
         Idea newIdea = Idea.generateIdea(category);
-        
+
         //Databaseden debate id lazım
-        Debate newDebate = new Debate(newIdea, 0);
+        Debate newDebate = new Debate(newIdea, 0, players);
 
         return newDebate;
     }
@@ -343,7 +399,7 @@ public class BattleThread implements Runnable {
         player3.setAsNegativeDebater();
         player4.setAsPositiveDebater();
         Idea idea = new Idea(10, "Idea 1", 0);
-        Debate debate = new Debate(idea, 0);
+        Debate debate = new Debate(idea, 0, null);
         debate.addPlayer(player1);
         debate.addPlayer(player2);
         debate.addPlayer(player3);
@@ -390,11 +446,13 @@ public class BattleThread implements Runnable {
      * @return false if all players chose same side, true otherwise
      */
     private static boolean designateSidesToPlayers(ArrayList<Player> players) {
+
         ArrayList<Player> yesSidePlayers = new ArrayList<Player>();
         ArrayList<Player> noSidePlayers = new ArrayList<Player>();
 
         int size = players.size();
         int lastRandomSide = Player.SIDE_POSITIVE;
+
         //Dividing players into yes and no sides.
         for (int i = 0; i < size; i++) {
 
@@ -482,6 +540,7 @@ public class BattleThread implements Runnable {
                 chosenPlayer = highPriorityPlayers.get(i);
             }
         }
+        System.out.println(chosenPlayer.getUsername() + " is chosen as side: " + side);
         chosenPlayer.setSide(side);
     }
 
@@ -496,6 +555,7 @@ public class BattleThread implements Runnable {
         } else {
             currentStage = STAGE_SIDE_SELECTION;
         }
+
     }
 
 }
