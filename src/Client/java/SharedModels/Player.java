@@ -6,7 +6,6 @@ import java.util.*;
 /**
  * Created by Yasin on 9.03.2018.
  */
-
 public class Player implements Serializable {
 
     private static final long serialVersionUID = 2L;
@@ -16,7 +15,7 @@ public class Player implements Serializable {
     public static final int SIDE_SPECTATOR = 0;
     public static final int VOTE_YES = 2;
     public static final int VOTE_NO = 3;
-    
+
     private int playerID;
     private String username;
     private int side;
@@ -24,8 +23,10 @@ public class Player implements Serializable {
     private int vote;
     private volatile int consecutiveGamesWatched;
     private volatile int gamesPlayedInSession;
+    private Avatar selectedAvatar;
+    private Title selectedTitle;
 
-    public Player(){
+    public Player() {
         playerID = 0;
         username = "";
         side = 0;
@@ -46,11 +47,12 @@ public class Player implements Serializable {
     }
 
     //Debug Constructor
-    public Player(String username){
+    public Player(String username) {
         this.username = username;
+
     }
 
-    public Player(User user){
+    public Player(User user) {
         this.playerID = user.getUserID();
         this.username = user.getUsername();
         side = SIDE_SPECTATOR;
@@ -58,21 +60,23 @@ public class Player implements Serializable {
         vote = VOTE_YES;
         consecutiveGamesWatched = 0;
         gamesPlayedInSession = 0;
+        selectedAvatar = user.getSelectedAvatar();
+        selectedTitle = new Title(500, "Novice");
     }
 
-    public void setAsSpectator(){
+    public void setAsSpectator() {
         setSide(SIDE_SPECTATOR);
     }
-    
-    public void setAsPositiveDebater(){
+
+    public void setAsPositiveDebater() {
         setSide(SIDE_POSITIVE);
     }
-    
-    public void setAsNegativeDebater(){
+
+    public void setAsNegativeDebater() {
         setSide(SIDE_NEGATIVE);
     }
-    
-    public int getGamesPlayedInSession(){
+
+    public int getGamesPlayedInSession() {
         return gamesPlayedInSession;
     }
 
@@ -97,7 +101,18 @@ public class Player implements Serializable {
     }
 
     public void addArgument(Argument argument) {
-        arguments.add(argument);
+        if (arguments.size() < 4) {
+
+            if (arguments.size() == 0) {
+                arguments.add(argument);
+                return;
+            }
+            if (arguments.get(arguments.size() - 1).getStage() != argument.getStage()) {
+                arguments.add(argument);
+            }
+
+        }
+
     }
 
     public int getVote() {
@@ -111,12 +126,12 @@ public class Player implements Serializable {
     public int getConsecutiveGamesWatched() {
         return consecutiveGamesWatched;
     }
-    
-    public void incrementConsecutiveGamesWatched(){
+
+    public void incrementConsecutiveGamesWatched() {
         consecutiveGamesWatched++;
     }
-    
-    public void incrementGamesPlayedInSession(){
+
+    public void incrementGamesPlayedInSession() {
         gamesPlayedInSession++;
     }
 
@@ -126,7 +141,22 @@ public class Player implements Serializable {
 
     @Override
     public String toString() {
-        return username;
+        String str = "PlayerID: " + playerID + " Username: " + username + " side: " + side + " vote: " + vote + " consecutiveGamesWatched: " + consecutiveGamesWatched
+                + " gamesPlayedInSession: " + gamesPlayedInSession + " selectedAvatar: " + selectedAvatar + " selectedTitle: " + selectedTitle + "\n";
+        str += "Arguments: " + "\n";
+        for (int i = 0; i < arguments.size(); i++) {
+            str += arguments.get(i);
+        }
+
+        return str;
     }
-    
+
+    public Avatar getSelectedAvatar() {
+        return selectedAvatar;
+    }
+
+    public Title getSelectedTitle() {
+        return selectedTitle;
+    }
+
 }

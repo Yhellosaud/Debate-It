@@ -44,6 +44,6 @@ public class Argument implements Serializable {
                 "sentTime=" + sentTime +
                 ", stage='" + stage + '\'' +
                 ", argument='" + argument + '\'' +
-                '}';
+                '}' +"\n";
     }
 }

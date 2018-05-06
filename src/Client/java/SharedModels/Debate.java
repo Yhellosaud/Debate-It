@@ -54,10 +54,15 @@ public class Debate implements Serializable {
         this.stage4Length = stage4Length;
     }
 
-    public Debate(Idea idea, int debateID) {
+    public Debate(Idea idea, int debateID,ArrayList<Player> players) {
         this.idea = idea;
         this.debateID = debateID;
-        this.players = new ArrayList<Player>();
+        
+        if(players ==null){
+            this.players = new ArrayList<Player>();
+        }else{
+            this.players = players;
+        }        
         this.debateLength = 0;
         this.yesVotes = 0;
         this.noVotes = 0;
@@ -69,6 +74,13 @@ public class Debate implements Serializable {
 
     public void addPlayer(Player player) {
         players.add(player);
+    }
+    
+    public void closeStage(int stage){
+        Argument blankArgument = new Argument(0,stage,"Player passed this stage");
+        for(int i=0;i<players.size();i++){
+            players.get(i).addArgument(blankArgument);
+        }
     }
 
     public int getProgress(){
@@ -83,10 +95,18 @@ public class Debate implements Serializable {
         }
     }
 
+    /**
+     * This method adds an argument if the maximum number of arguments is not reached and 
+     * if there is no argument with same stage.     
+     * @param playerId
+     * @param argument 
+     */
     public void addArgument(int playerId, Argument argument) {
         for (int i = 0; i < players.size(); i++) {
             if (players.get(i).getPlayerID() == playerId) {
+                
                 players.get(i).addArgument(argument);
+                return;
             }
         }
     }
@@ -153,10 +173,9 @@ public class Debate implements Serializable {
 
     @Override
     public String toString() {
-        String str = "";
-        str =  "Debate{"
-                + "idea=" + idea
-                + ", players=" + players
+       String str = "------Debate--------\n";
+        str +=  "Debate{"
+                + "idea=" + idea                
                 + ", debateID=" + debateID
                 + ", debateLength=" + debateLength
                 + ", yesVotes=" + yesVotes
@@ -165,13 +184,11 @@ public class Debate implements Serializable {
                 + ", stage2Length=" + stage2Length
                 + ", stage3Length=" + stage3Length
                 + '}'+"\n";
+        System.out.println("Players");
         for(int i=0;i< players.size();i++){
-            Player curPlayer = players.get(i);
-            str = str+ "Player "+curPlayer.getUsername()+"'s arguments:"+"\n";
-            for(int j=0;j<curPlayer.getArguments().size();j++){
-                str +=curPlayer.getArguments().get(j).toString()+"\n";
-            }
+            str +=players.get(i).toString();
         }
+        str += "------Debate--------";
         return str;
     }
 
@@ -189,6 +206,8 @@ public class Debate implements Serializable {
                     curPlayer.setConsecutiveGamesWatched(0);
                     curPlayer.incrementGamesPlayedInSession();
                 }
+                curPlayer.setAsSpectator();
+                curPlayer.getArguments().clear();
             }
         }
     }
