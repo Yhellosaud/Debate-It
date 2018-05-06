@@ -20,14 +20,10 @@ import static java.lang.Thread.sleep;
  * Created by Cagatay on 11.03.2018.
  */
 
-public class ServerBridge {
+public class ServerBridge  {
 
     public static final String serverIpAccessPoint = "192.168.43.193";
-  
-    public static final String serverIpBilkent = "139.179.226.135";
-
-    public static final String serverIpBilkent = "139.179.224.73";
-
+    public static final String serverIpBilkent = "192.168.1.37";
     public static final String serverIpEv = "192.168.1.42";
     public static final int serverPort = 54134;
 
@@ -66,12 +62,10 @@ public class ServerBridge {
     public static final int RESPONSE_BUYABLE_ITEMS = 104;
     public static final int RESPONSE_BATTLE_TIME = 105;
     public static final int RESPONSE_NEW_STAGE = 106;
-    public static final int RESPONSE_NEW_ARGUMENT = 107;
+
 
     public static final int REQUEST_SUBMIT_SIDES = 108;
-    public static final int REQUEST_SUBMIT_ARGUMENTS = 109;
     public static final int REQUEST_SUBMIT_VOTE = 110;
-
 
     public static final int RESPONSE_UPDATED_DEBATE = 115;
 
@@ -143,6 +137,14 @@ public class ServerBridge {
         requestParams.add(password);
         request(REQUEST_SIGN_IN,requestParams);
     }
+    public synchronized void requestSendSideSelection(User user,int side){
+
+        ArrayList<Serializable> requestParams = new ArrayList<Serializable>();
+        requestParams.add(user.getUserID());
+        requestParams.add(side);
+        request(REQUEST_SUBMIT_SIDES,requestParams);
+    }
+
 
     /**
      * This method starts a new async task that communicates with server.
@@ -280,8 +282,10 @@ public class ServerBridge {
 
                             System.out.println(leastRecentlyReceivedData.get(i).toString());
                         }
+                        ArrayList<Serializable> previousData = new ArrayList<Serializable>();
+                        previousData.addAll(leastRecentlyReceivedData);
 
-                        publishProgress(responseID,leastRecentlyReceivedData);
+                        publishProgress(responseID,previousData);
                     }
 
                 } catch (Exception e) {
