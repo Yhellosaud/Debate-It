@@ -234,8 +234,6 @@ public class UserManager {
         try {
 
             rsmd = rs1.getMetaData();
-            rsmd = rs2.getMetaData();
-            rsmd = rs3.getMetaData();
 
             rs1 = s1.executeQuery(str1);
             rs2 = s2.executeQuery(str2);
