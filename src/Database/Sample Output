@@ -1,0 +1,73 @@
+run:
+Connecting database...
+Database connected!
+
+
+Avatar with ID '31' of the user 'Mehmet Öğretmen' has been successfully updated!
+Avatar with ID '40' of the user 'Komşu Hüseyin' has been successfully updated!
+Avatar with ID '9' of the user 'Mehmet Öğretmen' has been successfully updated!
+Avatar with ID '1' of the user 'Ayşe Çavuş' has been successfully updated!
+
+
+------------------------
+userID: 1
+->  username: Eda Hanım
+->  password: 141511
+->  avatarID: 0
+->  playedDebateNumber: 3
+->  votedDebateNumber: 5
+-> played debates: 15, 40, 20, 
+-> voted debates: 9, 18, 27, 36, 45, 
+------------------------
+
+
+------------------------
+userID: 2
+->  username: Ayşe Çavuş
+->  password: 401230
+->  avatarID: 1
+->  playedDebateNumber: 5
+->  votedDebateNumber: 0
+-> played debates: 112, 5, 62, 8, 41, 
+-> voted debates: 
+------------------------
+
+
+------------------------
+userID: 3
+->  username: Mehmet Öğretmen
+->  password: 22234
+->  avatarID: 9
+->  playedDebateNumber: 0
+->  votedDebateNumber: 0
+-> played debates: 
+-> voted debates: 
+------------------------
+
+
+------------------------
+userID: 4
+->  username: Ali Kasap
+->  password: 88adaj21
+->  avatarID: 0
+->  playedDebateNumber: 0
+->  votedDebateNumber: 7
+-> played debates: 
+-> voted debates: 6, 12, 19, 34, 23, 117, 5, 
+------------------------
+
+
+------------------------
+userID: 5
+->  username: Komşu Hüseyin
+->  password: bentekim68
+->  avatarID: 40
+->  playedDebateNumber: 2
+->  votedDebateNumber: 0
+-> played debates: 7, 4, 
+-> voted debates: 
+------------------------
+
+
+NUMBER OF USERS: 5
+BUILD SUCCESSFUL (total time: 0 seconds)
