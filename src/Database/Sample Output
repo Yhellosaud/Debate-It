@@ -2,6 +2,38 @@ run:
 Connecting database...
 Database connected!
 
+User 'Eda Hanım' has been successfully signed up!
+User 'Ayşe Çavuş' has been successfully signed up!
+User 'Mehmet Öğretmen' has been successfully signed up!
+User 'Ali Kasap' has been successfully signed up!
+User 'Komşu Hüseyin' has been successfully signed up!
+
+Played debate with the id '15' has been successfully inserted to user 'Eda Hanım'!
+Played debate with the id '40' has been successfully inserted to user 'Eda Hanım'!
+Played debate with the id '20' has been successfully inserted to user 'Eda Hanım'!
+Played debate with the id '112' has been successfully inserted to user 'Ayşe Çavuş'!
+Played debate with the id '5' has been successfully inserted to user 'Ayşe Çavuş'!
+Played debate with the id '62' has been successfully inserted to user 'Ayşe Çavuş'!
+Played debate with the id '8' has been successfully inserted to user 'Ayşe Çavuş'!
+Played debate with the id '41' has been successfully inserted to user 'Ayşe Çavuş'!
+Played debate with the id '7' has been successfully inserted to user 'Komşu Hüseyin'!
+Played debate with the id '4' has been successfully inserted to user 'Komşu Hüseyin'!
+Played debate with the id '9' has been successfully inserted to user 'Eda Hanım'!
+Played debate with the id '18' has been successfully inserted to user 'Eda Hanım'!
+Played debate with the id '27' has been successfully inserted to user 'Eda Hanım'!
+Played debate with the id '36' has been successfully inserted to user 'Eda Hanım'!
+Played debate with the id '45' has been successfully inserted to user 'Eda Hanım'!
+Played debate with the id '6' has been successfully inserted to user 'Ali Kasap'!
+Played debate with the id '12' has been successfully inserted to user 'Ali Kasap'!
+Played debate with the id '19' has been successfully inserted to user 'Ali Kasap'!
+Played debate with the id '34' has been successfully inserted to user 'Ali Kasap'!
+Played debate with the id '23' has been successfully inserted to user 'Ali Kasap'!
+Played debate with the id '117' has been successfully inserted to user 'Ali Kasap'!
+Played debate with the id '5' has been successfully inserted to user 'Ali Kasap'!
+Avatar with ID '31' of the user 'Mehmet Öğretmen' has been successfully updated!
+Avatar with ID '40' of the user 'Komşu Hüseyin' has been successfully updated!
+Avatar with ID '9' of the user 'Mehmet Öğretmen' has been successfully updated!
+Avatar with ID '1' of the user 'Ayşe Çavuş' has been successfully updated!
 
 Avatar with ID '31' of the user 'Mehmet Öğretmen' has been successfully updated!
 Avatar with ID '40' of the user 'Komşu Hüseyin' has been successfully updated!
