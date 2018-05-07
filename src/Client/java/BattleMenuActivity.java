@@ -1,9 +1,12 @@
 package dicomp.debateit;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.provider.Settings;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +29,8 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
     private static final int STAGE_CONCLUSION = 4;
     private static final int STAGE_VOTING = 5;
 
+    private static final int EXPRESSION_TIME_IN_MILLIS = 4000;
+
     // *********************
     // ***** VARIABLES *****
     // *********************
@@ -40,10 +45,11 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
     ImageView avatar1, avatar2, avatar3, avatar4;
     TextView arg1, arg2, counter1, counter2, answer1, answer2, conclusion1, conclusion2;
     TextView stage1Label, stage2Label, stage3Label, stage4Label;
-    Button sendArgumentButton, joinButton, yesButton, noButton;
+    Button sendArgumentButton, joinButton, yesButton, noButton,lolButton,wowButton,wtfButton;
     EditText argumentEdit;
 
     Debate curDebate;
+    ConstraintLayout mainLayout;
 
     // **********************************
     // ***** CONSTRUCTOR - ONCREATE *****
@@ -93,7 +99,11 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
         joinButton = (Button) findViewById(R.id.joinButton);
         yesButton = (Button) findViewById(R.id.yesSideButton);
         noButton = (Button) findViewById(R.id.noSideButton);
+        lolButton = (Button)findViewById(R.id.lolButton);
+        wowButton = (Button)findViewById(R.id.wowButton);
+        wtfButton = (Button)findViewById(R.id.wtfButton);
         argumentEdit = (EditText) findViewById(R.id.argumentEdit);
+        mainLayout = (ConstraintLayout) findViewById(R.id.battleMenuLayout);
 
 
         user = (User) getIntent().getSerializableExtra("user");
@@ -119,6 +129,24 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
 
         } else if (v.getId() == R.id.noSideButton) {
             sb.requestSendSideSelection(user, Player.SIDE_NEGATIVE);
+
+        } else if (v.getId() == R.id.lolButton) {
+            sb.requestSendExpression(user,new Expression(400));
+            lolButton.setClickable(false);
+            wowButton.setClickable(false);
+            wtfButton.setClickable(false);
+
+        } else if (v.getId() == R.id.wowButton) {
+            sb.requestSendExpression(user,new Expression(401));
+            lolButton.setClickable(false);
+            wowButton.setClickable(false);
+            wtfButton.setClickable(false);
+
+        } else if (v.getId() == R.id.wtfButton) {
+            sb.requestSendExpression(user,new Expression(402));
+            lolButton.setClickable(false);
+            wowButton.setClickable(false);
+            wtfButton.setClickable(false);
 
         }
     }
@@ -160,6 +188,9 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
             yesButton.setVisibility(View.INVISIBLE);
             noButton.setVisibility(View.INVISIBLE);
             argumentEdit.setVisibility(View.INVISIBLE);
+            lolButton.setVisibility(View.INVISIBLE);
+            wowButton.setVisibility(View.INVISIBLE);
+            wtfButton.setVisibility(View.INVISIBLE);
 
         } else if (stageNo == -1) // waiting in lobby
         {
@@ -178,6 +209,10 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
             avatar3.setVisibility(View.VISIBLE);
             avatar4.setVisibility(View.VISIBLE);
             categoryView.setVisibility(View.VISIBLE);
+            joinButton.setVisibility(View.INVISIBLE);
+            lolButton.setVisibility(View.VISIBLE);
+            wowButton.setVisibility(View.VISIBLE);
+            wtfButton.setVisibility(View.VISIBLE);
 
             //yesButton.setVisibility(View.VISIBLE);
             /*arg1.setVisibility(View.INVISIBLE);
@@ -205,7 +240,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
 
             int userSide = curDebate.getPlayerSide(user.getUserID());
 
-            if(userSide!=Player.SIDE_SPECTATOR){
+            if (userSide != Player.SIDE_SPECTATOR) {
                 argumentEdit.setVisibility(View.VISIBLE);
                 sendArgumentButton.setVisibility(View.VISIBLE);
             }
@@ -294,12 +329,40 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
         } else if (responseId == ServerBridge.RESPONSE_UPDATED_DEBATE) {
             Debate updatedDebate = (Debate) responseData.get(0);
             drawDebate(updatedDebate);
+        } else if (responseId == ServerBridge.REQUEST_SEND_EXPRESSION) {
+            String userName = (String) responseData.get(0);
+            Expression expr = (Expression) responseData.get(1);
+            PlayExprTask newExprTask = new PlayExprTask();
+            newExprTask.execute(userName,expr);
         }
         return false;
     }
 
+    private void drawEmptyLobby(){
+        player1Label.setText("Player1");
+        player2Label.setText("Player2");
+        player3Label.setText("Player3");
+        player4Label.setText("Player4");
 
-    private void drawDebate(Debate updatedDebate) {
+        title1.setText("Novice");
+        title2.setText("Novice");
+        title3.setText("Novice");
+        title4.setText("Novice");
+
+        //Default avatar is id 102
+        int avatarID = 102;
+        String avatarFile = "a" + avatarID + "s";
+        int id = getResources().getIdentifier(avatarFile, "drawable", getPackageName());
+        avatar1.setImageResource(id);
+        avatar2.setImageResource(id);
+        avatar3.setImageResource(id);
+        avatar4.setImageResource(id);
+
+    }
+
+    private  void drawDebate(Debate updatedDebate) {
+
+        drawEmptyLobby();
 
         curDebate = updatedDebate;
         String ideaText = curDebate.getIdea().getStatement();
@@ -312,18 +375,23 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
 
             case (Idea.CATEGORY_ECONOMY):
                 categoryString = "ECONOMY";
+                mainLayout.setBackgroundResource(R.drawable.economy);
                 break;
             case (Idea.CATEGORY_EDUCATION):
                 categoryString = "EDUCATION";
+                mainLayout.setBackgroundResource(R.drawable.education);
                 break;
             case (Idea.CATEGORY_HEALTH):
                 categoryString = "HEALTH";
+                mainLayout.setBackgroundResource(R.drawable.health);
                 break;
             case (Idea.CATEGORY_HISTORY):
                 categoryString = "HISTORY";
+                mainLayout.setBackgroundResource(R.drawable.history);
                 break;
             case (Idea.CATEGORY_PHILOSOPHY):
                 categoryString = "PHILOSOPHY";
+                mainLayout.setBackgroundResource(R.drawable.philosophy);
                 break;
         }
 
@@ -342,7 +410,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
                 title3.setText(curPlayer.getSelectedTitle().getTitleName());
 
                 int avatarID = curPlayer.getSelectedAvatar().getItemID();
-                String avatarFile = "a" + avatarID+"s";
+                String avatarFile = "a" + avatarID + "s";
                 int id = getResources().getIdentifier(avatarFile, "drawable", getPackageName());
                 avatar3.setImageResource(id);
 
@@ -368,7 +436,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
                 title4.setText(curPlayer.getSelectedTitle().getTitleName());
 
                 int avatarID = curPlayer.getSelectedAvatar().getItemID();
-                String avatarFile = "a" + avatarID+"s";
+                String avatarFile = "a" + avatarID + "s";
                 int id = getResources().getIdentifier(avatarFile, "drawable", getPackageName());
                 avatar4.setImageResource(id);
 
@@ -388,7 +456,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
                 }
 
             } else {
-                if(curPlayer.getPlayerID() == user.getUserID()){
+                if (curPlayer.getPlayerID() == user.getUserID()) {
 
                 }
                 if (spectator == 0) {
@@ -396,7 +464,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
                     title1.setText(curPlayer.getSelectedTitle().getTitleName());
 
                     int avatarID = curPlayer.getSelectedAvatar().getItemID();
-                    String avatarFile = "a" + avatarID+"s";
+                    String avatarFile = "a" + avatarID + "s";
                     int id = getResources().getIdentifier(avatarFile, "drawable", getPackageName());
                     avatar1.setImageResource(id);
                     spectator++;
@@ -406,7 +474,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
                     title2.setText(curPlayer.getSelectedTitle().getTitleName());
 
                     int avatarID = curPlayer.getSelectedAvatar().getItemID();
-                    String avatarFile = "a" + avatarID+"s";
+                    String avatarFile = "a" + avatarID + "s";
                     int id = getResources().getIdentifier(avatarFile, "drawable", getPackageName());
                     avatar2.setImageResource(id);
                     spectator++;
@@ -416,7 +484,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
                     title3.setText(curPlayer.getSelectedTitle().getTitleName());
 
                     int avatarID = curPlayer.getSelectedAvatar().getItemID();
-                    String avatarFile = "a" + avatarID+"s";
+                    String avatarFile = "a" + avatarID + "s";
                     int id = getResources().getIdentifier(avatarFile, "drawable", getPackageName());
                     avatar3.setImageResource(id);
                     spectator++;
@@ -426,7 +494,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
                     title4.setText(curPlayer.getSelectedTitle().getTitleName());
 
                     int avatarID = curPlayer.getSelectedAvatar().getItemID();
-                    String avatarFile = "a" + avatarID+"s";
+                    String avatarFile = "a" + avatarID + "s";
                     int id = getResources().getIdentifier(avatarFile, "drawable", getPackageName());
                     avatar4.setImageResource(id);
                     spectator++;
@@ -441,4 +509,67 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
     public void updateRetrieveProgress(int progress) {
 
     }
+
+    /**
+     * This async task updates the fix and alternative menu files using html parser.
+     * It updates the food menu views on post execution.
+     */
+    private class PlayExprTask extends AsyncTask<Serializable, Serializable, Void> {
+
+        @Override
+        protected Void doInBackground(Serializable... params) {
+
+            publishProgress(params[0], params[1], true);
+            try {
+                Thread.sleep(EXPRESSION_TIME_IN_MILLIS);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            publishProgress(params[0], params[1], false);
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Serializable... progress) {
+
+            String userName = (String) progress[0];
+            Expression expr = (Expression) progress[1];
+            boolean show = (boolean) progress[2];
+
+            int id = 0;
+            if (show) {
+                lolButton.setClickable(false);
+                wowButton.setClickable(false);
+                wtfButton.setClickable(false);
+
+                int exprId = expr.getExpressionID();
+                String exprFile = "e" + exprId + "s";
+                id = getResources().getIdentifier(exprFile, "drawable", getPackageName());
+                System.out.println("expr id: "+exprId);
+            } else {
+                drawDebate(curDebate);
+                System.out.println("draw debate temizlemeli");
+                lolButton.setClickable(true);
+                wowButton.setClickable(true);
+                wtfButton.setClickable(true);
+
+                return;
+            }
+
+            if (player1Label.getText().toString().equals(userName)) {
+                avatar1.setImageResource(id);
+
+            } else if (player2Label.getText().toString().equals(userName)) {
+                avatar2.setImageResource(id);
+
+            } else if (player3Label.getText().toString().equals(userName)) {
+                avatar3.setImageResource(id);
+
+            } else if (player4Label.getText().toString().equals(userName)) {
+                avatar4.setImageResource(id);
+            }
+
+        }
+    }
+
 }
