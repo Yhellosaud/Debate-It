@@ -100,18 +100,21 @@ public class Player implements Serializable {
         return arguments;
     }
 
-    public void addArgument(Argument argument) {
+    public boolean addArgument(Argument argument) {
         if (arguments.size() < 4) {
 
             if (arguments.size() == 0) {
                 arguments.add(argument);
-                return;
+                return true;
             }
             if (arguments.get(arguments.size() - 1).getStage() != argument.getStage()) {
                 arguments.add(argument);
+                return true;
             }
+            return false;
 
         }
+        return false;
 
     }
 
