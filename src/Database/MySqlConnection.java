@@ -68,6 +68,11 @@ public class MySqlConnection {
             um.addVotedDebateID("Ali Kasap", 117);
             um.addVotedDebateID("Ali Kasap", 5);
             
+            um.setSelectedAvatar("Mehmet Öğretmen", new Avatar(31));
+            um.setSelectedAvatar("Komşu Hüseyin", new Avatar(40));
+            um.setSelectedAvatar("Mehmet Öğretmen", new Avatar(9));
+            um.setSelectedAvatar("Ayşe Çavuş", new Avatar(1));
+            
             System.out.println();
             
             um.displayAllUsers();
