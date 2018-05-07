@@ -73,6 +73,10 @@ public class MySqlConnection {
             um.setSelectedAvatar("Mehmet Öğretmen", new Avatar(9));
             um.setSelectedAvatar("Ayşe Çavuş", new Avatar(1));
             
+            Title title = new Title();
+            um.setSelectedTitle("Eda Hanım", title.getTitle(1));
+            um.setSelectedTitle("Ali Kasap", title.getTitle(2));
+            
             System.out.println();
             
             um.displayAllUsers();
