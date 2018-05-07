@@ -10,7 +10,7 @@ public abstract class Item implements Serializable {
     }
 
     public Item() {
-        itemID = 0;
+        itemID = 1;
     }
 
     public int getItemID() {
