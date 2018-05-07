@@ -29,7 +29,7 @@ public class Title extends Item implements Serializable {
         return new Title(titleID);
     }
     
-    public ArrayList<Title> getAllTitles(){
+    public static ArrayList<Title> getAllTitles(){
         ArrayList<Title> titlesAL= new ArrayList<Title>();
         for(int i = 1; i <= titles.length; i++)
             titlesAL.add(new Title(i));
