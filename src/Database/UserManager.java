@@ -26,7 +26,7 @@ public class UserManager {
     private PreparedStatement statement;
     private final Connection c;
     private final Statement s1, s2, s3, s4;
-    private final String str1, str2, str3, str4, str5, str6, str7, str8, str9, str10;
+    private final String str1, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11;
     
     public UserManager(Connection c) throws SQLException {
 
@@ -49,6 +49,7 @@ public class UserManager {
         str8 = "UPDATE user_voteddebateid SET debateID = ? WHERE userID = ?";
         str9 = "UPDATE user SET playedDebateNumber = ? WHERE userID = ?";
         str10 = "UPDATE user SET votedDebateNumber = ? WHERE userID = ?";
+        str11 = "UPDATE user SET avatarID = ? WHERE userID = ?";
     }
     
     public boolean signUp(String username, String password) throws SQLException {
@@ -183,21 +184,19 @@ public class UserManager {
     }
     
     public boolean setSelectedAvatar(String username, Avatar selectedAvatar) throws SQLException {
-        
+        int avatarID = selectedAvatar.getAvatarID();
         rs1 = s1.executeQuery(str1);
-
-        int userID = 0;
-        
         while(rs1.next()) {
-
             if(username.equals(rs1.getString(2))) {
-
-                statement.setInt(4, selectedAvatar.getAvatarID());
-                System.out.println("Avatar of the user '" + username + "' has been successfully updated!");
+                statement = c.prepareStatement(str11);
+                statement.setInt(1, avatarID);
+                statement.setInt(2, rs1.getInt(1));
+                statement.executeBatch();
+                statement.executeUpdate();
+                System.out.println("Avatar with ID '" + avatarID + "' of the user '" + username + "' has been successfully updated!");
                 return true;
             }
         }
-        
         return false;
     }
     
@@ -324,7 +323,7 @@ public class UserManager {
         statement.setInt(1, 0);
         statement.setString(2, user.getUsername());
         statement.setString(3, user.getPassword());
-        statement.setInt(4, user.getSelectedAvatar().getAvatarID());
+        statement.setInt(4, 0);
         statement.setInt(5, 0);
         statement.setInt(6, 0);
         statement.executeBatch();
@@ -341,10 +340,5 @@ public class UserManager {
         statement.setString(2, vdids);
         statement.executeBatch();
         statement.executeUpdate();
-    }
-    
-    public void updateUser(User user) throws SQLException{
-        
-        
     }
 }
