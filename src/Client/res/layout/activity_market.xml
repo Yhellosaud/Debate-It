@@ -16,16 +16,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Market"
+            android:text="Customization"
             android:textColor="@color/black"
             android:textSize="23sp" />
 
-        <Button
-            android:id="@+id/getItems"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="See Items"
-            android:visibility="visible" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/getTitles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="seeTitles"
+                android:text="See Titles" />
+
+            <Button
+                android:id="@+id/getAvatars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="seeAvatars"
+                android:text="See Avatars"
+                android:visibility="visible" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +51,13 @@
             android:orientation="vertical">
 
             <ListView
-                android:id="@+id/itemList"
+                android:id="@+id/avatarList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:dividerHeight="5dp" />
+
+            <ListView
+                android:id="@+id/titleList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:dividerHeight="5dp" />
