@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import SharedModels.Avatar;
 import SharedModels.User;
 
 import static java.lang.Thread.sleep;
@@ -23,7 +24,7 @@ import static java.lang.Thread.sleep;
 public class ServerBridge  {
 
     public static final String serverIpAccessPoint = "192.168.43.193";
-    public static final String serverIpBilkent = "139.179.226.179";
+    public static final String serverIpBilkent = "139.179.226.31";
     public static final String serverIpEv = "192.168.1.42";
     public static final int serverPort = 54134;
 
@@ -79,6 +80,7 @@ public class ServerBridge  {
     private volatile boolean listening;
 
 
+
     /**
      * Constructor
      *
@@ -89,6 +91,15 @@ public class ServerBridge  {
         isDataReady = false;
         listening = false;
         this.context = context;
+
+    }
+
+    public synchronized void requestChangeAvatar(User user, Avatar avatar){
+
+        ArrayList<Serializable> requestParams = new ArrayList<Serializable>();
+        requestParams.add(user.getUserID());
+        requestParams.add(avatar);
+        request(REQUEST_CHANGE_SELECTED_AVATAR,requestParams);
 
     }
 
