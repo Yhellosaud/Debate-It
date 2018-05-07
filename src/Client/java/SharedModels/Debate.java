@@ -110,14 +110,15 @@ public class Debate implements Serializable {
      * @param playerId
      * @param argument 
      */
-    public void addArgument(int playerId, Argument argument) {
+    public boolean addArgument(int playerId, Argument argument) {
         for (int i = 0; i < players.size(); i++) {
             if (players.get(i).getPlayerID() == playerId) {
                 
-                players.get(i).addArgument(argument);
-                return;
+                return players.get(i).addArgument(argument);
+                
             }
         }
+        return false;
     }
 
     public Idea getIdea() {
