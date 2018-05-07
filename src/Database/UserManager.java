@@ -26,24 +26,85 @@ public class UserManager {
     private ResultSetMetaData rsmd;
     private PreparedStatement statement;
     private final Connection c;
+    private int numberOfUsers;
     
     public UserManager(Connection c) throws SQLException {
 
         this.c = c;
         s = c.createStatement();
         c.setAutoCommit(true);
+        numberOfUsers = 0;
     }
     
-    /*public boolean signUp(String username, String password) {
+    public boolean signUp(String username, String password) throws SQLException {
+                
+        userData = "SELECT * FROM user";
+        s = c.createStatement();
+        rs = s.executeQuery(userData);
+        rsmd = rs.getMetaData();
         
+        int userID = 0;
+        
+        while(rs.next()) {
+
+            if(username.equals(rs.getString(2)) || password.equals(rs.getString(3))) {
+                
+                return false;
+            }
+            
+            userID = rs.getInt(1);
+        }
+        
+        insertUser(new User(username, password, ++userID, null, null, null));
+        numberOfUsers++;
         
         return true;
     }
     
-    public User signIn(String username, String password) {
+    public User signIn(String username, String password) throws SQLException {
+        
+        userData = "SELECT * FROM user";
+        s = c.createStatement();
+        rs = s.executeQuery(userData);
+        rsmd = rs.getMetaData();
+        
+        int userID = 0;
+        
+        while(rs.next()) {
+
+            if(username.equals(rs.getString(2)) && password.equals(rs.getString(3))) {
+                
+                
+                return getUserDetails(username);
+            }
+        }
+
+        return null;
+    }
+    
+    public boolean setSelectedAvatar(String username, Avatar selectedAvatar) throws SQLException {
         
         
-    }*/
+        userData = "SELECT * FROM user";
+        s = c.createStatement();
+        rs = s.executeQuery(userData);
+        rsmd = rs.getMetaData();
+        
+        int userID = 0;
+        
+        while(rs.next()) {
+
+            if(username.equals(rs.getString(2))) {
+
+                statement.setInt(4, selectedAvatar.getAvatarID());
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    
     
     public boolean checkUserName(String username) {
         
@@ -51,13 +112,19 @@ public class UserManager {
         return true;
     }
     
+    public int getNumberOfUsers() {
+        
+        return numberOfUsers;
+    }
+    
     public User getUserDetails(String username) throws SQLException {
         
         int userID = 0;
         String password = " ";
-        ArrayList<Integer> pastDebateIDs = new ArrayList<Integer>();
+        Avatar selectedAvatar = null;
+        ArrayList<Integer> playedDebateIDs = new ArrayList<Integer>();
         ArrayList<Integer> votedDebateIDs = new ArrayList<Integer>();
-
+        
         userData = "SELECT * FROM user";
         s = c.createStatement();
         rs = s.executeQuery(userData);
@@ -79,11 +146,11 @@ public class UserManager {
 
                 userID = rs.getInt(1);
                 password = rs.getString(3);
+                selectedAvatar = new Avatar(rs.getInt(4));
             }
         }
             
         userData = "SELECT * FROM user_playeddebateid";
-        s = c.createStatement();
         rs = s.executeQuery(userData);
         rsmd = rs.getMetaData();
 
@@ -100,12 +167,11 @@ public class UserManager {
         for(int i = 0; i < dids.length; i++) {
 
             int id = Integer.parseInt(dids[i]);
-            pastDebateIDs.add(i, id);
+            playedDebateIDs.add(i, id);
 
         }
 
         userData = "SELECT * FROM user_voteddebateid";
-        s = c.createStatement();
         rs = s.executeQuery(userData);
         rsmd = rs.getMetaData();
 
@@ -124,7 +190,7 @@ public class UserManager {
 
         }
         
-        return (new User(username, password, userID, pastDebateIDs, votedDebateIDs));
+        return (new User(username, password, userID, playedDebateIDs, votedDebateIDs, selectedAvatar));
     }
     
     public void insertUser(User user) throws SQLException {
@@ -133,6 +199,7 @@ public class UserManager {
         int userID = user.getUserID();
         String username = user.getUsername();
         String password = user.getPassword();
+        int avatarID = user.getSelectedAvatar().getAvatarID();
         ArrayList<Integer> pastDebateIDs = user.getPlayedDebateIDs();
         ArrayList<Integer> votedDebateIDs = user.getVotedDebateIDs();
         
@@ -156,6 +223,7 @@ public class UserManager {
         statement.setInt(1, userID);
         statement.setString(2, username);
         statement.setString(3, password);
+        statement.setInt(4, avatarID);
         statement.executeBatch();
         statement.executeUpdate();
         //////////////////////////////////////////////////////////////////////
