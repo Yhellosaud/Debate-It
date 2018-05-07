@@ -182,34 +182,33 @@ public class UserManager {
         System.out.println("Played debate with the id '" + debateID + "' has been successfully inserted to user '" + username + "'!");
         return true;
     }
-    
-    public boolean setSelectedAvatar(String username, Avatar selectedAvatar) throws SQLException {
+    public boolean setSelectedAvatar(int userID, Avatar selectedAvatar) throws SQLException {
         int avatarID = selectedAvatar.getAvatarID();
         rs1 = s1.executeQuery(str1);
         while(rs1.next()) {
-            if(username.equals(rs1.getString(2))) {
+            if(userID == rs1.getInt(1)) {
                 ps = c.prepareStatement(str11);
                 ps.setInt(1, avatarID);
                 ps.setInt(2, rs1.getInt(1));
                 ps.executeBatch();
                 ps.executeUpdate();
-                System.out.println("Avatar with ID '" + avatarID + "' of the user '" + username + "' has been successfully updated!");
+                System.out.println("Avatar with ID '" + avatarID + "' of the user '" + rs1.getString(2) + "' has been successfully updated!");
                 return true;
             }
         }
         return false;
     }
-    public boolean setSelectedTitle(String username, Title selectedTitle) throws SQLException {
+    public boolean setSelectedTitle(int userID, Title selectedTitle) throws SQLException {
         int titleID = selectedTitle.getTitleID();
         rs1 = s1.executeQuery(str1);
         while(rs1.next()) {
-            if(username.equals(rs1.getString(2))) {
+            if(userID == rs1.getInt(1)) {
                 ps = c.prepareStatement(str12);
                 ps.setInt(1, titleID);
                 ps.setInt(2, rs1.getInt(1));
                 ps.executeBatch();
                 ps.executeUpdate();
-                System.out.println("Title with ID '" + titleID + "' of the user '" + username + "' has been successfully updated!");
+                System.out.println("Title with ID '" + titleID + "' of the user '" + rs1.getString(2) + "' has been successfully updated!");
                 return true;
             }
         }
@@ -288,8 +287,8 @@ public class UserManager {
                 password = rs1.getString(3);
                 selectedAvatar = new Avatar(rs1.getInt(4));
                 selectedTitle = new Title(rs1.getInt(5));
-                playedDebateNumber = rs1.getInt(5);
-                votedDebateNumber = rs2.getInt(6);
+                playedDebateNumber = rs1.getInt(6);
+                votedDebateNumber = rs1.getInt(7);
             }
         }
         // Played debateID's of user are retrieved
