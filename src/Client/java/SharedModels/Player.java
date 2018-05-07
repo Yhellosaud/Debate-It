@@ -61,7 +61,7 @@ public class Player implements Serializable {
         consecutiveGamesWatched = 0;
         gamesPlayedInSession = 0;
         selectedAvatar = user.getSelectedAvatar();
-        selectedTitle = new Title(500, "Novice");
+        selectedTitle = user.getSelectedTitle();
     }
 
     public void setAsSpectator() {
