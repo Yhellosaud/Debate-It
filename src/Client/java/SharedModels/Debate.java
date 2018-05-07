@@ -94,6 +94,15 @@ public class Debate implements Serializable {
             }
         }
     }
+    
+    public int getPlayerSide(int playerId){
+        for(int i=0;i<players.size();i++){
+            if(players.get(i).getPlayerID()==playerId){
+                return players.get(i).getSide();
+            }
+        }
+        return Player.SIDE_SPECTATOR;
+    }
 
     /**
      * This method adds an argument if the maximum number of arguments is not reached and 
