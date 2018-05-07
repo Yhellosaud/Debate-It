@@ -23,9 +23,9 @@ public class UserManager {
 
     private ResultSet rs1, rs2, rs3;
     private ResultSetMetaData rsmd1, rsmd2, rsmd3;
-    private PreparedStatement statement;
+    private PreparedStatement ps;
     private final Connection c;
-    private final Statement s1, s2, s3, s4;
+    private final Statement s1, s2, s3;
     private final String str1, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11;
     
     public UserManager(Connection c) throws SQLException {
@@ -35,7 +35,6 @@ public class UserManager {
         s1 = c.createStatement();
         s2 = c.createStatement();
         s3 = c.createStatement();
-        s4 = c.createStatement();
         
         c.setAutoCommit(true);
         
@@ -120,17 +119,17 @@ public class UserManager {
 
         ids += "" + debateID + ", ";
         
-        statement = c.prepareStatement(str7);
-        statement.setString(1, ids);
-        statement.setInt(2, userID);
-        statement.executeBatch();
-        statement.executeUpdate();
+        ps = c.prepareStatement(str7);
+        ps.setString(1, ids);
+        ps.setInt(2, userID);
+        ps.executeBatch();
+        ps.executeUpdate();
         
-        statement = c.prepareStatement(str9);
-        statement.setInt(1, playedDebateNumber + 1);
-        statement.setInt(2, userID);
-        statement.executeBatch();
-        statement.executeUpdate();
+        ps = c.prepareStatement(str9);
+        ps.setInt(1, playedDebateNumber + 1);
+        ps.setInt(2, userID);
+        ps.executeBatch();
+        ps.executeUpdate();
                 
         System.out.println("Played debate with the id '" + debateID + "' has been successfully inserted to user '" + username + "'!");
         return true;
@@ -167,17 +166,17 @@ public class UserManager {
 
         ids += "" + debateID + ", ";
 
-        statement = c.prepareStatement(str8);
-        statement.setString(1, ids);
-        statement.setInt(2, userID);
-        statement.executeBatch();
-        statement.executeUpdate();
+        ps = c.prepareStatement(str8);
+        ps.setString(1, ids);
+        ps.setInt(2, userID);
+        ps.executeBatch();
+        ps.executeUpdate();
         
-        statement = c.prepareStatement(str10);
-        statement.setInt(1, votedDebateNumber + 1);
-        statement.setInt(2, userID);
-        statement.executeBatch();
-        statement.executeUpdate();
+        ps = c.prepareStatement(str10);
+        ps.setInt(1, votedDebateNumber + 1);
+        ps.setInt(2, userID);
+        ps.executeBatch();
+        ps.executeUpdate();
                 
         System.out.println("Played debate with the id '" + debateID + "' has been successfully inserted to user '" + username + "'!");
         return true;
@@ -188,11 +187,11 @@ public class UserManager {
         rs1 = s1.executeQuery(str1);
         while(rs1.next()) {
             if(username.equals(rs1.getString(2))) {
-                statement = c.prepareStatement(str11);
-                statement.setInt(1, avatarID);
-                statement.setInt(2, rs1.getInt(1));
-                statement.executeBatch();
-                statement.executeUpdate();
+                ps = c.prepareStatement(str11);
+                ps.setInt(1, avatarID);
+                ps.setInt(2, rs1.getInt(1));
+                ps.executeBatch();
+                ps.executeUpdate();
                 System.out.println("Avatar with ID '" + avatarID + "' of the user '" + username + "' has been successfully updated!");
                 return true;
             }
@@ -319,26 +318,26 @@ public class UserManager {
         //Related database tables are prepared in order to perform insertion
         //The table is transfered into a prepared statement
         //Statement variants are loaded with user information
-        statement = c.prepareStatement(str4);
-        statement.setInt(1, 0);
-        statement.setString(2, user.getUsername());
-        statement.setString(3, user.getPassword());
-        statement.setInt(4, 0);
-        statement.setInt(5, 0);
-        statement.setInt(6, 0);
-        statement.executeBatch();
-        statement.executeUpdate();
+        ps = c.prepareStatement(str4);
+        ps.setInt(1, 0);
+        ps.setString(2, user.getUsername());
+        ps.setString(3, user.getPassword());
+        ps.setInt(4, 0);
+        ps.setInt(5, 0);
+        ps.setInt(6, 0);
+        ps.executeBatch();
+        ps.executeUpdate();
         //////////////////////////////////////////////////////////////////////
-        statement = c.prepareStatement(str5); 
-        statement.setInt(1, 0);
-        statement.setString(2, pdids);
-        statement.executeBatch();
-        statement.executeUpdate();
+        ps = c.prepareStatement(str5); 
+        ps.setInt(1, 0);
+        ps.setString(2, pdids);
+        ps.executeBatch();
+        ps.executeUpdate();
         //////////////////////////////////////////////////////////////////////
-        statement = c.prepareStatement(str6);
-        statement.setInt(1, 0);
-        statement.setString(2, vdids);
-        statement.executeBatch();
-        statement.executeUpdate();
+        ps = c.prepareStatement(str6);
+        ps.setInt(1, 0);
+        ps.setString(2, vdids);
+        ps.executeBatch();
+        ps.executeUpdate();
     }
 }
