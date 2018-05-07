@@ -16,7 +16,7 @@ public class User implements Serializable {
     private ArrayList<Integer> playedDebateIDs;
     private ArrayList<Integer> votedDebateIDs;
     private Avatar selectedAvatar;
-
+	private Title selectedTitle;
     public User() {
         userID = 0;
         username = "";
@@ -24,15 +24,29 @@ public class User implements Serializable {
         playedDebateIDs = new ArrayList<Integer>();
         votedDebateIDs = new ArrayList<Integer>();
         selectedAvatar = new Avatar();
+        selectedTitle = new Title();
     }
 
-    public User(String username, String password, int userID, ArrayList<Integer> playedDebateIDs, ArrayList<Integer> votedDebates, Avatar selectedAvatar) {
+    public User(String username, String password, int userID, ArrayList<Integer> playedDebateIDs, ArrayList<Integer> votedDebates, Avatar selectedAvatar, Title selectedTitle) {
         this.username = username;
         this.password = password;
         this.votedDebateIDs = votedDebates;
         this.playedDebateIDs = playedDebateIDs;
         this.userID = userID;
         this.selectedAvatar = selectedAvatar;
+		this.selectedTitle = selectedTitle;
+    }
+
+    public Title changeSelectedTitle() {
+        return selectedTitle;
+    }
+
+    public void changeSelectedAvatar(Avatar selectedAvatar) {
+        this.selectedAvatar = selectedAvatar;
+    }
+
+    public void setSelectedTitle(Title selectedTitle) {
+        this.selectedTitle = selectedTitle;
     }
 
     public int getUserID() {
