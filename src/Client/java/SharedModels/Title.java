@@ -25,13 +25,8 @@ public class Title extends Item implements Serializable {
         return titleName;
     }
 
-    public static Title getTitle(int val){
-        switch (val){
-            case 0: return new Title(0, titles[0]);
-            case 1: return new Title(1, titles[1]);
-            case 2: return new Title(2, titles[2]);
-            default: return new Title(3, titles[3]);
-        }
+    public static Title getTitle(int titleID){
+        return new Title(titleID, titles[titleID - 1]);
     }
     public ArrayList<Title> getAllTitles(){
         ArrayList<Title> titlesAL= new ArrayList<Title>();
