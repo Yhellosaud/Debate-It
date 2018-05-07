@@ -23,7 +23,7 @@ import static java.lang.Thread.sleep;
 public class ServerBridge  {
 
     public static final String serverIpAccessPoint = "192.168.43.193";
-    public static final String serverIpBilkent = "192.168.1.37";
+    public static final String serverIpBilkent = "139.179.226.179";
     public static final String serverIpEv = "192.168.1.42";
     public static final int serverPort = 54134;
 
