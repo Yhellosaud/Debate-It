@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/battleMenuLayout"
     tools:context="dicomp.debateit.BattleMenuActivity">
 
     <TextView
@@ -13,7 +14,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:text="3"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:text="4"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,14 +52,15 @@
         android:layout_marginTop="8dp"
         android:text="Argument"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
+        android:textStyle="bold"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.441"
+        app:layout_constraintVertical_bias="0.44"
         tools:layout_editor_absoluteX="31dp" />
 
     <TextView
@@ -69,8 +71,10 @@
         android:layout_marginTop="8dp"
         android:text="Counter Arguement"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+
         android:textSize="12sp"
+        android:textColor="#000000"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -90,7 +94,8 @@
         android:layout_marginTop="8dp"
         android:text="Counter Arguement"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
+        android:textStyle="bold"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -98,7 +103,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.574"
-        tools:layout_editor_absoluteX="259dp" />
+        tools:layout_editor_absoluteX="257dp" />
 
     <TextView
         android:id="@+id/answer1Text"
@@ -108,9 +113,8 @@
         android:layout_marginTop="8dp"
         android:text="Answer"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
-        android:textColorHighlight="@color/colorPrimary"
-        android:textColorLink="@color/colorPrimary"
+        android:textColor="#000000"
+        android:textStyle="bold"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -128,7 +132,8 @@
         android:layout_marginTop="8dp"
         android:text="Answer"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
+        android:textStyle="bold"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -146,7 +151,8 @@
         android:layout_marginTop="8dp"
         android:text="Conclusion"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
+        android:textStyle="bold"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -164,7 +170,8 @@
         android:layout_marginTop="8dp"
         android:text="Conclusion"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
+        android:textStyle="bold"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -182,7 +189,8 @@
         android:layout_marginTop="8dp"
         android:text="Argument"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
+        android:textStyle="bold"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -190,7 +198,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.441"
-        tools:layout_editor_absoluteX="292dp" />
+        tools:layout_editor_absoluteX="291dp" />
 
     <TextView
         android:id="@+id/stage1View"
@@ -199,9 +207,10 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:text="1"
-        android:textColor="@color/colorPrimary"
-        android:textSize="18sp"
+        android:textColor="#000000"
         android:textStyle="bold"
+        android:textSize="18sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -216,7 +225,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:text="2"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -232,7 +241,7 @@
         android:layout_height="24dp"
         android:text="category"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
         android:textSize="14dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -251,12 +260,12 @@
         android:layout_height="24dp"
         android:text="Idea Name"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
         android:textSize="14dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteX="149dp"
+        tools:layout_editor_absoluteX="159dp"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -271,7 +280,7 @@
         android:layout_marginTop="8dp"
         android:text="Player4"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -293,7 +302,7 @@
         android:layout_marginTop="8dp"
         android:text="Player3"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -313,7 +322,7 @@
         android:layout_height="24dp"
         android:text="Player1"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -334,7 +343,7 @@
         android:layout_marginTop="8dp"
         android:text="Player2"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -353,7 +362,7 @@
         android:layout_marginTop="16dp"
         android:text="0"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="#000000"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -391,7 +400,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.01"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/a102s"
         android:layout_marginStart="112dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -506,6 +515,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="Novice"
+        android:textColor="#000000"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -524,6 +534,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="Novice"
+        android:textColor="#000000"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="16dp"
@@ -537,6 +548,7 @@
 
     <TextView
         android:id="@+id/title3"
+        android:textColor="#000000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -555,6 +567,7 @@
 
     <TextView
         android:id="@+id/title4"
+        android:textColor="#000000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -586,5 +599,46 @@
         android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:id="@+id/buttonLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0.92"
+        android:layout_height="34dp">
+
+        <Button
+            android:text="LOL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lolButton"
+            android:layout_weight="1"
+            android:onClick="onClick"/>
+
+        <Button
+            android:text="WOW"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/wowButton"
+            android:layout_weight="1"
+            android:onClick="onClick"/>
+
+        <Button
+            android:text="WTF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/wtfButton"
+            android:layout_weight="1"
+            android:onClick="onClick"/>
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
