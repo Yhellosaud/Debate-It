@@ -338,8 +338,8 @@ public class UserManager {
         ps.setInt(1, 0);
         ps.setString(2, user.getUsername());
         ps.setString(3, user.getPassword());
-        ps.setInt(4, 0);
-        ps.setInt(5, 0);
+        ps.setInt(4, 100);
+        ps.setInt(5, 1);
         ps.setInt(6, 0);
         ps.setInt(7, 0);
         ps.executeBatch();
