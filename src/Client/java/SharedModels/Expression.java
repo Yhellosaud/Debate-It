@@ -6,7 +6,7 @@ import java.util.*;
 public class Expression implements Serializable {
     int expressionID;
 
-    public Expression(int titleID) {
+    public Expression(int expressionID) {
         this.expressionID = expressionID;
     }
 
@@ -18,5 +18,9 @@ public class Expression implements Serializable {
         return "Expression{" +
                 "expressionID=" + expressionID +
                 '}';
+    }
+
+    public int getExpressionID(){
+        return expressionID;
     }
 }
