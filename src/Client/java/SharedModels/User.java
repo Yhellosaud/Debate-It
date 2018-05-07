@@ -37,7 +37,7 @@ public class User implements Serializable {
 		this.selectedTitle = selectedTitle;
     }
 
-    public Title changeSelectedTitle() {
+    public Title getSelectedTitle() {
         return selectedTitle;
     }
 
@@ -45,7 +45,7 @@ public class User implements Serializable {
         this.selectedAvatar = selectedAvatar;
     }
 
-    public void setSelectedTitle(Title selectedTitle) {
+    public void changeSelectedTitle(Title selectedTitle) {
         this.selectedTitle = selectedTitle;
     }
 
