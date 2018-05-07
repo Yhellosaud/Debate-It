@@ -11,10 +11,12 @@ public class Avatar extends Item implements Serializable {
 
     public Avatar(int avatarID) {
         super(avatarID);
+        this.avatarID = avatarID;
     }
 
     public Avatar() {
         super();
+        avatarID = 0;
     }
 
     public int getAvatarID() {
