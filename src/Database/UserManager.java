@@ -345,13 +345,13 @@ public class UserManager {
         ps.executeBatch();
         ps.executeUpdate();
         //////////////////////////////////////////////////////////////////////
-        ps = c.prepareStatement(str5); 
+        ps = c.prepareStatement(str6); 
         ps.setInt(1, 0);
         ps.setString(2, pdids);
         ps.executeBatch();
         ps.executeUpdate();
         //////////////////////////////////////////////////////////////////////
-        ps = c.prepareStatement(str6);
+        ps = c.prepareStatement(str7);
         ps.setInt(1, 0);
         ps.setString(2, vdids);
         ps.executeBatch();
