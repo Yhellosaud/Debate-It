@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements DataReceivable {
     }
 
     public void changeAvatar(View view) {
-        Intent intent = new Intent(this, BattleMenuActivity.class);
+        Intent intent = new Intent(this, MarketActivity.class);
         intent.putExtra("user", user);
         startActivity(intent);
     }
@@ -85,7 +85,13 @@ public class MainActivity extends AppCompatActivity implements DataReceivable {
     }
 
     public boolean receiveAndUpdateUI(int responseId,ArrayList<Serializable> responseData) {
-        if(responseId == ServerBridge.RESPONSE_USER_OBJECT){}
+        debates = new ArrayList<Debate>();
+        for(int i = 0; i < responseData.size(); i++)
+            debates.add((Debate)responseData.get(i));
+        adaptor = new CustomListViewAdapter(MainActivity.this, debates);
+        debateList.setAdapter(adaptor);
+        debateList.setVisibility(View.VISIBLE);
+        sb.disconnectFromServer();
         return false;
     }
 
