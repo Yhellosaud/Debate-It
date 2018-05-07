@@ -22,11 +22,11 @@ public class UserManager {
     
 
     private ResultSet rs1, rs2, rs3;
-    private ResultSetMetaData rsmd1, rsmd2, rsmd3;
+    private ResultSetMetaData rsmd;
     private PreparedStatement ps;
     private final Connection c;
     private final Statement s1, s2, s3;
-    private final String str1, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11;
+    private final String str1, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11, str12;
     
     public UserManager(Connection c) throws SQLException {
 
@@ -41,7 +41,7 @@ public class UserManager {
         str1 = "SELECT * FROM user";
         str2 = "SELECT * FROM user_playeddebateid";
         str3 = "SELECT * FROM user_voteddebateid";
-        str4 = "INSERT INTO user (userID, username, password, avatarID, playedDebateNumber, votedDebateNumber) VALUES (?, ?, ?, ?, ?, ?)";
+        str4 = "INSERT INTO user (userID, username, password, avatarID, titleID, playedDebateNumber, votedDebateNumber) VALUES (?, ?, ?, ?, ?, ?, ?)";
         str5 = "INSERT INTO user_playeddebateid (userID, debateID) VALUES (?, ?)";
         str6 = "INSERT INTO user_voteddebateid (userID, debateID) VALUES (?, ?)";
         str7 = "UPDATE user_playeddebateid SET debateID = ? WHERE userID = ?";
@@ -49,6 +49,7 @@ public class UserManager {
         str9 = "UPDATE user SET playedDebateNumber = ? WHERE userID = ?";
         str10 = "UPDATE user SET votedDebateNumber = ? WHERE userID = ?";
         str11 = "UPDATE user SET avatarID = ? WHERE userID = ?";
+        str12 = "UPDATE user SET titleID = ? WHERE userID = ?";
     }
     
     public boolean signUp(String username, String password) throws SQLException {
@@ -67,7 +68,7 @@ public class UserManager {
             userID = rs1.getInt(1);
         }
         
-        insertUser(new User(username, password, ++userID, new ArrayList<>(), new ArrayList<>(), new Avatar()));
+        insertUser(new User(username, password, ++userID, new ArrayList<>(), new ArrayList<>(), new Avatar(), new Title()));
         System.out.println("User '" + username + "' has been successfully signed up!");
         return true;
     }
@@ -98,7 +99,7 @@ public class UserManager {
         while(rs1.next()) {
             if(username.equals(rs1.getString(2))) {
                 userID = rs1.getInt(1);
-                playedDebateNumber = rs1.getInt(5);
+                playedDebateNumber = rs1.getInt(6);
                 break;
             }
         }
@@ -145,7 +146,7 @@ public class UserManager {
         while(rs1.next()) {
             if(username.equals(rs1.getString(2))) {
                 userID = rs1.getInt(1);
-                votedDebateNumber = rs1.getInt(6);
+                votedDebateNumber = rs1.getInt(7);
                 break;
             }
         }
@@ -198,7 +199,22 @@ public class UserManager {
         }
         return false;
     }
-    
+    public boolean setSelectedTitle(String username, Title selectedTitle) throws SQLException {
+        int titleID = selectedTitle.getTitleID();
+        rs1 = s1.executeQuery(str1);
+        while(rs1.next()) {
+            if(username.equals(rs1.getString(2))) {
+                ps = c.prepareStatement(str12);
+                ps.setInt(1, titleID);
+                ps.setInt(2, rs1.getInt(1));
+                ps.executeBatch();
+                ps.executeUpdate();
+                System.out.println("Title with ID '" + titleID + "' of the user '" + username + "' has been successfully updated!");
+                return true;
+            }
+        }
+        return false;
+    }
     public int getNumberOfUsers() throws SQLException {
         
         rs1 = s1.executeQuery(str1);
@@ -217,9 +233,9 @@ public class UserManager {
         
         try {
 
-            rsmd1 = rs1.getMetaData();
-            rsmd2 = rs2.getMetaData();
-            rsmd3 = rs3.getMetaData();
+            rsmd = rs1.getMetaData();
+            rsmd = rs2.getMetaData();
+            rsmd = rs3.getMetaData();
 
             rs1 = s1.executeQuery(str1);
             rs2 = s2.executeQuery(str2);
@@ -230,13 +246,13 @@ public class UserManager {
                 rs3.next();
                 //Table display
                 System.out.println("\n------------------------");
-                for(int i = 1; i <= rsmd1.getColumnCount(); i++) {
+                for(int i = 1; i <= rsmd.getColumnCount(); i++) {
 
                     if (i > 1) { 
                         System.out.print("->  ");
                     }
                     
-                    System.out.println(rsmd1.getColumnName(i) + ": " + rs1.getString(i));
+                    System.out.println(rsmd.getColumnName(i) + ": " + rs1.getString(i));
                 }
                 
                 System.out.print("-> played debates: " + rs2.getString(2));
@@ -261,6 +277,7 @@ public class UserManager {
         int votedDebateNumber = 0;
         String password = " ";
         Avatar selectedAvatar = null;
+        Title selectedTitle = null;
         ArrayList<Integer> playedDebateIDs = new ArrayList<>();
         ArrayList<Integer> votedDebateIDs = new ArrayList<>();
         String[] pdids = new String[playedDebateIDs.size()];
@@ -272,6 +289,7 @@ public class UserManager {
                 userID = rs1.getInt(1);
                 password = rs1.getString(3);
                 selectedAvatar = new Avatar(rs1.getInt(4));
+                selectedTitle = new Title(rs1.getInt(5));
                 playedDebateNumber = rs1.getInt(5);
                 votedDebateNumber = rs2.getInt(6);
             }
@@ -299,7 +317,7 @@ public class UserManager {
             votedDebateIDs.add(i, Integer.parseInt(vdids[i]));
         }
         
-        return (new User(username, password, userID, playedDebateIDs, votedDebateIDs, selectedAvatar));
+        return (new User(username, password, userID, playedDebateIDs, votedDebateIDs, selectedAvatar, selectedTitle));
     }
     
     public void insertUser(User user) throws SQLException {
@@ -325,6 +343,7 @@ public class UserManager {
         ps.setInt(4, 0);
         ps.setInt(5, 0);
         ps.setInt(6, 0);
+        ps.setInt(7, 0);
         ps.executeBatch();
         ps.executeUpdate();
         //////////////////////////////////////////////////////////////////////
