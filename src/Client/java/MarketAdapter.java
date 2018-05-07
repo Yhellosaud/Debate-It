@@ -5,11 +5,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,7 +16,6 @@ import SharedModels.*;
 
 public class MarketAdapter extends ArrayAdapter<Item> {
     private final LayoutInflater inflater;
-    private int lastPushed;
     private final Context context;
     private MarketAdapter.ViewHolder holder;
     private final ArrayList<Item> items;
@@ -64,19 +61,21 @@ public class MarketAdapter extends ArrayAdapter<Item> {
         }
         Item item = items.get(position);
         if(item != null){
-            if(item.getClass().getName().equals("Avatar")){
+            if(item instanceof Avatar) {
                 System.out.println("Avatar DAAAAAAAAAAAAAAAAA");
                 int itemID = getItemID(position);
-                String avatarFile = "a" + itemID+"m";
+                String avatarFile = "a" + itemID + "l";
                 int id = context.getResources().getIdentifier(avatarFile, "drawable", context.getPackageName());
                 holder.image.setImageResource(id);
+                holder.image.setTag(avatarFile);
                 holder.title.setVisibility(View.GONE);
                 holder.image.setVisibility(View.VISIBLE);
             }
-            else if(item.getClass().getName().equals("Title")){
+            else if(item instanceof Title){
                 System.out.println("Title EEEEEEEEEEEEEEEEEE");
                 int itemID = getItemID(position);
-                holder.title.setText(((Title)getItem(position)).getTitle());
+                holder.title.setText(((Title)getItem(position)).getTitleName());
+                holder.title.setTag(itemID);
                 holder.image.setVisibility(View.GONE);
                 holder.title.setVisibility(View.VISIBLE);
             }
