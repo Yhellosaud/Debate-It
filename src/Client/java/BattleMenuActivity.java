@@ -177,6 +177,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
             avatar2.setVisibility(View.VISIBLE);
             avatar3.setVisibility(View.VISIBLE);
             avatar4.setVisibility(View.VISIBLE);
+            categoryView.setVisibility(View.VISIBLE);
 
             //yesButton.setVisibility(View.VISIBLE);
             /*arg1.setVisibility(View.INVISIBLE);
@@ -197,7 +198,7 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
             joinButton.setVisibility(View.INVISIBLE);
             yesButton.setVisibility(View.VISIBLE);
             noButton.setVisibility(View.VISIBLE);
-            categoryView.setVisibility(View.VISIBLE);
+
 
         } else if (stageNo == 1) // initial arguments
         {
