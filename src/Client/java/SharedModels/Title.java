@@ -12,9 +12,9 @@ public class Title extends Item implements Serializable {
 
     private String titleName;
 
-    public Title(int titleID, String titleName) {
+    public Title(int titleID) {
         super(titleID);
-        this.titleName = titleName;
+        this.titleName = titles[titleID - 1];
     }
 
     public int getTitleID() {
@@ -26,12 +26,13 @@ public class Title extends Item implements Serializable {
     }
 
     public static Title getTitle(int titleID){
-        return new Title(titleID, titles[titleID - 1]);
+        return new Title(titleID);
     }
+    
     public ArrayList<Title> getAllTitles(){
         ArrayList<Title> titlesAL= new ArrayList<Title>();
-        for(int i = 0; i < titles.length; i++)
-            titlesAL.add(new Title(i, titles[i]));
+        for(int i = 1; i <= titles.length; i++)
+            titlesAL.add(new Title(i));
         return titlesAL;
     }
 
