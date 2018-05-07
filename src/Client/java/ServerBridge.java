@@ -16,6 +16,7 @@ import SharedModels.Avatar;
 import SharedModels.User;
 
 import static java.lang.Thread.sleep;
+import SharedModels.*;
 
 /**
  * Created by Cagatay on 11.03.2018.
@@ -102,6 +103,15 @@ public class ServerBridge  {
         request(REQUEST_CHANGE_SELECTED_AVATAR,requestParams);
 
     }
+    public synchronized void requestChangeAvatar(User user, Title title){
+
+        ArrayList<Serializable> requestParams = new ArrayList<Serializable>();
+        requestParams.add(user.getUserID());
+        requestParams.add(title);
+        request(REQUEST_CHANGE_SELECTED_TITLE,requestParams);
+
+    }
+
 
     public synchronized void requestGetBuyableItems(){
         ArrayList<Serializable> requestParams = new ArrayList<Serializable>();
