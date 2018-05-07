@@ -202,8 +202,14 @@ public class BattleMenuActivity extends AppCompatActivity implements DataReceiva
 
         } else if (stageNo == 1) // initial arguments
         {
-            argumentEdit.setVisibility(View.VISIBLE);
-            sendArgumentButton.setVisibility(View.VISIBLE);
+
+            int userSide = curDebate.getPlayerSide(user.getUserID());
+
+            if(userSide!=Player.SIDE_SPECTATOR){
+                argumentEdit.setVisibility(View.VISIBLE);
+                sendArgumentButton.setVisibility(View.VISIBLE);
+            }
+
             yesButton.setVisibility(View.INVISIBLE);
             noButton.setVisibility(View.INVISIBLE);
             arg1.setVisibility(View.VISIBLE);
