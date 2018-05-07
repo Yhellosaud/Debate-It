@@ -9,7 +9,7 @@ public class Title extends Item implements Serializable {
 
     private static final String[] titles = {"Master", "King", "Socrates", "Sarkozy"};
 
-    private int titleID;
+
     private String titleName;
 
     public Title(int titleID, String titleName) {
@@ -18,7 +18,7 @@ public class Title extends Item implements Serializable {
     }
 
     public int getTitleID() {
-        return titleID;
+        return super.getItemID();
     }
 
     public String getTitleName() {
