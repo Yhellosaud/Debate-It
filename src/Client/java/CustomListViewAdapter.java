@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -43,13 +44,6 @@ public class CustomListViewAdapter extends ArrayAdapter<Debate> {
         return debates.get(pos).getDebateID();
     }
 
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        holder.replayDebate.setVisibility(View.VISIBLE);
-        holder.viewDebate.setVisibility(View.VISIBLE);
-        long viewId = view.getId();
-        view.setTag(holder);
-    }
-
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = new ViewHolder();
 
@@ -57,11 +51,11 @@ public class CustomListViewAdapter extends ArrayAdapter<Debate> {
             convertView = inflater.inflate(R.layout.list_items, parent, false);
 
             holder.bar = (ProgressBar) convertView.findViewById(R.id.bar);
-            holder.text = (TextView) convertView.findViewById(R.id.text);
+            holder.text = (TextView) convertView.findViewById(R.id.text);/*
             holder.replayDebate = convertView.findViewById(R.id.replay);
             holder.viewDebate = convertView.findViewById(R.id.view);
             holder.viewDebate.setVisibility(View.GONE);
-            holder.replayDebate.setVisibility(View.GONE);
+            holder.replayDebate.setVisibility(View.GONE);*/
             convertView.setTag(holder);
         }
         else{
@@ -77,7 +71,7 @@ public class CustomListViewAdapter extends ArrayAdapter<Debate> {
         return convertView;
     }
     //View Holder Pattern for better performance
-    private class ViewHolder {
+    public class ViewHolder {
         TextView text;
         ProgressBar bar;
         Button replayDebate;
