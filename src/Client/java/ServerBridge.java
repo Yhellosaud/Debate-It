@@ -25,7 +25,7 @@ import SharedModels.*;
 public class ServerBridge  {
 
     public static final String serverIpAccessPoint = "192.168.43.193";
-    public static final String serverIpBilkent = "139.179.226.31";
+    public static final String serverIpBilkent = "139.179.200.216";
     public static final String serverIpEv = "192.168.1.42";
     public static final int serverPort = 54134;
 
@@ -70,6 +70,7 @@ public class ServerBridge  {
     public static final int REQUEST_SUBMIT_VOTE = 110;
 
     public static final int RESPONSE_UPDATED_DEBATE = 115;
+    public static final int REQUEST_SEND_EXPRESSION = 116;
 
 
     private volatile ArrayList<Serializable> leastRecentlyReceivedData;
@@ -95,7 +96,7 @@ public class ServerBridge  {
 
     }
 
-    public synchronized void requestChangeAvatar(User user, Avatar avatar){
+    public synchronized void requestChangeSelectedAvatar(User user, Avatar avatar){
 
         ArrayList<Serializable> requestParams = new ArrayList<Serializable>();
         requestParams.add(user.getUserID());
@@ -103,7 +104,7 @@ public class ServerBridge  {
         request(REQUEST_CHANGE_SELECTED_AVATAR,requestParams);
 
     }
-    public synchronized void requestChangeAvatar(User user, Title title){
+    public synchronized void requestChangeSelectedTitle(User user, Title title){
 
         ArrayList<Serializable> requestParams = new ArrayList<Serializable>();
         requestParams.add(user.getUserID());
@@ -150,6 +151,13 @@ public class ServerBridge  {
         requestParams.add(argument);
         requestParams.add(stage);
         request(REQUEST_SEND_ARGUMENT,requestParams);
+    }
+    public synchronized void requestSendExpression(User user,Expression expr){
+
+        ArrayList<Serializable> requestParams = new ArrayList<Serializable>();
+        requestParams.add(user.getUsername());
+        requestParams.add(expr);
+        request(REQUEST_SEND_EXPRESSION,requestParams);
     }
 
     public synchronized void requestSignIn(String userName, String password){
