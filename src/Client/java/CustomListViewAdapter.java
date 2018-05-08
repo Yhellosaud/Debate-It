@@ -51,11 +51,7 @@ public class CustomListViewAdapter extends ArrayAdapter<Debate> {
             convertView = inflater.inflate(R.layout.list_items, parent, false);
 
             holder.bar = (ProgressBar) convertView.findViewById(R.id.bar);
-            holder.text = (TextView) convertView.findViewById(R.id.text);/*
-            holder.replayDebate = convertView.findViewById(R.id.replay);
-            holder.viewDebate = convertView.findViewById(R.id.view);
-            holder.viewDebate.setVisibility(View.GONE);
-            holder.replayDebate.setVisibility(View.GONE);*/
+            holder.text = (TextView) convertView.findViewById(R.id.text);
             convertView.setTag(holder);
         }
         else{
@@ -74,8 +70,6 @@ public class CustomListViewAdapter extends ArrayAdapter<Debate> {
     public class ViewHolder {
         TextView text;
         ProgressBar bar;
-        Button replayDebate;
-        Button viewDebate;
     }
 }
 

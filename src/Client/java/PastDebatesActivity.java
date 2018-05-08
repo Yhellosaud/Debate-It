@@ -38,25 +38,24 @@ public class PastDebatesActivity extends AppCompatActivity implements DataReceiv
     ServerBridge sb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        sb = new ServerBridge(this);
-        sb.startListeningToServer();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_debates);
         but = (Button)findViewById(R.id.getDebates);
         pastDebates = (ListView)findViewById(R.id.debateList);
         pastDebates.setVisibility(View.GONE);
-        /*
+
         sb = new ServerBridge(this);
         sb.startListeningToServer();
-        sb.requestGetPastDebates();
-        Player p1 = new Player("ali");
-        Player p2 = new Player("veli");
-        Player p3 = new Player("49");
-        Player p4 = new Player("50");
+        /*
+        debates = new ArrayList<Debate>();
+        Player p1 = new Player(0, "ali", 1, new ArrayList<Argument>(), 1, 1, 1);
+        Player p2 = new Player(0, "veli", 1, new ArrayList<Argument>(), 1, 1, 1);
+        Player p3 = new Player(0, "49", 1, new ArrayList<Argument>(), 1, 1, 1);
+        Player p4 = new Player(0, "ali", 1, new ArrayList<Argument>(), 1, 1, 1);
         ArrayList<Player> playerAL = new ArrayList<Player>();
         playerAL.add(p1); playerAL.add(p2); playerAL.add(p3); playerAL.add(p4);
         Idea idea = new Idea(1, "Euthanasia should be legal.", 1);
-        Debate d1 = new Debate(idea,playerAL, 20, 10);
+        Debate d1 = new Debate(idea,playerAL,0,30, 20, 10, 6, 6, 6, 6);
         debates.add(d1); debates.add(d1); debates.add(d1);
 
         adaptor = new CustomListViewAdapter(PastDebatesActivity.this, debates);
@@ -69,20 +68,19 @@ public class PastDebatesActivity extends AppCompatActivity implements DataReceiv
 
     @Override
     public boolean receiveAndUpdateUI(int responseId,ArrayList<Serializable> responseData) {
-        /*
         debates = new ArrayList<Debate>();
         for(int i = 0; i < responseData.size(); i++)
             debates.add((Debate)responseData.get(i));
         adaptor = new CustomListViewAdapter(PastDebatesActivity.this, debates);
         pastDebates.setAdapter(adaptor);
         pastDebates.setVisibility(View.VISIBLE);
-        */
+
         sb.disconnectFromServer();
         return false;
     }
 
-    public void pushed(View view){
-        sb.requestGetBuyableItems();
+    public void getPastDebates(View view){
+        sb.requestGetPastDebates();
         but.setVisibility(View.GONE);
     }
 

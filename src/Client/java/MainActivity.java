@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements DataReceivable {
         startActivity(intent);
     }
     public void goToMarket(View view){
+        sb.disconnectFromServer();
         Intent intent = new Intent(this, MarketActivity.class);
         intent.putExtra("user", user);
         startActivityForResult(intent, x);
@@ -120,12 +121,7 @@ public class MainActivity extends AppCompatActivity implements DataReceivable {
         adaptor = new CustomListViewAdapter(MainActivity.this, debates);
         debateList.setAdapter(adaptor);
         mainScreen.setVisibility(View.VISIBLE);
-        sb.disconnectFromServer();
         return false;
-    }
-    public void seePlayedDebates(View view){
-        //sb.requestChangeSelectedAvatar(user,new Avatar(101));
-        sb.requestChangeSelectedTitle(user, new Title(2));
     }
 
     @Override
