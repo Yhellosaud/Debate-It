@@ -18,23 +18,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="changeAvatar"
-            app:srcCompat="@drawable/a100" />
+            app:srcCompat="@drawable/a100m" />
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:gravity="center_vertical"
+            android:gravity="center_horizontal"
             android:text="Welcome User"
             android:textSize="23sp" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:gravity="center_horizontal"
+            android:text="Title"
+            android:textColor="@color/gold"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/getDebates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="seePlayedDebates"
+            android:text="See Played Debates"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/mainScreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
             android:background="@drawable/border_ui"
-            android:orientation="vertical">
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:paddingBottom="0dp">
 
             <TextView
                 android:id="@+id/your_past_debates"
@@ -49,7 +71,8 @@
                 android:id="@+id/list1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:dividerHeight="5dp"></ListView>
+                android:dividerHeight="5dp"
+                android:drawSelectorOnTop="false"></ListView>
         </LinearLayout>
 
         <LinearLayout
@@ -64,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="changeAvatar"
+                android:onClick="goToMarket"
                 android:text="Market" />
 
             <Button
