@@ -27,6 +27,7 @@ public class RegisterActivity extends AppCompatActivity implements DataReceivabl
     User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.LoginTheme);
         sb = new ServerBridge(this);
         sb.startListeningToServer();
         super.onCreate(savedInstanceState);
