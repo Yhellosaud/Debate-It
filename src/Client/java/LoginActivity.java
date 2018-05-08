@@ -22,6 +22,7 @@ public class LoginActivity extends AppCompatActivity implements DataReceivable {
     String username, password;
     User user;
     ArrayList<Serializable> coming;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.LoginTheme);
@@ -29,54 +30,49 @@ public class LoginActivity extends AppCompatActivity implements DataReceivable {
         setContentView(R.layout.login_activity);
         sb = new ServerBridge(this);
 
-        login = (Button)findViewById(R.id.login);
-        inusername   = (EditText)findViewById(R.id.username);
-        inpassword   = (EditText)findViewById(R.id.password);
+        login = (Button) findViewById(R.id.login);
+        inusername = (EditText) findViewById(R.id.username);
+        inpassword = (EditText) findViewById(R.id.password);
 
         login.setOnClickListener(
-                new View.OnClickListener()
-                {
-                    public void onClick(View view)
-                    {
+                new View.OnClickListener() {
+                    public void onClick(View view) {
                         //login.setClickable(false);
                         username = inusername.getText().toString();
                         password = inpassword.getText().toString();
-                        /*
-                        Avatar avatar = new Avatar(101);
-                        User user = new User(username, password, avatar);
+/*
+                        User user = new User(username, password, new Avatar(100), new Title(1));
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.putExtra("user", user);
                         startActivity(intent);
-                        /**/
+*/
                         System.out.println(username);
                         System.out.println(password);
                         sb.requestSignIn(username, password);
-
                     }
                 }
         );
     }
+
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
         sb.startListeningToServer();
-
-
     }
-    public void goToRegister(View view){
 
+    public void goToRegister(View view) {
+        sb.disconnectFromServer();
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
-
-
     }
-    public boolean receiveAndUpdateUI(int responseId,ArrayList<Serializable> responseData) {
+
+    public boolean receiveAndUpdateUI(int responseId, ArrayList<Serializable> responseData) {
         System.out.println("Receive tamam");
-        if(responseId == ServerBridge.RESPONSE_USER_OBJECT){
+        if (responseId == ServerBridge.RESPONSE_USER_OBJECT) {
             System.out.println("response id tamam");
-            if(responseData.get(0) == null)
+            if (responseData.get(0) == null)
                 return false;
-            user = (User)responseData.get(0);
+            user = (User) responseData.get(0);
             System.out.println("user tamam");
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             sb.disconnectFromServer();
