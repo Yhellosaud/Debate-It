@@ -63,6 +63,7 @@ public class MarketActivity extends AppCompatActivity implements DataReceivable 
             }
         });
     }
+
     public void seeAvatars(View view){
         listAvatars.setVisibility(View.VISIBLE);
         listTitles.setVisibility(View.GONE);
@@ -86,7 +87,11 @@ public class MarketActivity extends AppCompatActivity implements DataReceivable 
             System.out.println(user.getSelectedTitle());
             sb.requestChangeSelectedTitle(user, tit);
         }
-        vwParentRow.refreshDrawableState();
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("user", user);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
+        //vwParentRow.refreshDrawableState();
     }
 
     public void seeTitles(View view){

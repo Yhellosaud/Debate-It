@@ -1,12 +1,15 @@
 package dicomp.debateit;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,44 +20,44 @@ import SharedModels.*;
 
 
 public class MainActivity extends AppCompatActivity implements DataReceivable {
-    TextView username;
+    CustomListViewAdapter adaptor;
+    LinearLayout mainScreen;
+    TextView username, title;
     ListView debateList;
     ImageView imavatar;
+    Button but;
     ServerBridge sb;
     ArrayList<Serializable> coming;
     User user;
-    ArrayList<Debate> debatesAL;
-    String[] output;
-    Debate[] debates;
-    Helper helper;
+    public static final int x = 0;
+    ArrayList<Debate> debates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        sb = new ServerBridge(this);
+        sb.startListeningToServer();
+        but = (Button)findViewById(R.id.getDebates);
+        mainScreen = (LinearLayout)findViewById(R.id.mainScreen);
         imavatar = (ImageView) findViewById(R.id.avatar);
         username = (TextView) findViewById(R.id.textView2);
         debateList = (ListView) findViewById(R.id.list1);
-        output = new String[1];
-        output[0] = "not ready";
+        title = (TextView)findViewById(R.id.title);
+
         user = (User) getIntent().getSerializableExtra("user");
         int avatarID = user.getSelectedAvatar().getItemID();
         String avatarFile = "a" + avatarID+"m";
-
         int id = getResources().getIdentifier(avatarFile, "drawable", getPackageName());
         imavatar.setImageResource(id);
+        title.setText(user.getSelectedTitle().getTitleName());
         System.out.println("çalıştı");
         /*
         System.out.println(user);
         sb = new ServerBridge(this);
         sb.startListeningToServer();
         sb.requestGetPlayedDebates(user);
-        helper = new Helper();
-        helper.execute();
-        ArrayAdapter<String> veriAdaptoru=new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1, android.R.id.text1, output);
-        debateList.setAdapter(veriAdaptoru);*/
+        */
 
         if (user == null) {
             username.setVisibility(View.GONE);
@@ -65,7 +68,24 @@ public class MainActivity extends AppCompatActivity implements DataReceivable {
 
 
     }
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case(x): {
+                if (resultCode == Activity.RESULT_OK) {
+                    user = (User)data.getSerializableExtra("user");
+                    System.out.println("****************************CASE X - INSIDE IF -- got user" + user.getSelectedAvatar());
+                    int avatarID = user.getSelectedAvatar().getItemID();
+                    String avatarFile = "a" + avatarID+"m";
+                    int id = getResources().getIdentifier(avatarFile, "drawable", getPackageName());
+                    imavatar.setImageResource(id);
+                    title.setText(user.getSelectedTitle().getTitleName());
+                }
+                break;
+            }
+        }
+    }
     public void changeAvatar(View view) {
         Intent intent = new Intent(this, MarketActivity.class);
         intent.putExtra("user", user);
@@ -83,6 +103,15 @@ public class MainActivity extends AppCompatActivity implements DataReceivable {
         intent.putExtra("user", user);
         startActivity(intent);
     }
+    public void goToMarket(View view){
+        Intent intent = new Intent(this, MarketActivity.class);
+        intent.putExtra("user", user);
+        startActivityForResult(intent, x);
+    }
+    public void getPlayedDebates(View view){
+        sb.requestGetPlayedDebates(user);
+        but.setVisibility(View.GONE);
+    }
 
     public boolean receiveAndUpdateUI(int responseId,ArrayList<Serializable> responseData) {
         debates = new ArrayList<Debate>();
@@ -90,29 +119,16 @@ public class MainActivity extends AppCompatActivity implements DataReceivable {
             debates.add((Debate)responseData.get(i));
         adaptor = new CustomListViewAdapter(MainActivity.this, debates);
         debateList.setAdapter(adaptor);
-        debateList.setVisibility(View.VISIBLE);
+        mainScreen.setVisibility(View.VISIBLE);
         sb.disconnectFromServer();
         return false;
+    }
+    public void seePlayedDebates(View view){
+        //sb.requestChangeSelectedAvatar(user,new Avatar(101));
+        sb.requestChangeSelectedTitle(user, new Title(2));
     }
 
     @Override
     public void updateRetrieveProgress(int progress) {
-    }
-
-    private class Helper extends AsyncTask<Void, Void, User> {
-        protected User doInBackground(Void... arg0) {
-            coming = sb.getLeastRecentlyReceivedData();
-            for (int i = 0; i < coming.size(); i++)
-                debatesAL.add((Debate) coming.get(i));
-            debatesAL.toArray(debates);
-            String[] temp = new String[coming.size()];
-            for (int i = 0; i < debates.length; i++)
-                temp[i] = debates[i].menuDisplay();
-            output = temp;
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.putExtra("user", user);
-            startActivity(intent);
-            return null;
-        }
     }
 }
