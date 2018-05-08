@@ -19,20 +19,20 @@ import dicomp.debateit.R;
 
 public class RegisterActivity extends AppCompatActivity implements DataReceivable {
     EditText inusername, inpassword, inconfirmPassword;
-    ServerBridge sb = new ServerBridge(this);
+    ServerBridge sb;
     ArrayList<Serializable> coming;
-    TextView warning, successful;
+    TextView warning;
     String username, password, confirmPassword;
     Button register;
     User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sb = new ServerBridge(this);
+        sb.startListeningToServer();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_activity);
         warning = (TextView)findViewById(R.id.warning);
         warning.setVisibility(View.GONE);
-        successful = (TextView)findViewById(R.id.successful);
-        successful.setVisibility(View.GONE);
         register = (Button)findViewById(R.id.register);
         inusername   = (EditText)findViewById(R.id.username);
         inpassword   = (EditText)findViewById(R.id.password);
@@ -45,19 +45,23 @@ public class RegisterActivity extends AppCompatActivity implements DataReceivabl
         confirmPassword = inconfirmPassword.getText().toString();
         System.out.println("asd1");
         if(!password.equals(confirmPassword)){
-            System.out.println("asd2");
+            warning.setText("Registeration Failed!");
             warning.setVisibility(View.VISIBLE);
+            System.out.println("asd2");
             register.setClickable(true);
             System.out.println("asd3");
         }
         else{
-            successful.setVisibility(View.VISIBLE);
+            warning.setVisibility(View.VISIBLE);
+            warning.setText("Maybe Successful, Maybe Not.");
+            sb.requestRegister(username, password);
         }
     }
 
     public void goToLogin(View view){
         finish();
     }
+
     public boolean receiveAndUpdateUI(int responseId,ArrayList<Serializable> responseData) {
         return false;
     }
@@ -65,21 +69,5 @@ public class RegisterActivity extends AppCompatActivity implements DataReceivabl
     @Override
     public void updateRetrieveProgress(int progress) {
 
-    }
-
-    private class Helper extends AsyncTask<Void, Void, User> {
-        protected User doInBackground(Void... arg0) {
-            coming = sb.getLeastRecentlyReceivedData();
-            if(coming == null)
-                register.setClickable(true);
-            else{
-                user = (User)coming.get(0);
-                System.out.println(user.getUsername());
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("user", user);
-                startActivity(intent);
-            }
-            return null;
-        }
     }
 }
