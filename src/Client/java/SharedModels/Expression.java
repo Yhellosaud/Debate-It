@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 
 public class Expression implements Serializable {
-    private int expressionID;
+    int expressionID;
 
     public Expression(int expressionID) {
         this.expressionID = expressionID;
