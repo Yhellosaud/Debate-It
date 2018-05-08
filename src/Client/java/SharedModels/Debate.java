@@ -57,12 +57,12 @@ public class Debate implements Serializable {
     public Debate(Idea idea, int debateID,ArrayList<Player> players) {
         this.idea = idea;
         this.debateID = debateID;
-        
+
         if(players ==null){
             this.players = new ArrayList<Player>();
         }else{
             this.players = players;
-        }        
+        }
         this.debateLength = 0;
         this.yesVotes = 0;
         this.noVotes = 0;
@@ -75,7 +75,7 @@ public class Debate implements Serializable {
     public void addPlayer(Player player) {
         players.add(player);
     }
-    
+
     public void closeStage(int stage){
         Argument blankArgument = new Argument(0,stage,"Player passed this stage");
         for(int i=0;i<players.size();i++){
@@ -94,7 +94,7 @@ public class Debate implements Serializable {
             }
         }
     }
-    
+
     public int getPlayerSide(int playerId){
         for(int i=0;i<players.size();i++){
             if(players.get(i).getPlayerID()==playerId){
@@ -105,20 +105,19 @@ public class Debate implements Serializable {
     }
 
     /**
-     * This method adds an argument if the maximum number of arguments is not reached and 
-     * if there is no argument with same stage.     
+     * This method adds an argument if the maximum number of arguments is not reached and
+     * if there is no argument with same stage.
      * @param playerId
-     * @param argument 
+     * @param argument
      */
-    public boolean addArgument(int playerId, Argument argument) {
+    public void addArgument(int playerId, Argument argument) {
         for (int i = 0; i < players.size(); i++) {
             if (players.get(i).getPlayerID() == playerId) {
-                
-                return players.get(i).addArgument(argument);
-                
+
+                players.get(i).addArgument(argument);
+                return;
             }
         }
-        return false;
     }
 
     public Idea getIdea() {
@@ -178,14 +177,22 @@ public class Debate implements Serializable {
     }
 
     public String menuDisplay() {
-        return "Idea: " + idea.getStatement() + "\n" + "Players: " + players;
+        String out = "Idea: " + idea.getStatement() + "\nPlayers: ";
+        for(int i = 0; i < players.size(); i++) {
+            if(i == players.size() - 1)
+                out += players.get(i).menuDisplay();
+            else{
+                out += players.get(i).menuDisplay() + ", ";
+            }
+        }
+        return out;
     }
 
     @Override
     public String toString() {
-       String str = "------Debate--------\n";
+        String str = "------Debate--------\n";
         str +=  "Debate{"
-                + "idea=" + idea                
+                + "idea=" + idea
                 + ", debateID=" + debateID
                 + ", debateLength=" + debateLength
                 + ", yesVotes=" + yesVotes
@@ -221,10 +228,10 @@ public class Debate implements Serializable {
             }
         }
     }
-    
+
     public void addYesVote(){
         yesVotes++;
-        
+
     }
     public void addNoVote(){
         noVotes++;

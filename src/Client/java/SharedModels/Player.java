@@ -100,21 +100,18 @@ public class Player implements Serializable {
         return arguments;
     }
 
-    public boolean addArgument(Argument argument) {
+    public void addArgument(Argument argument) {
         if (arguments.size() < 4) {
 
             if (arguments.size() == 0) {
                 arguments.add(argument);
-                return true;
+                return;
             }
             if (arguments.get(arguments.size() - 1).getStage() != argument.getStage()) {
                 arguments.add(argument);
-                return true;
             }
-            return false;
 
         }
-        return false;
 
     }
 
@@ -141,7 +138,9 @@ public class Player implements Serializable {
     public void setConsecutiveGamesWatched(int consecutiveGamesPlayed) {
         this.consecutiveGamesWatched = consecutiveGamesPlayed;
     }
-
+    public String menuDisplay(){
+        return username;
+    }
     @Override
     public String toString() {
         String str = "PlayerID: " + playerID + " Username: " + username + " side: " + side + " vote: " + vote + " consecutiveGamesWatched: " + consecutiveGamesWatched
