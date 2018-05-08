@@ -27,11 +27,11 @@ public class RegisterActivity extends AppCompatActivity implements DataReceivabl
     User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setTheme(R.style.LoginTheme);
+        setContentView(R.layout.register_activity);
         sb = new ServerBridge(this);
         sb.startListeningToServer();
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.register_activity);
         warning = (TextView)findViewById(R.id.warning);
         warning.setVisibility(View.GONE);
         register = (Button)findViewById(R.id.register);
