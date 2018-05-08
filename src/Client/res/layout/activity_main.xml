@@ -41,7 +41,7 @@
             android:id="@+id/getDebates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="seePlayedDebates"
+            android:onClick="getPlayedDebates"
             android:text="See Played Debates"
             android:visibility="visible" />
 
