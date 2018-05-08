@@ -24,7 +24,7 @@
             android:id="@+id/getDebates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="pushed"
+            android:onClick="getPastDebates"
             android:visibility="visible"
             android:text="Get Past Debates" />
 
@@ -39,7 +39,7 @@
                 android:id="@+id/debateList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:dividerHeight="5dp"></ListView>
+                android:dividerHeight="5dp"/>
         </LinearLayout>
 
     </LinearLayout>

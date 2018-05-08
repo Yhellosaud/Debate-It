@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="3dp"
         android:text="@string/action_login"
-        android:textColor="@color/black"></TextView>
+        android:textColor="@color/black"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,19 +55,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/replay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Replay" />
-
-        <Button
-            android:id="@+id/view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="View" />
     </LinearLayout>
 
     <!--set 100 maximum value for the progress bar-->
